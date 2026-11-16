@@ -2,12 +2,12 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
 <title>타인의 삶</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Do+Hyeon&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
@@ -23,14 +23,6 @@
   --f-hand:"Gaegu","IBM Plex Sans KR",system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#11161B; --surface:#1A2128; --surface2:#151B21; --ink:#E5EAF0; --muted:#97A3AF; --line:#2B343E;
-  --badge:#8EA6FF; --badge-ink:#0E1630; --hl:#F3D23F; --hl-ink:#1B1B12;
-  --good:#4CC28A; --bad:#FF7A66; --bubble:#232C35; --panel-line:#05070A; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#11161B; --surface:#1A2128; --surface2:#151B21; --ink:#E5EAF0; --muted:#97A3AF; --line:#2B343E;
-  --badge:#8EA6FF; --badge-ink:#0E1630; --hl:#F3D23F; --hl-ink:#1B1B12;
-  --good:#4CC28A; --bad:#FF7A66; --bubble:#232C35; --panel-line:#05070A; color-scheme:dark}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
@@ -219,7 +211,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--badge);outline-offs
 .vote .e{font-size:22px}
 .vote[aria-pressed="true"]{border-color:var(--badge);box-shadow:inset 0 0 0 1px var(--badge)}
 .vote .v{font-size:11px;color:var(--muted)}
-.back{background:none;border:none;color:var(--muted);padding:4px 0;width:max-content;font-size:14px}
+.back{display:none!important}
+.factlist .src{color:var(--muted);font-size:12px}
+.back-unused{background:none;border:none;color:var(--muted);padding:4px 0;width:max-content;font-size:14px}
 .idcard{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
 .idcard .lanyard{height:40px;background:var(--badge);display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:var(--badge-ink);font-weight:700;font-size:12px;letter-spacing:.06em}
 .idcard .hole{width:44px;height:8px;border-radius:8px;background:var(--bg)}
@@ -630,7 +624,7 @@ let DAILY_PAY = Math.round(4700000 / 21), CONTRACT_WAGE = Math.round(DAILY_PAY /
 let JOB_ID = "daeri", PF = null;
 const JOBS = [
   {id:"daeri", icon:"🪪", name:"대기업 5년차 대리", kind:"일반", meta:"연봉 약 7,000만 원 · 마케팅팀", playable:true},
-  {id:"derma", icon:"💉", name:"강남 피부과 개원의", kind:"부자", meta:"월 매출 약 1.6억 · 직원 12명", playable:true},
+  {id:"derma", icon:"💉", name:"강남 피부과 개원의", kind:"부자", meta:"월 매출 약 1.6억 · 직원 12명", playable:false},
   {id:"civil", icon:"🏛️", name:"9급 공무원 3년차", kind:"일반", meta:"정년 보장 · 주민센터 민원창구", playable:false},
   {id:"nurse", icon:"🩺", name:"대학병원 3교대 간호사", kind:"일반", meta:"4년차 · 내과 병동", playable:false}
 ];
@@ -1036,6 +1030,7 @@ function phHTML(place){
 }
 function startDay(){
   st = freshState(); view = {screen:"play", idx:0};
+  syncHistory();
   beginScene(); window.scrollTo(0,0);
 }
 function beginScene(){
@@ -1248,7 +1243,7 @@ function renderHome(){
   const heroSc = {bg:"subway", cam:"panr", tint:null};
   $app.innerHTML = `
     <div class="brand">
-      <span class="demo-tag">DEMO v0.4 · 하루 체험</span>
+      <span class="demo-tag">하루 체험</span>
       <h1>남의 연봉 말고<br><em>남의 하루</em>를 살아보기</h1>
       <p>부러운 직업의 하루를 웹툰처럼 살아보고, 연봉 뒤에 숨은 실제 시급을 확인해 보세요.</p>
     </div>
@@ -1263,7 +1258,7 @@ function renderHome(){
       </button>`).join("")}</div>
     <div class="section-title"><h2>다음에 열 직업 투표</h2><span class="note">한 표만</span></div>
     <div class="votes">${VOTES.map(v => `<button class="vote" type="button" data-vote="${v.id}" aria-pressed="${myVote===v.id}"><span class="e" aria-hidden="true">${v.e}</span><span>${esc(v.n)}</span><span class="v">${myVote===v.id ? "투표함 ✓" : "투표하기"}</span></button>`).join("")}</div>
-    <p class="note">데모라서 투표와 알림 신청은 이 기기에만 저장됩니다.</p>`;
+    <p class="note">투표와 알림 신청은 이 기기에 저장돼요.</p>`;
   $app.querySelectorAll("[data-job]").forEach(b => b.addEventListener("click", () => {
     const j = JOBS.find(x => x.id === b.dataset.job);
     if(j.playable){ setJob(j.id); view.screen = "job"; render(); window.scrollTo(0,0); }
@@ -1357,7 +1352,7 @@ ${PF.wageLabel} ${won(wage)}
       <div class="p"><h4>부러운 점</h4><ul>${perks.map(p => `<li>${esc(p)}</li>`).join("")}${PF.perkExtra.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>
       <div class="c"><h4>대가</h4><ul>${st.costs.map(c => `<li>${esc(c)}</li>`).join("")}</ul></div></div></div>
     <div class="box"><h3>현직자 한마디</h3><p class="quote">“${esc(PF.quote)}”<small>가상 예시 문구입니다. 실제 현직자 인터뷰로 교체할 예정입니다.</small></p></div>
-    <div class="box"><h3>이 하루의 근거</h3><ul class="factlist">${FACTS.map(f => `<li><span>${esc(f.t)}</span><a href="${f.u}" target="_blank" rel="noopener">${esc(f.s)} ↗</a></li>`).join("")}</ul></div>
+    <div class="box"><h3>이 하루의 근거</h3><ul class="factlist">${FACTS.map(f => `<li><span>${esc(f.t)}</span><span class="src">출처: ${esc(f.s)}</span></li>`).join("")}</ul></div>
     <div class="box"><h3>공유 카드</h3><div class="sharecard" id="sharetext">${esc(share)}</div>
       <div class="actions"><button class="btn primary wide" type="button" id="copy">결과 복사하기</button></div></div>
     <div class="actions">
@@ -1436,7 +1431,7 @@ function paintRx(){
     } else if(rxState === "slow"){
       html += `<p class="note">다른 사람들의 반응을 아직 불러오지 못했어요. 잠시 뒤 다시 열어 보세요.</p>`;
     } else if(rxState === "off"){
-      html += `<p class="note">반응을 저장했어요. 다른 사람들의 반응은 로그인한 상태에서 볼 수 있어요.</p>`;
+      html += `<p class="note">반응을 저장했어요. 다른 사람들의 반응 모아보기는 곧 열려요.</p>`;
     } else {
       html += `<p class="note">첫 번째 반응이에요. 다른 사람들이 하루를 마치면 여기에 비율이 쌓여요.</p>`;
     }
@@ -1493,9 +1488,29 @@ function setJob(id){
 let FACTS = FACTS_DAERI;
 setJob("daeri");
 
+/* ---------- 뒤로가기: 홈(0) ← 직업 상세(1) ← 체험·정산(2). 홈에서 뒤로가기를 누르면 미니앱이 닫힌다 ---------- */
+const DEPTH = {home:0, job:1, play:2, end:2};
+let ignorePop = 0;
+function curDepth(){ return (history.state && history.state.aitDepth) || 0; }
+function syncHistory(){
+  const want = DEPTH[view.screen] || 0, have = curDepth();
+  if(want > have){ for(let d = have + 1; d <= want; d++) history.pushState({aitDepth:d}, ""); }
+  else if(want < have){ ignorePop++; history.go(want - have); }
+}
+window.addEventListener("popstate", () => {
+  if(ignorePop > 0){ ignorePop--; return; }
+  const d = curDepth();
+  stopTyping();
+  if(d <= 0){ view.screen = "home"; } else if(d === 1){ view.screen = "job"; }
+  if(view.screen === "home") renderHome(); else if(view.screen === "job") renderJob();
+  $modal.innerHTML = "";
+  window.scrollTo(0, 0);
+});
+
 /* ---------- router ---------- */
 function render(){
   stopTyping();
+  syncHistory();
   if(view.screen === "home") renderHome();
   else if(view.screen === "job") renderJob();
   else if(view.screen === "play") beginScene();

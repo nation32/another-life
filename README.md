@@ -5,25 +5,33 @@
 
 ## 실행
 
-빌드 과정이 없는 정적 웹페이지입니다.
-
-- 가장 간단한 방법: `index.html`을 브라우저로 엽니다.
-- 로컬 서버로 열기 (폰에서도 같은 와이파이로 확인 가능):
+앱인토스(토스 미니앱) WebView 프로젝트입니다. Node 22 이상이 필요해요.
 
 ```bash
-cd another-life
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-그다음 브라우저에서 `http://localhost:8000` 을 엽니다.
+브라우저에서 `http://localhost:3000` 을 열면 오른쪽 아래 앱인토스 devtools와 함께 확인할 수 있어요.
+
+## 앱 번들(.ait) 만들기
+
+```bash
+npm run build
+```
+
+`another-life.ait` 파일이 생겨요. 앱인토스 콘솔 → 앱 번들에 업로드하고 '토스앱 테스트'로 확인한 뒤 출시를 요청하세요.
+`apps-in-toss.config.ts`의 `appName`은 콘솔에 등록한 앱 이름과 같아야 업로드돼요.
 
 ## 폴더 구조
 
 ```
 another-life/
-├── index.html   화면, 시나리오 데이터, 게임 엔진이 모두 들어 있는 한 파일
-├── img/         장면·선택 결과 웹툰 그림 (Figma AI로 생성, 720px JPEG)
-└── README.md
+├── index.html              화면, 시나리오 데이터, 게임 엔진이 모두 들어 있는 한 파일
+├── public/img/             장면·선택 결과 웹툰 그림 (Figma AI로 생성, 720px JPEG)
+├── apps-in-toss.config.ts  앱인토스 설정 (appName, WebView 옵션)
+├── vite.config.ts          빌드 설정
+└── package.json
 ```
 
 ## 코드에서 고칠 곳
@@ -32,10 +40,10 @@ another-life/
 
 | 무엇 | 어디 |
 |---|---|
-| 직업 목록 | `const JOBS` |
+| 직업 목록 (체험 가능 여부 `playable`) | `const JOBS` |
 | 대리 시나리오 | `const SCENES_DAERI` |
 | 원장 시나리오 | `const SCENES_DERMA` |
-| 장면 그림 연결 | `const IMG`, `IMG_DERMA` (장면 id → `img/` 파일 이름) |
+| 장면 그림 연결 | `const IMG`, `IMG_DERMA` (장면 id → `public/img/` 파일 이름) |
 | 선택 결과 그림 | `RIMG_DAERI`, `RIMG_DERMA` (장면 id → 선택 순서별 파일 이름) |
 | 직업 프로필, 세후 일급, 정산 문구 | `const PROFILES` |
 | 엔딩 조건 | `endingDaeri()`, `endingDerma()` |
@@ -48,3 +56,10 @@ another-life/
   실제 서비스에서는 Firebase, Supabase 같은 백엔드로 바꿔 연결하면 됩니다 (`paintRx`, `react` 함수).
 - 수치(연봉, 매출, 대출 등)는 시나리오용 가정입니다.
 - 그림은 Figma AI로 생성했습니다. 상업적으로 쓰기 전에 Figma AI 이용 약관을 확인하세요.
+
+## 토스 출시 가이드에 맞춘 점
+
+- 라이트 모드만 사용, 확대·축소 제스처 끔
+- 자체 뒤로가기 버튼을 숨기고, 토스 내비게이션 바·안드로이드 뒤로가기를 화면 흐름(홈 ← 직업 상세 ← 체험)에 연결. 홈에서 뒤로가기를 누르면 미니앱이 닫혀요.
+- 근거 기사는 외부 링크 없이 출처 이름만 표시
+- 강남 피부과 원장은 장면 그림이 채워질 때까지 '준비 중'으로 잠금 (`JOBS`의 `playable`)
