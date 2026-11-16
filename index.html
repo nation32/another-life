@@ -1,0 +1,1515 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>타인의 삶</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Do+Hyeon&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one phone-width column. The day plays as webtoon panels (4:5) with captions, speech bubbles and a phone that slides up. Lanyard blue = the company, highlighter yellow = the real hourly wage. */
+:root{
+  --bg:#ECEFF3; --surface:#FFFFFF; --surface2:#F5F7FA; --ink:#17202A; --muted:#5A6672; --line:#D4DAE1;
+  --badge:#2443C4; --badge-ink:#FFFFFF; --hl:#FFE14D; --hl-ink:#1B1B12;
+  --good:#167A4C; --bad:#C23B2A; --bubble:#E6EAF0;
+  --panel-line:#111418; --cap-bg:#FFFFFF; --cap-ink:#16181C;
+  --f-display:"Do Hyeon","IBM Plex Sans KR",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-hand:"Gaegu","IBM Plex Sans KR",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161B; --surface:#1A2128; --surface2:#151B21; --ink:#E5EAF0; --muted:#97A3AF; --line:#2B343E;
+  --badge:#8EA6FF; --badge-ink:#0E1630; --hl:#F3D23F; --hl-ink:#1B1B12;
+  --good:#4CC28A; --bad:#FF7A66; --bubble:#232C35; --panel-line:#05070A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11161B; --surface:#1A2128; --surface2:#151B21; --ink:#E5EAF0; --muted:#97A3AF; --line:#2B343E;
+  --badge:#8EA6FF; --badge-ink:#0E1630; --hl:#F3D23F; --hl-ink:#1B1B12;
+  --good:#4CC28A; --bad:#FF7A66; --bubble:#232C35; --panel-line:#05070A; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:480px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 48px;display:flex;flex-direction:column;gap:14px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;letter-spacing:.01em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--badge);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.note{font-size:12px;color:var(--muted)}
+.demo-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.06em;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px;width:max-content}
+
+/* ---------- panel (webtoon cut) ---------- */
+.panel{position:relative;width:100%;aspect-ratio:4/5;max-height:62vh;margin:0 auto;border:3px solid var(--panel-line);background:#222;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.panel.tilt-a{clip-path:polygon(0 0,100% 1.2%,100% 100%,0 98.8%)}
+.panel.tilt-b{clip-path:polygon(0 1.2%,100% 0,100% 98.8%,0 100%)}
+.panel svg.art{position:absolute;inset:0;width:100%;height:100%;display:block}
+.panel img.art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+.panel .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:0 14%;text-align:center;background:radial-gradient(120% 90% at 50% 30%,#3A4A6B,#141A26);color:#D5DDEC;font-size:13px}
+.panel .ph b{font-family:var(--f-display);font-weight:400;font-size:22px;color:#fff}
+.photo .ph-emoji{width:100%;height:100%;display:grid;place-items:center;font-size:40px;background:var(--surface2)}
+.ai-tag{position:absolute;right:3%;top:2.5%;font-size:9px;font-weight:700;letter-spacing:.04em;color:#fff;background:rgba(10,12,16,.5);border-radius:6px;padding:1px 6px}
+.panel .cam{transform-origin:50% 45%}
+.cam-zoomin{animation:camZoomIn 10s ease-out forwards}
+.cam-zoomout{animation:camZoomOut 10s ease-out forwards}
+.cam-panr{animation:camPanR 12s ease-in-out forwards}
+.cam-panl{animation:camPanL 12s ease-in-out forwards}
+.cam-shake{animation:camShake .5s ease 2}
+@keyframes camZoomIn{from{transform:scale(1)}to{transform:scale(1.09)}}
+@keyframes camZoomOut{from{transform:scale(1.12)}to{transform:scale(1)}}
+@keyframes camPanR{from{transform:scale(1.08) translateX(-10px)}to{transform:scale(1.08) translateX(10px)}}
+@keyframes camPanL{from{transform:scale(1.08) translateX(10px)}to{transform:scale(1.08) translateX(-10px)}}
+@keyframes camShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px) rotate(-.4deg)}75%{transform:translateX(4px) rotate(.4deg)}}
+.panel-in{animation:panelIn .55s cubic-bezier(.2,.8,.2,1)}
+.panel-out{animation:panelOut .32s ease-in forwards}
+@keyframes panelIn{from{clip-path:inset(0 0 0 100%);transform:translateX(12px)}to{clip-path:inset(0 0 0 0);transform:none}}
+@keyframes panelOut{to{transform:translateY(-18px);opacity:0}}
+.panel.narr img.art,.panel.narr svg.art{filter:blur(10px) brightness(.3) saturate(.8);transition:filter .5s ease}
+.panel.narr .cap,.panel.narr .say,.panel.narr .npc{left:8%;right:8%;top:50%;bottom:auto;transform:translateY(-50%);max-width:none;background:transparent;color:#fff;border:none;box-shadow:none;font-size:25px;line-height:1.4;text-align:center;padding:0;animation:narrIn .6s ease}
+.panel.narr .say::after{display:none}
+.panel.narr .npc .who{position:static;display:inline-block;margin-bottom:10px;background:#fff;color:#16181C}
+.panel.narr .npc .tx{display:block}
+.panel.narr .floaters{top:auto;bottom:12%}
+@keyframes narrIn{from{opacity:0}to{opacity:1}}
+@keyframes reactIn{from{opacity:0;clip-path:inset(0 0 0 100%)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.chr{animation:breathe 4.2s ease-in-out infinite}
+.chr.pop{animation:pop .35s ease, breathe 4.2s ease-in-out .35s infinite}
+@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(2.5px)}}
+@keyframes pop{0%{transform:translateY(0) scale(1)}40%{transform:translateY(-6px) scale(1.015)}100%{transform:none}}
+.sway{animation:sway 3.6s ease-in-out infinite;transform-origin:50% 0}
+@keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.rock{animation:rock 2.4s ease-in-out infinite}
+@keyframes rock{0%,100%{transform:translateY(0)}50%{transform:translateY(1.5px)}}
+.streak{animation:streak 1.4s linear infinite}
+.streak.s2{animation-duration:2.1s;animation-delay:-.7s}
+.streak.s3{animation-duration:1.1s;animation-delay:-.3s}
+@keyframes streak{from{transform:translateX(420px)}to{transform:translateX(-420px)}}
+.twinkle{animation:twinkle 3s ease-in-out infinite}
+.twinkle.t2{animation-delay:-1s}.twinkle.t3{animation-delay:-2s}
+@keyframes twinkle{0%,100%{opacity:.35}50%{opacity:1}}
+.shakeit{animation:shakeit .25s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes shakeit{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.steam{animation:steam 2.6s ease-in-out infinite;opacity:.0}
+.steam.d2{animation-delay:-1.3s}
+@keyframes steam{0%{transform:translateY(8px);opacity:0}40%{opacity:.7}100%{transform:translateY(-16px);opacity:0}}
+.blink{animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.spin{animation:spin 2.4s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.float{animation:floaty 2.2s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* overlays inside panel */
+.ov{position:absolute;inset:0;pointer-events:none}
+.cap{position:absolute;left:4%;top:4%;max-width:72%;background:var(--cap-bg);color:var(--cap-ink);border:2px solid #16181C;padding:9px 12px;font-family:var(--f-hand);font-size:19px;line-height:1.3;font-weight:700;box-shadow:3px 3px 0 rgba(0,0,0,.25);animation:capIn .25s ease}
+.cap.time{font-family:var(--f-mono);font-size:13px;font-weight:600;padding:4px 8px;top:auto;bottom:4%;left:auto;right:4%;background:#16181C;color:#fff;border-color:#16181C;box-shadow:none}
+@keyframes capIn{from{transform:translateY(-6px);opacity:0}to{transform:none;opacity:1}}
+.say{position:absolute;right:5%;top:6%;max-width:64%;background:#fff;color:#16181C;border:2px solid #16181C;border-radius:22px;padding:10px 15px;font-family:var(--f-hand);font-size:21px;line-height:1.25;font-weight:700;animation:sayIn .3s cubic-bezier(.2,1.4,.4,1)}
+.say::after{content:"";position:absolute;left:22%;bottom:-13px;width:18px;height:16px;background:#fff;border-left:2px solid #16181C;border-bottom:2px solid #16181C;transform:skewX(-30deg) rotate(-10deg);border-bottom-left-radius:4px}
+.say.left{right:auto;left:5%}
+@keyframes sayIn{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.npc{position:absolute;left:4%;top:20%;max-width:74%;background:#fff;color:#16181C;border:2.5px solid #16181C;border-radius:16px;padding:16px 14px 10px;font-family:var(--f-hand);font-size:20px;line-height:1.25;font-weight:700;animation:sayIn .3s cubic-bezier(.2,1.4,.4,1);box-shadow:4px 4px 0 rgba(0,0,0,.3)}
+.npc .who{position:absolute;top:-12px;left:10px;background:#16181C;color:#fff;font-family:var(--f-body);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;letter-spacing:.02em}
+.npc.shout{border-width:3px;transform:rotate(-1.5deg)}
+.phone{position:absolute;left:50%;bottom:-2%;width:70%;height:64%;transform:translateX(-50%);background:#0E1116;border-radius:26px 26px 0 0;padding:10px 8px 0;box-shadow:0 -10px 30px rgba(0,0,0,.45);animation:phoneUp .4s cubic-bezier(.2,.9,.2,1);display:flex;flex-direction:column}
+.phone .scr{flex:1;background:#B9C9DA;border-radius:18px 18px 0 0;overflow:hidden;display:flex;flex-direction:column;font-family:var(--f-body)}
+.phone .bar{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:700;padding:7px 12px;background:rgba(255,255,255,.55);color:#16181C}
+.phone .list{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:8px 9px 12px;overflow:hidden}
+.phone.kakao .scr{background:#B2C7D9}
+.phone.work .scr{background:#E9EDF3}
+.phone.blind .scr{background:#F2F3F5}
+.phone.bank .scr{background:#EEF2F7}
+.pm{display:flex;flex-direction:column;gap:2px;max-width:92%;animation:capIn .25s ease}
+.pm .f{font-size:10px;font-weight:700;color:#3A4450}
+.pm .b{background:#fff;color:#16181C;border-radius:4px 12px 12px 12px;padding:6px 9px;font-size:12.5px;line-height:1.4}
+.pm .t{font-size:9px;color:#56606C;font-family:var(--f-mono)}
+.pm.typing .b{color:#7A8490;font-style:italic}
+.pp{background:#fff;border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;color:#16181C;animation:capIn .25s ease;border:1px solid #DDE1E6}
+.pp .s{font-size:9.5px;color:#6A7480;font-weight:700}
+.pp b{font-size:12.5px;line-height:1.35}
+.pp .m{font-size:10px;color:#6A7480}
+.pa{background:#fff;border-radius:12px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:6px;color:#16181C;font-size:11.5px;animation:capIn .25s ease;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.pa .amt{font-family:var(--f-mono);font-weight:600;color:var(--bad)}
+@keyframes phoneUp{from{transform:translate(-50%,100%)}to{transform:translate(-50%,0)}}
+.banner{position:absolute;left:4%;right:4%;top:3%;background:rgba(250,251,253,.97);color:#16181C;border-radius:14px;padding:9px 12px;font-size:12.5px;display:flex;gap:9px;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.3);animation:bannerIn .35s cubic-bezier(.2,.9,.2,1)}
+.banner .ic{width:26px;height:26px;border-radius:7px;background:var(--badge);color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
+.banner b{display:block;font-size:11px;color:#56606C}
+@keyframes bannerIn{from{transform:translateY(-140%)}to{transform:none}}
+.sticky{position:absolute;right:5%;top:30%;width:52%;background:#FFE98A;color:#2A2410;padding:10px 12px 12px;font-family:var(--f-hand);font-size:17px;line-height:1.3;font-weight:700;transform:rotate(2.5deg);box-shadow:3px 4px 0 rgba(0,0,0,.22);animation:capIn .3s ease}
+.sticky div{display:flex;gap:6px}
+.filechip{position:absolute;left:6%;right:6%;bottom:6%;background:#fff;color:#16181C;border:2px solid #16181C;border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:center;font-family:var(--f-mono);font-size:11px;animation:capIn .3s ease}
+.filechip span:first-child{background:#C23B2A;color:#fff;border-radius:4px;padding:1px 5px;font-weight:700}
+.filechip span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.stamp{position:absolute;left:5%;bottom:5%;max-width:80%;font-size:12.5px;font-weight:700;padding:6px 10px;border-radius:8px;animation:stampIn .4s cubic-bezier(.2,1.6,.4,1);border:2px solid}
+.stamp.perk{background:#E9F8F0;color:#0F5B38;border-color:#0F5B38}
+.stamp.cost{background:#FDECEA;color:#8E2418;border-color:#8E2418}
+@keyframes stampIn{from{transform:scale(1.6) rotate(-6deg);opacity:0}to{transform:rotate(-2deg);opacity:1}}
+.floaters{position:absolute;left:0;right:0;top:38%;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:0 10%}
+.fl{font-family:var(--f-mono);font-weight:700;font-size:13px;padding:3px 10px;border-radius:999px;background:#fff;border:2px solid #16181C;animation:floatUp 2.2s ease forwards}
+.fl.up{color:#0F6B42}.fl.dn{color:#B02A1A}
+@keyframes floatUp{0%{transform:translateY(16px) scale(.7);opacity:0}15%{transform:translateY(0) scale(1.05);opacity:1}75%{opacity:1}100%{transform:translateY(-36px);opacity:0}}
+.tapnext{position:absolute;right:4%;bottom:3.5%;font-size:11px;font-weight:700;color:#fff;background:rgba(10,12,16,.65);border-radius:999px;padding:3px 10px;animation:blink 1.4s steps(2) infinite}
+
+/* ---------- HUD ---------- */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px 8px;display:flex;flex-direction:column;gap:7px}
+.hud-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.clock{display:flex;align-items:baseline;gap:8px;min-width:0}
+.clock .tm{font-family:var(--f-mono);font-size:24px;font-weight:600;line-height:1}
+.clock .pl{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wage{background:var(--hl);color:var(--hl-ink);border-radius:8px;padding:3px 10px;display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;flex:none}
+.wage .k{font-size:10px;font-weight:700;letter-spacing:.04em}
+.wage .v{font-family:var(--f-mono);font-weight:600;font-size:15px}
+.wage.tick{animation:pop .5s ease}
+.dayline{position:relative;height:3px;background:var(--line);border-radius:4px;overflow:hidden}
+.dayline i{position:absolute;inset:0 auto 0 0;background:var(--badge);border-radius:4px;transition:width .6s ease}
+.gauges{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.g{display:flex;flex-direction:column;gap:2px;min-width:0}
+.g .lb{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted)}
+.g .lb b{font-family:var(--f-mono);color:var(--ink);font-weight:600}
+.g .bar{height:5px;background:var(--line);border-radius:6px;overflow:hidden}
+.g .bar i{display:block;height:100%;background:var(--ink);border-radius:6px;transition:width .6s ease}
+.g.low .bar i{background:var(--bad)} .g.low .lb b{color:var(--bad)}
+.g.hit{animation:pop .45s ease}
+
+/* ---------- below panel ---------- */
+.stage-meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.stage-meta h2{font-size:22px}
+.controls{display:flex;flex-direction:column;gap:12px;min-height:64px}
+.thoughts{display:flex;flex-direction:column;gap:14px;padding-top:4px}
+.thought{position:relative;text-align:left;background:var(--surface);color:var(--ink);border:2px solid var(--ink);border-radius:26px;padding:12px 18px;font-family:var(--f-hand);font-size:20px;font-weight:700;line-height:1.25;width:100%;display:flex;flex-direction:column;gap:2px;animation:sayIn .3s cubic-bezier(.2,1.4,.4,1) both;transition:transform .12s ease,background .12s ease}
+.thought:nth-child(2){animation-delay:.08s}.thought:nth-child(3){animation-delay:.16s}.thought:nth-child(4){animation-delay:.24s}
+.thought::before,.thought::after{content:"";position:absolute;border:2px solid var(--ink);background:var(--surface);border-radius:50%}
+.thought::before{width:12px;height:12px;left:26px;top:-16px}
+.thought::after{width:7px;height:7px;left:18px;top:-26px}
+.thought:hover{transform:translateY(-2px)}
+.thought:active{transform:scale(.98)}
+.thought .sub{font-family:var(--f-body);font-size:12px;font-weight:500;color:var(--muted)}
+.thought .k{font-family:var(--f-mono);font-size:11px;color:var(--muted);font-weight:600}
+.cta-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.next{background:var(--ink);color:var(--bg);border:none;border-radius:999px;padding:11px 22px;font-weight:700;margin-left:auto}
+.skip{background:none;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:13px;color:var(--muted)}
+.react-note{font-size:13px;color:var(--muted)}
+
+/* ---------- home / job ---------- */
+.brand{display:flex;flex-direction:column;gap:10px;padding-top:4px}
+.brand h1{font-size:40px;line-height:1.08}
+.brand h1 em{font-style:normal;background:linear-gradient(transparent 58%,var(--hl) 58%);color:inherit;padding:0 2px}
+.brand p{color:var(--muted);max-width:36ch}
+.hero .panel{max-height:46vh}
+.section-title{display:flex;justify-content:space-between;align-items:baseline;margin-top:6px}
+.section-title h2{font-size:22px}
+.joblist{display:flex;flex-direction:column;gap:10px}
+.job{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;width:100%}
+.job .ic{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;font-size:26px;background:var(--surface2);border:1px solid var(--line)}
+.job .nm{font-weight:700;font-size:16px}
+.job .meta{font-size:13px;color:var(--muted)}
+.job .go{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:var(--badge);color:var(--badge-ink);white-space:nowrap}
+.job.locked{background:transparent;border-style:dashed}
+.job.locked .ic{filter:grayscale(1);opacity:.7}
+.job.locked .go{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.job.playable{border:1.5px solid var(--badge)}
+.tag-kind{font-size:11px;font-weight:700;letter-spacing:.04em;padding:1px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted);margin-left:6px;vertical-align:2px}
+.votes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.vote{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;min-width:0}
+.vote .e{font-size:22px}
+.vote[aria-pressed="true"]{border-color:var(--badge);box-shadow:inset 0 0 0 1px var(--badge)}
+.vote .v{font-size:11px;color:var(--muted)}
+.back{background:none;border:none;color:var(--muted);padding:4px 0;width:max-content;font-size:14px}
+.idcard{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.idcard .lanyard{height:40px;background:var(--badge);display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:var(--badge-ink);font-weight:700;font-size:12px;letter-spacing:.06em}
+.idcard .hole{width:44px;height:8px;border-radius:8px;background:var(--bg)}
+.idcard .body{padding:16px;display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center}
+.idcard .photo{width:84px;height:104px;border-radius:10px;background:#DCE3EC;border:1px solid var(--line);overflow:hidden}
+.idcard .photo svg,.idcard .photo img{width:100%;height:100%;display:block;object-fit:cover;max-width:none}
+.idcard .who{font-family:var(--f-display);font-size:26px;line-height:1.15}
+.idcard .role{color:var(--muted);font-size:13px}
+.facts{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.facts div{padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.facts div:nth-child(odd){border-right:1px solid var(--line)}
+.facts div:nth-child(n+3){border-top:1px solid var(--line)}
+.facts .k{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.facts .v{font-weight:700;font-size:15px}
+.assume{font-size:11px;color:var(--muted);padding:0 16px 12px}
+.modes{display:flex;flex-direction:column;gap:10px}
+.mode{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;text-align:left;padding:16px;border-radius:14px;border:1px solid var(--line);background:var(--surface);width:100%}
+.mode .t{font-weight:700;font-size:16px}
+.mode .d{grid-column:1;font-size:13px;color:var(--muted)}
+.mode .cta{grid-row:1/3;grid-column:2;font-weight:700;font-size:14px;border-radius:999px;padding:8px 14px;background:var(--badge);color:var(--badge-ink);white-space:nowrap}
+.mode.locked{background:var(--surface2);border-style:dashed}
+.mode.locked .t{color:var(--muted)}
+.mode.locked .cta{background:transparent;color:var(--muted);border:1px solid var(--line)}
+
+/* ---------- end ---------- */
+.endhead{display:flex;flex-direction:column;gap:6px}
+.endhead h1{font-size:32px;line-height:1.15}
+.wagebig{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
+.wagebig .lbl{font-family:var(--f-display);font-size:24px;line-height:1.3;color:var(--ink);text-wrap:balance}
+.wagebig .num{font-family:var(--f-mono);font-size:26px;font-weight:600;line-height:1}
+.wagebig .num span{background:var(--hl);color:var(--hl-ink);padding:0 6px;border-radius:6px}
+.cmp{display:flex;flex-direction:column;gap:8px}
+.cmp .row{display:grid;grid-template-columns:96px 1fr 84px;gap:10px;align-items:center;font-size:13px}
+.cmp .row .barw{height:10px;background:var(--surface2);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.cmp .row .barw i{display:block;height:100%;background:var(--muted)}
+.cmp .row.me .barw i{background:var(--hl)}
+.cmp .row .val{font-family:var(--f-mono);text-align:right;font-weight:600}
+.timebar{display:flex;height:16px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.timebar i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.c-commute{background:#8A97A6} .c-work{background:var(--badge)} .c-extra{background:var(--bad)} .c-home{background:#C98A14}
+.ending{background:var(--ink);color:var(--bg);border-radius:18px;padding:18px 16px;display:flex;flex-direction:column;gap:6px}
+.ending .k{font-size:12px;letter-spacing:.08em;opacity:.7;font-weight:700}
+.ending h2{font-size:30px}
+.ending p{opacity:.85;font-size:14px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.box h3{font-size:20px}
+.gfinal{display:flex;flex-direction:column;gap:8px}
+.gfinal .row{display:grid;grid-template-columns:68px 1fr 92px;gap:10px;align-items:center;font-size:13px}
+.gfinal .bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden}
+.gfinal .bar i{display:block;height:100%;background:var(--ink)}
+.gfinal .low .bar i{background:var(--bad)}
+.gfinal .val{font-family:var(--f-mono);text-align:right}
+.up{color:var(--good)} .dn{color:var(--bad)} .nu{color:var(--muted)}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pc ul{margin:0;padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+.pc h4{margin:0 0 6px;font-size:13px}
+.pc .p h4{color:var(--good)} .pc .c h4{color:var(--bad)}
+.quote{font-size:15px;line-height:1.6;border-left:3px solid var(--line);padding-left:12px}
+.quote small{display:block;color:var(--muted);font-size:11px;margin-top:6px}
+.factlist{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.factlist li{font-size:13px;display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line);padding-top:10px}
+.factlist li:first-child{border-top:none;padding-top:0}
+.factlist a{color:var(--badge);font-size:12px;text-decoration:none}
+.factlist a:hover{text-decoration:underline}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{border-radius:12px;padding:12px;font-weight:700;border:1px solid var(--line);background:var(--surface);text-align:center}
+.btn.primary{background:var(--badge);color:var(--badge-ink);border-color:var(--badge)}
+.btn.locked{background:var(--surface2);border-style:dashed;color:var(--muted)}
+.btn.wide{grid-column:1/-1}
+.sharecard{font-family:var(--f-mono);font-size:12px;white-space:pre-wrap;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;word-break:break-word}
+.emos{display:flex;flex-wrap:wrap;gap:8px}
+.emo{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 12px;font-size:14px;font-weight:600}
+.emo span{font-size:18px}
+.emo[aria-pressed="true"]{border-color:var(--badge);background:var(--surface2);box-shadow:inset 0 0 0 1px var(--badge)}
+.rxbars{display:flex;flex-direction:column;gap:7px}
+.rxrow{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr 40px;gap:10px;align-items:center;font-size:13px}
+.rxrow.me{font-weight:700}
+.rxbar{height:8px;background:var(--surface2);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:block}
+.rxbar i{display:block;height:100%;background:var(--muted);transition:width .6s ease}
+.rxrow.me .rxbar i,.rxchoices .rxbar i{background:var(--hl)}
+.rxv{font-family:var(--f-mono);font-size:12px;text-align:right}
+.rxline{font-size:14px}
+.rxline b{font-family:var(--f-mono)}
+.rxh{margin:4px 0 0;font-size:14px}
+.rxchoices{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rxchoices li{display:grid;grid-template-columns:minmax(0,1.6fr) 1fr 40px;gap:10px;align-items:center;font-size:13px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;z-index:30;max-width:calc(100% - 32px)}
+.scrim{position:fixed;inset:0;background:rgba(10,14,20,.5);z-index:20;display:flex;align-items:flex-end;justify-content:center;padding:0 max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.sheet{background:var(--surface);border-radius:20px;padding:20px 18px;max-width:456px;width:100%;display:flex;flex-direction:column;gap:12px;animation:capIn .25s ease}
+.sheet h3{font-size:24px}
+.sheet .lock{font-size:30px}
+.sheet p{color:var(--muted);font-size:14px}
+.sheet .row{display:flex;gap:10px}
+.sheet .row .btn{flex:1}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap" id="app"></div>
+<div id="modal-root"></div>
+
+<script>
+(function(){
+"use strict";
+const $app = document.getElementById("app");
+const $modal = document.getElementById("modal-root");
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const won = n => Math.round(n).toLocaleString("ko-KR") + "원";
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const reduced = (() => { try{ return matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return false; } })();
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem("taini:"+k); return v == null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("taini:"+k, JSON.stringify(v)); }catch(e){} }
+};
+function toast(msg){ const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+const toMin = hhmm => { const [h,m] = hhmm.split(":").map(Number); return (h < 5 ? h + 24 : h) * 60 + m; };
+const toClock = min => { const h = Math.floor(min/60) % 24, m = min % 60; return String(h).padStart(2,"0") + ":" + String(m).padStart(2,"0"); };
+
+/* =====================================================================
+   ART: character (한 대리) + backgrounds, drawn as SVG in a 360x450 panel
+   ===================================================================== */
+const SKIN = "#F7DCC8", SKIN_SH = "#E9BFA5", HAIR = "#5A3A28", HAIR_HI = "#7A5238", LINE = "#2A1A12";
+function eyeSVG(cx, cy, kind, look){
+  const dx = look === "up" ? 2.5 : look === "side" ? 3.5 : 0, dy = look === "up" ? -4 : 0;
+  const open = (rx, ry, irx, iry) => `
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#fff"/>
+    <ellipse cx="${cx+dx}" cy="${cy+dy+1}" rx="${irx}" ry="${iry}" fill="#5A3420"/>
+    <ellipse cx="${cx+dx}" cy="${cy+dy+2}" rx="${irx*0.48}" ry="${iry*0.52}" fill="#24130A"/>
+    <circle cx="${cx+dx-2.8}" cy="${cy+dy-3.5}" r="2.6" fill="#fff"/>
+    <circle cx="${cx+dx+2.6}" cy="${cy+dy+4}" r="1.2" fill="#fff"/>
+    <path d="M${cx-rx-2} ${cy-ry*0.45} Q${cx} ${cy-ry-4} ${cx+rx+2} ${cy-ry*0.6}" stroke="${LINE}" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
+  switch(kind){
+    case "closed": return `<path d="M${cx-9} ${cy+2} Q${cx} ${cy-8} ${cx+9} ${cy+2}" stroke="${LINE}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    case "shut": return `<path d="M${cx-9} ${cy} Q${cx} ${cy+5} ${cx+9} ${cy}" stroke="${LINE}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    case "half": return open(9.5,11,7.5,10) + `<path d="M${cx-12} ${cy-14} H${cx+12} V${cy-1} Q${cx} ${cy+1} ${cx-12} ${cy-1} Z" fill="${SKIN}"/><path d="M${cx-11} ${cy-1} Q${cx} ${cy+1.5} ${cx+11} ${cy-2}" stroke="${LINE}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    case "wide": return `<ellipse cx="${cx}" cy="${cy}" rx="10.5" ry="12.5" fill="#fff" stroke="${LINE}" stroke-width="1.6"/><circle cx="${cx}" cy="${cy+1}" r="3.6" fill="#24130A"/><circle cx="${cx-1}" cy="${cy}" r="1" fill="#fff"/>`;
+    default: return open(9.5,11,7.5,10);
+  }
+}
+const FACES = {
+  neutral:{eyes:"open", brow:"flat", mouth:"smile0"},
+  smile:{eyes:"open", brow:"soft", mouth:"smile", blush:true},
+  happy:{eyes:"closed", brow:"soft", mouth:"open", blush:true, fx:"sparkle"},
+  sigh:{eyes:"half", brow:"sad", mouth:"sigh", fx:"sweat"},
+  tired:{eyes:"half", brow:"sad", mouth:"wavy", fx:"swirl"},
+  shock:{eyes:"wide", brow:"up", mouth:"o", fx:"sweat"},
+  think:{eyes:"open", brow:"flat", mouth:"flat", look:"up", fx:"dots"},
+  sad:{eyes:"open", brow:"sad", mouth:"frown", fx:"tears"},
+  determined:{eyes:"open", brow:"firm", mouth:"flat", fx:"spark1"},
+  sleepy:{eyes:"shut", brow:"soft", mouth:"o", fx:"zzz"},
+  soft:{eyes:"closed", brow:"soft", mouth:"smile", blush:true}
+};
+function browSVG(kind){
+  const L = 162, R = 198, y = 178;
+  const pair = (l, r) => `<path d="${l}" stroke="${HAIR}" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="${r}" stroke="${HAIR}" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;
+  switch(kind){
+    case "sad": return pair(`M${L-10} ${y+1} Q${L} ${y-1} ${L+9} ${y-6}`, `M${R-9} ${y-6} Q${R} ${y-1} ${R+10} ${y+1}`);
+    case "up": return pair(`M${L-10} ${y-6} Q${L} ${y-11} ${L+9} ${y-7}`, `M${R-9} ${y-7} Q${R} ${y-11} ${R+10} ${y-6}`);
+    case "firm": return pair(`M${L-10} ${y-4} Q${L} ${y-3} ${L+9} ${y+2}`, `M${R-9} ${y+2} Q${R} ${y-3} ${R+10} ${y-4}`);
+    case "soft": return pair(`M${L-10} ${y-1} Q${L} ${y-5} ${L+9} ${y-2}`, `M${R-9} ${y-2} Q${R} ${y-5} ${R+10} ${y-1}`);
+    default: return pair(`M${L-10} ${y} Q${L} ${y-4} ${L+9} ${y-1}`, `M${R-9} ${y-1} Q${R} ${y-4} ${R+10} ${y}`);
+  }
+}
+function mouthSVG(kind){
+  const x = 180, y = 232, st = `stroke="${LINE}" stroke-width="2.6" fill="none" stroke-linecap="round"`;
+  switch(kind){
+    case "smile": return `<path d="M${x-8} ${y-1} Q${x} ${y+7} ${x+8} ${y-1}" ${st}/>`;
+    case "smile0": return `<path d="M${x-5} ${y} Q${x} ${y+3} ${x+5} ${y}" ${st}/>`;
+    case "open": return `<path d="M${x-10} ${y-3} Q${x} ${y+15} ${x+10} ${y-3} Z" fill="#A8463F" stroke="${LINE}" stroke-width="2"/><path d="M${x-5} ${y+5} Q${x} ${y+2} ${x+5} ${y+5} Q${x} ${y+9} ${x-5} ${y+5}" fill="#E78A86"/>`;
+    case "sigh": return `<ellipse cx="${x}" cy="${y+1}" rx="4.5" ry="2.6" fill="#A8463F" stroke="${LINE}" stroke-width="1.6"/>`;
+    case "wavy": return `<path d="M${x-9} ${y+1} q3 -3 6 0 q3 3 6 0 q3 -3 6 0" ${st}/>`;
+    case "o": return `<ellipse cx="${x}" cy="${y+2}" rx="3.6" ry="4.6" fill="#A8463F" stroke="${LINE}" stroke-width="1.8"/>`;
+    case "frown": return `<path d="M${x-7} ${y+3} Q${x} ${y-3} ${x+7} ${y+3}" ${st}/>`;
+    default: return `<path d="M${x-6} ${y} L${x+6} ${y}" ${st}/>`;
+  }
+}
+function fxSVG(kind){
+  switch(kind){
+    case "sweat": return `<path class="float" d="M233 160 q-7 12 0 16 q7 -4 0 -16Z" fill="#9CD3F2" stroke="#2A6E96" stroke-width="1.4"/>`;
+    case "swirl": return `<g class="spin" transform="translate(246 112)"><path d="M0 0 m-1 0 a2 2 0 1 1 4 0 a5 5 0 1 1 -9 0 a8 8 0 1 1 15 0 a11 11 0 1 1 -21 0" stroke="${LINE}" stroke-width="2" fill="none"/></g>`;
+    case "sparkle": return `<g class="twinkle"><path d="M250 132 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z" fill="#FFD84A" stroke="#7A5A00" stroke-width="1"/></g><g class="twinkle t2"><path d="M108 150 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z" fill="#FFB3C7"/></g>`;
+    case "tears": return `<path d="M156 210 v14 M168 210 v18 M192 210 v18 M204 210 v14" stroke="#5DB4E8" stroke-width="3" stroke-linecap="round" opacity=".9"/>`;
+    case "zzz": return `<g class="float" font-family="Gaegu, sans-serif" font-weight="700" fill="#33404E"><text x="236" y="138" font-size="22">Z</text><text x="256" y="120" font-size="16">z</text><text x="270" y="106" font-size="12">z</text></g>`;
+    case "dots": return `<g fill="#fff" stroke="${LINE}" stroke-width="1.6"><circle class="twinkle" cx="238" cy="150" r="3.5"/><circle class="twinkle t2" cx="248" cy="138" r="5"/><circle class="twinkle t3" cx="262" cy="122" r="7"/></g>`;
+    case "spark1": return `<path d="M236 150 l8 -6 M240 160 l10 -2 M232 142 l3 -9" stroke="${LINE}" stroke-width="2.4" stroke-linecap="round"/>`;
+    default: return "";
+  }
+}
+function propSVG(prop, outfit){
+  const sleeve = outfit === "coat" ? "#C9A982" : outfit === "home" ? "#EBD5D0" : "#B7C5E6";
+  const hands = (lx, ly, rx, ry) => `
+    <path d="M70 450 C 92 410 118 ${ly+18} ${lx} ${ly+8}" stroke="${sleeve}" stroke-width="30" fill="none" stroke-linecap="round"/>
+    <path d="M290 450 C 268 410 242 ${ry+18} ${rx} ${ry+8}" stroke="${sleeve}" stroke-width="30" fill="none" stroke-linecap="round"/>
+    <ellipse cx="${lx}" cy="${ly}" rx="13" ry="15" fill="${SKIN}" stroke="${SKIN_SH}" stroke-width="1.5"/>
+    <ellipse cx="${rx}" cy="${ry}" rx="13" ry="15" fill="${SKIN}" stroke="${SKIN_SH}" stroke-width="1.5"/>`;
+  if(prop === "phone") return hands(166, 384, 194, 384) + `
+    <rect x="160" y="330" width="40" height="70" rx="7" fill="#1A1E25"/><rect x="163" y="334" width="34" height="61" rx="5" fill="#BFD6F5"/>
+    <rect x="167" y="342" width="22" height="5" rx="2" fill="#fff" opacity=".9"/><rect x="167" y="351" width="16" height="5" rx="2" fill="#fff" opacity=".7"/>`;
+  if(prop === "cup") return `
+    <g><path class="steam" d="M172 316 q-6 -10 0 -18 q6 -8 0 -16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+       <path class="steam d2" d="M188 316 q-6 -10 0 -18 q6 -8 0 -16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+    <rect x="158" y="322" width="44" height="50" rx="8" fill="#F4F1EC" stroke="#8A7F72" stroke-width="2"/>
+    <path d="M202 334 q14 0 14 12 q0 12 -14 12" stroke="#8A7F72" stroke-width="4" fill="none"/>` + hands(158, 352, 202, 352);
+  if(prop === "cheek") return `
+    <path d="M290 450 C 280 400 262 330 236 262" stroke="${sleeve}" stroke-width="30" fill="none" stroke-linecap="round"/>
+    <ellipse cx="226" cy="236" rx="15" ry="19" fill="${SKIN}" stroke="${SKIN_SH}" stroke-width="1.5"/>`;
+  if(prop === "laptop") return `
+    <path d="M86 450 L104 372 L256 372 L274 450 Z" fill="#3A4250"/><path d="M104 372 L256 372 L262 380 L98 380 Z" fill="#59647A"/>`;
+  return "";
+}
+function charSVG(o){
+  o = o || {};
+  const f = FACES[o.face || "neutral"] || FACES.neutral;
+  const outfit = o.outfit || "shirt", hair = o.hair || "long";
+  const bun = hair === "bun", messy = hair === "messy";
+  const backHair = bun
+    ? `<path d="M180 108 C122 108 104 160 108 220 C110 250 120 266 132 272 L228 272 C240 266 250 250 252 220 C256 160 238 108 180 108Z" fill="${HAIR}"/>
+       <circle cx="182" cy="104" r="26" fill="${HAIR}"/><path d="M164 96 q18 -14 36 0" stroke="${HAIR_HI}" stroke-width="2" fill="none"/>`
+    : `<path d="M180 108 C120 108 100 160 104 220 C96 270 76 300 92 340 C100 362 80 386 96 412 L264 412 C280 386 260 362 268 340 C284 300 264 270 256 220 C260 160 240 108 180 108Z" fill="${HAIR}"/>
+       <path d="M110 250 q-10 40 2 80 M250 250 q10 40 -2 80" stroke="${HAIR_HI}" stroke-width="2.2" fill="none" opacity=".7"/>`;
+  let body;
+  if(outfit === "coat"){
+    body = `<path d="M70 450 C74 342 120 300 180 296 C240 300 286 342 290 450Z" fill="#F7F5F1"/>
+      <path d="M70 450 C74 345 116 305 160 298 L178 382 L150 450Z" fill="#CDB08B"/><path d="M290 450 C286 345 244 305 200 298 L182 382 L210 450Z" fill="#CDB08B"/>
+      <path d="M160 298 L170 336 L150 330Z M200 298 L190 336 L210 330Z" fill="#B99A73"/>
+      <path d="M246 316 L132 450" stroke="#3A2E26" stroke-width="10"/>`;
+  } else if(outfit === "home"){
+    body = `<path d="M70 450 C74 342 120 300 180 296 C240 300 286 342 290 450Z" fill="#EBD5D0"/>
+      <path d="M128 304 C140 276 220 276 232 304 C220 322 140 322 128 304Z" fill="#DDBFB9"/>
+      <path d="M168 318 v40 M192 318 v40" stroke="#B9968F" stroke-width="2.4" stroke-linecap="round"/>`;
+  } else {
+    body = `<path d="M70 450 C74 342 120 300 180 296 C240 300 286 342 290 450Z" fill="#B7C5E6"/>
+      <path d="M160 290 L180 322 L168 336 L148 302Z M200 290 L180 322 L192 336 L212 302Z" fill="#D6DFF3"/>
+      <path d="M180 322 V450" stroke="#9EAFD6" stroke-width="2"/>
+      <path d="M164 294 C158 334 168 380 192 398" stroke="#2443C4" stroke-width="4" fill="none"/>
+      <path d="M196 294 C206 334 206 372 200 398" stroke="#2443C4" stroke-width="4" fill="none"/>
+      <rect x="182" y="396" width="30" height="40" rx="4" fill="#fff" stroke="#9AA6BA" stroke-width="1.4"/><rect x="182" y="396" width="30" height="9" rx="3" fill="#2443C4"/>
+      <rect x="189" y="411" width="16" height="13" rx="2" fill="#DCE3EC"/>`;
+  }
+  const sideLen = bun ? 250 : 372;
+  const front = `
+    <path d="M136 196 C130 140 158 112 184 114 C214 116 232 146 226 196 C218 170 210 158 198 150 C194 168 184 176 172 178 C176 164 172 154 168 148 C160 164 148 178 140 194Z" fill="${HAIR}"/>
+    <path d="M142 150 C128 190 130 ${sideLen*0.64} 120 ${sideLen*0.8} C116 ${sideLen*0.88} 124 ${sideLen*0.94} 116 ${sideLen} C134 ${sideLen*0.92} 136 ${sideLen*0.8} 146 ${sideLen*0.7} C150 ${sideLen*0.63} 146 200 152 168Z" fill="${HAIR}"/>
+    <path d="M218 150 C232 190 230 ${sideLen*0.64} 240 ${sideLen*0.8} C244 ${sideLen*0.88} 236 ${sideLen*0.94} 244 ${sideLen} C226 ${sideLen*0.92} 224 ${sideLen*0.8} 214 ${sideLen*0.7} C210 ${sideLen*0.63} 214 200 208 168Z" fill="${HAIR}"/>
+    <path d="M160 128 q16 -8 34 -2" stroke="${HAIR_HI}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    ${messy ? `<path d="M170 116 q-6 -18 4 -26 M190 114 q10 -16 2 -28 M150 128 q-16 -8 -20 -20" stroke="${HAIR}" stroke-width="5" fill="none" stroke-linecap="round"/>` : ""}`;
+  const glasses = o.glasses ? `<g fill="none" stroke="#3C4452" stroke-width="2"><circle cx="162" cy="198" r="14"/><circle cx="198" cy="198" r="14"/><path d="M176 198 h8"/></g>` : "";
+  return `<g class="chr${o.pop ? " pop" : ""}">
+    ${backHair}
+    <path d="M164 238 L164 290 Q180 300 196 290 L196 238Z" fill="${SKIN_SH}"/>
+    ${body}
+    <path d="M138 190 C138 150 156 130 180 130 C204 130 222 150 222 190 C222 226 202 252 180 254 C158 252 138 226 138 190Z" fill="${SKIN}"/>
+    ${f.blush ? `<ellipse cx="152" cy="216" rx="9" ry="4.5" fill="#F08A8A" opacity=".4"/><ellipse cx="208" cy="216" rx="9" ry="4.5" fill="#F08A8A" opacity=".4"/>` : ""}
+    ${eyeSVG(162, 198, f.eyes, f.look)}${eyeSVG(198, 198, f.eyes, f.look)}
+    <path d="M180 210 l-2 6 l4 0" stroke="${SKIN_SH}" stroke-width="2" fill="none" stroke-linecap="round"/>
+    ${mouthSVG(f.mouth)}
+    ${front}
+    ${browSVG(f.brow)}
+    ${glasses}
+    ${propSVG(o.prop, outfit)}
+    ${fxSVG(f.fx)}
+  </g>`;
+}
+
+/* backgrounds: back (behind character) + front (over character) */
+function people(list, color, op){
+  return list.map(([x,y,s]) => `<g opacity="${op}" fill="${color}"><circle cx="${x}" cy="${y}" r="${13*s}"/><path d="M${x-26*s} ${y+70*s} C${x-24*s} ${y+24*s} ${x+24*s} ${y+24*s} ${x+26*s} ${y+70*s}Z"/></g>`).join("");
+}
+function cityLights(n, x0, x1, y0, y1, seed){
+  let s = seed || 7, out = "";
+  const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  for(let i = 0; i < n; i++){
+    const x = x0 + rnd()*(x1-x0), y = y0 + rnd()*(y1-y0);
+    out += `<rect class="twinkle ${["","t2","t3"][i%3]}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="3" height="4" fill="#FFD98A"/>`;
+  }
+  return out;
+}
+const BG = {
+  bedroomDawn: () => ({back:`
+    <defs><linearGradient id="gDawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9FB6E0"/><stop offset=".7" stop-color="#F6C9A0"/><stop offset="1" stop-color="#FBE0BE"/></linearGradient></defs>
+    <rect width="360" height="450" fill="#E8CDB9"/>
+    <rect x="200" y="30" width="140" height="190" fill="url(#gDawn)" stroke="#C9A98F" stroke-width="6"/>
+    <path d="M270 30 V220 M200 125 H340" stroke="#C9A98F" stroke-width="4"/>
+    <path d="M190 22 C204 90 200 170 214 236 L190 236Z" fill="#D9A5A0"/><path d="M350 22 C336 90 340 170 326 236 L350 236Z" fill="#D9A5A0"/>
+    <path d="M200 220 L80 450 L360 450 L360 300 Z" fill="#FFE3C4" opacity=".35"/>
+    <rect x="12" y="250" width="70" height="80" rx="6" fill="#BF9A80"/>
+    <g transform="translate(46 236)"><g class="shakeit"><circle r="18" fill="#F04E4E" stroke="#7A1E1E" stroke-width="2"/><circle r="12" fill="#fff"/><path d="M0 0 V-8 M0 0 L6 3" stroke="#222" stroke-width="2"/></g></g>
+    <text x="22" y="200" font-family="Gaegu, sans-serif" font-weight="700" font-size="22" fill="#7A1E1E" class="blink">따르릉!!</text>`,
+    front:`<path d="M0 410 C80 396 280 396 360 412 L360 450 L0 450Z" fill="#F2EFEA"/><path d="M0 420 C90 410 270 410 360 424" stroke="#DCD6CE" stroke-width="3" fill="none"/>`}),
+  subway: () => ({back:`
+    <defs><linearGradient id="gTun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B3442"/><stop offset="1" stop-color="#11161E"/></linearGradient></defs>
+    <rect width="360" height="450" fill="#DCE3EA"/>
+    <rect x="0" y="40" width="360" height="130" fill="url(#gTun)"/>
+    <g><rect class="streak" x="0" y="80" width="140" height="4" fill="#FFE9A8" opacity=".8"/><rect class="streak s2" x="40" y="120" width="90" height="3" fill="#BFE0FF" opacity=".7"/><rect class="streak s3" x="10" y="100" width="60" height="2" fill="#fff" opacity=".6"/></g>
+    <path d="M0 40 H360 M0 170 H360" stroke="#AEB8C4" stroke-width="8"/><path d="M120 40 V170 M240 40 V170" stroke="#AEB8C4" stroke-width="10"/>
+    <rect x="20" y="186" width="70" height="40" rx="4" fill="#fff" stroke="#AEB8C4"/><text x="28" y="210" font-size="10" font-family="IBM Plex Sans KR, sans-serif" fill="#2443C4" font-weight="700">2호선 · 강남 방면</text>
+    <g class="sway"><path d="M70 0 V36" stroke="#9AA4B0" stroke-width="3"/><path d="M58 36 h24 v20 a12 12 0 0 1 -24 0z" fill="none" stroke="#7E8894" stroke-width="5"/></g>
+    <g class="sway" style="animation-delay:-1.3s"><path d="M300 0 V36" stroke="#9AA4B0" stroke-width="3"/><path d="M288 36 h24 v20 a12 12 0 0 1 -24 0z" fill="none" stroke="#7E8894" stroke-width="5"/></g>
+    <path d="M30 0 V450 M330 0 V450" stroke="#C3CAD3" stroke-width="10"/>
+    ${people([[34,250,1.3],[330,240,1.4],[90,280,1.0],[270,290,1.0]], "#6E7A8A", .55)}`,
+    front:`${people([[-10,330,1.9],[372,320,2]], "#3C4552", .85)}`}),
+  lobby: () => ({back:`
+    <defs><linearGradient id="gGlass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9C6E8"/><stop offset="1" stop-color="#E4EEF8"/></linearGradient></defs>
+    <rect width="360" height="450" fill="url(#gGlass)"/>
+    <path d="M0 0 H360 V40 H0Z" fill="#8FA3BC"/>
+    ${[40,110,180,250,320].map(x => `<path d="M${x} 40 V330" stroke="#8FA3BC" stroke-width="6"/>`).join("")}
+    <path d="M0 160 H360" stroke="#8FA3BC" stroke-width="3" opacity=".6"/>
+    <rect x="110" y="62" width="140" height="34" rx="4" fill="#fff" opacity=".9"/><text x="180" y="86" text-anchor="middle" font-family="Do Hyeon, sans-serif" font-size="22" fill="#2443C4">HANBIT</text>
+    <rect x="0" y="330" width="360" height="120" fill="#D9DEE5"/>
+    ${people([[60,250,.8],[300,256,.8],[130,262,.6]], "#5E6B7C", .45)}
+    <g><rect x="20" y="300" width="30" height="80" fill="#4A5566"/><rect x="310" y="300" width="30" height="80" fill="#4A5566"/><rect x="26" y="308" width="18" height="6" fill="#4CD38A" class="blink"/></g>`,
+    front:""}),
+  office: (v) => {
+    const sky = v === "evening" ? ["#F2A86E","#8C6FB0"] : v === "night" ? ["#1C2546","#0E1428"] : ["#CFE3F7","#EEF5FC"];
+    return {back:`
+    <defs><linearGradient id="gWin${v||""}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky[1]}"/><stop offset="1" stop-color="${sky[0]}"/></linearGradient></defs>
+    <rect width="360" height="450" fill="${v === "night" ? "#2A3142" : "#E9EDF2"}"/>
+    <rect x="0" y="30" width="360" height="150" fill="url(#gWin${v||""})"/>
+    ${v === "night" ? cityLights(40, 0, 360, 90, 175, 11) : v === "evening" ? `<circle cx="300" cy="150" r="26" fill="#FFD08A" opacity=".8"/>` : ""}
+    <path d="M90 30 V180 M180 30 V180 M270 30 V180" stroke="${v==="night"?"#3A4356":"#C5CFDB"}" stroke-width="5"/>
+    <rect x="0" y="0" width="360" height="30" fill="${v==="night"?"#20273A":"#F6F8FB"}"/><rect x="40" y="10" width="110" height="7" rx="3" fill="${v==="night"?"#3A4356":"#fff"}"/><rect x="210" y="10" width="110" height="7" rx="3" fill="${v==="night"?"#3A4356":"#fff"}"/>
+    <rect x="0" y="180" width="360" height="270" fill="${v==="night"?"#2A3142":"#E3E8EF"}"/>
+    <g opacity="${v==="night"?.4:.75}"><rect x="10" y="200" width="70" height="50" rx="3" fill="#2C3440"/><rect x="14" y="204" width="62" height="40" fill="#8FB2E6"/><rect x="280" y="196" width="76" height="54" rx="3" fill="#2C3440"/><rect x="284" y="200" width="68" height="44" fill="#9FC0EA"/></g>
+    ${v === "night" ? "" : people([[110,214,.6],[250,210,.6]], "#7D8898", .5)}
+    <rect x="0" y="250" width="360" height="16" fill="${v==="night"?"#384054":"#C7CED8"}"/>
+    <path d="M330 300 q-20 -40 0 -70 q16 28 0 70" fill="#6FAE7A"/><rect x="318" y="298" width="24" height="26" rx="3" fill="#B97A55"/>`,
+    front:`<rect x="0" y="412" width="360" height="38" fill="${v==="night"?"#3B4458":"#CDD4DE"}"/>
+      <g><rect x="276" y="300" width="96" height="74" rx="4" fill="#1E242D"/><rect x="282" y="306" width="84" height="62" fill="${v==="night"?"#BFD6FF":"#DCE8F8"}" opacity=".95"/><rect x="314" y="374" width="20" height="38" fill="#1E242D"/></g>
+      <g><rect x="12" y="372" width="34" height="40" rx="5" fill="#F1EFEA" stroke="#9A9286" stroke-width="2"/><path d="M46 382 q10 0 10 9 q0 9 -10 9" stroke="#9A9286" stroke-width="3" fill="none"/></g>`};
+  },
+  meeting: () => ({back:`
+    <rect width="360" height="450" fill="#2A303A"/>
+    <rect x="40" y="40" width="280" height="170" rx="4" fill="#DDE7F6"/><rect x="40" y="40" width="280" height="170" rx="4" fill="none" stroke="#11151B" stroke-width="6"/>
+    <text x="58" y="70" font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="700" fill="#2443C4">캠페인 성과 리포트</text>
+    ${[[70,150,40],[110,120,70],[150,135,55],[190,165,25],[230,175,15]].map(([x,y,h],i) => `<rect x="${x}" y="${y}" width="26" height="${190-y}" fill="${i>2?"#E06A5A":"#7FA2E3"}"/>`).join("")}
+    <path d="M60 190 H300" stroke="#9AA6BA" stroke-width="2"/>
+    <path d="M40 210 L0 300 L360 300 L320 210Z" fill="#DDE7F6" opacity=".08"/>`,
+    front:`${people([[30,340,1.9],[340,330,2.1]], "#10141A", .95)}<rect x="0" y="420" width="360" height="30" fill="#151A21"/>`}),
+  lunch: () => ({back:`
+    <rect width="360" height="450" fill="#E9D3B6"/>
+    <rect x="0" y="0" width="360" height="180" fill="#C9A47E"/>
+    <rect x="30" y="30" width="150" height="100" rx="6" fill="#3B2E22"/>
+    <text x="44" y="60" font-family="Gaegu, sans-serif" font-weight="700" font-size="18" fill="#FFF4D8">순댓국 11,000</text>
+    <text x="44" y="84" font-family="Gaegu, sans-serif" font-weight="700" font-size="18" fill="#FFF4D8">비빔밥 12,000</text>
+    <text x="44" y="108" font-family="Gaegu, sans-serif" font-weight="700" font-size="18" fill="#FFF4D8">칼국수 10,000</text>
+    <circle cx="280" cy="70" r="30" fill="#FFE7B0" opacity=".7"/><path d="M280 0 V40" stroke="#5A4634" stroke-width="3"/>
+    ${people([[60,230,.9],[120,240,.8],[300,236,.9]], "#8A6E52", .45)}
+    <rect x="0" y="290" width="360" height="12" fill="#B48A62"/>`,
+    front:`<path d="M0 404 H360 V450 H0Z" fill="#8C6544"/>
+      <ellipse cx="96" cy="410" rx="56" ry="16" fill="#2C2622"/><ellipse cx="96" cy="404" rx="48" ry="12" fill="#C5562F"/>
+      <path class="steam" d="M84 390 q-6 -10 0 -18 q6 -8 0 -16" stroke="#fff" stroke-width="3" fill="none"/><path class="steam d2" d="M104 390 q-6 -10 0 -18 q6 -8 0 -16" stroke="#fff" stroke-width="3" fill="none"/>
+      <path d="M250 420 L330 380 M256 426 L336 388" stroke="#C9A35E" stroke-width="4" stroke-linecap="round"/>`}),
+  taxi: () => ({back:`
+    <rect width="360" height="450" fill="#0F1420"/>
+    <rect x="0" y="40" width="360" height="200" rx="10" fill="#1A2236"/>
+    <g>${cityLights(30, 0, 360, 60, 230, 23)}</g>
+    <g><rect class="streak" x="0" y="120" width="160" height="5" fill="#FFB45A" opacity=".8"/><rect class="streak s2" x="0" y="170" width="120" height="4" fill="#FF6A6A" opacity=".7"/><rect class="streak s3" x="0" y="90" width="80" height="3" fill="#9FD0FF" opacity=".7"/></g>
+    <path d="M0 240 H360" stroke="#2A3248" stroke-width="10"/>
+    <rect x="250" y="250" width="90" height="34" rx="6" fill="#0B0F17"/><text x="295" y="273" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="600" fill="#FF5C5C">18,000</text>
+    <text x="295" y="296" text-anchor="middle" font-family="IBM Plex Sans KR, sans-serif" font-size="9" fill="#FF9C9C">심야 할증</text>`,
+    front:`<path d="M0 360 C40 330 60 330 70 360 L80 450 L0 450Z" fill="#06080D"/>`}),
+  restaurant: () => ({back:`
+    <rect width="360" height="450" fill="#2B1B17"/>
+    ${[[40,60,26],[110,40,18],[200,70,30],[290,50,22],[330,120,16],[70,140,20],[250,140,14]].map(([x,y,r],i) => `<circle class="twinkle ${["","t2","t3"][i%3]}" cx="${x}" cy="${y}" r="${r}" fill="#FFC27A" opacity=".5"/>`).join("")}
+    <rect x="0" y="230" width="360" height="220" fill="#3A241E"/>
+    <ellipse cx="180" cy="200" rx="200" ry="110" fill="#FFB86B" opacity=".08"/>`,
+    front:`<rect x="0" y="400" width="360" height="50" fill="#5A3528"/>
+      <g><rect x="40" y="350" width="8" height="50" fill="#F1E3C8"/><path class="float" d="M44 336 q-6 8 0 14 q6 -6 0 -14Z" fill="#FFB347"/></g>
+      <path d="M296 330 h28 l-6 30 h-16Z" fill="#E9F0F7" opacity=".6"/><path d="M310 360 V398 M300 398 h20" stroke="#E9F0F7" stroke-width="3" opacity=".6"/>`}),
+  living: () => ({back:`
+    <defs><linearGradient id="gNight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121A3A"/><stop offset="1" stop-color="#2D3A6A"/></linearGradient></defs>
+    <rect width="360" height="450" fill="#3A3548"/>
+    <rect x="150" y="30" width="200" height="230" fill="url(#gNight)" stroke="#2A2638" stroke-width="8"/>
+    <path d="M150 220 L190 196 L230 210 L270 180 L310 200 L350 186 V260 H150Z" fill="#141A30"/>
+    <g><path d="M262 182 V120 M256 120 h12 l-2 -12 h-8z" stroke="#9FB0D8" stroke-width="3" fill="#9FB0D8"/><circle class="twinkle" cx="262" cy="104" r="4" fill="#FFE29A"/></g>
+    ${cityLights(30, 156, 344, 200, 256, 5)}
+    <circle cx="40" cy="190" r="70" fill="#FFCC80" opacity=".18"/><path d="M30 140 h24 l-6 -26 h-12z" fill="#F5D6A0"/><path d="M42 140 V300" stroke="#6E5A46" stroke-width="3"/>
+    <rect x="0" y="300" width="360" height="150" fill="#2C2838"/>`,
+    front:`<path d="M0 410 h360 v40 h-360z" fill="#1E1B28"/>`}),
+  bedNight: () => ({back:`
+    <rect width="360" height="450" fill="#161B2E"/>
+    <rect x="40" y="30" width="120" height="150" fill="#222C4C" stroke="#10131F" stroke-width="6"/><circle cx="120" cy="70" r="16" fill="#E8ECF8" opacity=".85"/>
+    ${cityLights(14, 46, 156, 120, 176, 3)}
+    <path d="M0 330 C80 300 280 300 360 330 V450 H0Z" fill="#2A3352"/>`,
+    front:`<path d="M0 400 C100 380 260 380 360 404 V450 H0Z" fill="#39436A"/>`})
+};
+const TINT = {night:{c:"#1E2550", o:.42}, dusk:{c:"#7A4A6A", o:.18}, warm:{c:"#7A3A1A", o:.16}, dim:{c:"#1E2550", o:.26}};
+function panelSVG(sc, o){
+  const bgv = BG[sc.bg] ? BG[sc.bg](sc.bgv) : BG.office();
+  const t = TINT[sc.tint];
+  return `<svg class="art" viewBox="0 0 360 450" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g class="cam ${reduced ? "" : "cam-" + (sc.cam || "zoomin")}">
+      ${bgv.back}
+      <g id="chrwrap" class="${sc.bg === "subway" ? "rock" : ""}">${charSVG(o)}</g>
+      ${bgv.front}
+      ${t ? `<rect width="360" height="450" fill="${t.c}" opacity="${t.o}" style="mix-blend-mode:multiply"/>` : ""}
+    </g>
+  </svg>`;
+}
+
+/* =====================================================================
+   DATA
+   ===================================================================== */
+/* 세후 기준: 월 실수령 약 470만 원 ÷ 약 21근무일 */
+let DAILY_PAY = Math.round(4700000 / 21), CONTRACT_WAGE = Math.round(DAILY_PAY / 8);
+let JOB_ID = "daeri", PF = null;
+const JOBS = [
+  {id:"daeri", icon:"🪪", name:"대기업 5년차 대리", kind:"일반", meta:"연봉 약 7,000만 원 · 마케팅팀", playable:true},
+  {id:"derma", icon:"💉", name:"강남 피부과 개원의", kind:"부자", meta:"월 매출 약 1.6억 · 직원 12명", playable:true},
+  {id:"civil", icon:"🏛️", name:"9급 공무원 3년차", kind:"일반", meta:"정년 보장 · 주민센터 민원창구", playable:false},
+  {id:"nurse", icon:"🩺", name:"대학병원 3교대 간호사", kind:"일반", meta:"4년차 · 내과 병동", playable:false}
+];
+const VOTES = [{id:"lawyer", e:"⚖️", n:"대형로펌 변호사"},{id:"youtuber", e:"🎬", n:"100만 유튜버"},{id:"dev", e:"💻", n:"판교 개발자"}];
+let START = {hp:65, mind:60, team:60, love:60, bank:50, rep:60};
+function freshState(){
+  return {g:{...START}, prog:20, spent:0, min:{commute:0, work:0, extra:0, home:0},
+    flags:{late:false, quit:0, data:false, dinner:null, junior:null, agency:null, finish:null, bed:null, night:null, lease:false},
+    perks:[], costs:[], homeMin:0, log:[]};
+}
+let st = freshState();
+const val = x => typeof x === "function" ? x(st) : x;
+
+/* line types: cap, say, npc, msg, post, alert, note, file, perk, cost
+   phone kinds: work(사내 메신저) kakao blind bank */
+const SCENES_DAERI = [
+{ id:"alarm", t:"06:50", place:"집 · 원룸 오피스텔", title:"세 번째 알람", bg:"bedroomDawn", cam:"zoomin", outfit:"home", hair:"messy", face:"sleepy",
+  lines:[["cap","06:50. 세 번째 알람."],["say","으으… 5분만…"],["cap","어젯밤 쇼츠를 보다가 1시에 잤다."],["cap","오늘은 화요일. 월요일보다 나을 것도 없는 화요일."]],
+  choices:[
+    {label:"벌떡 일어난다", fx:{hp:-5}, face:"determined", res:["say","일어나자. 일어나야 산다."]},
+    {label:"5분만 더…", fx:{hp:3}, face:"shock", set:s=>{s.flags.late=true}, res:["cap","5분은 언제나 17분이 된다. 머리를 덜 말린 채 뛰어나갔다."]}
+  ]},
+{ id:"subway", t:"07:35", place:"지하철 2호선", title:"편도 41분", bg:"subway", img:"img/subway.jpg", cam:"zoomin", outfit:"coat", prop:"phone",
+  face:s=> s.flags.late ? "sigh" : "neutral",
+  enter:s=> s.flags.late ? {mind:-5} : null,
+  lines:s=>[
+    s.flags.late ? ["cap","한 대를 놓쳤다. 다음 열차도 빽빽하다. 겨우 손잡이 하나를 붙잡았다."] : ["say","오늘도 출근하는 화요일…"],
+    ["cap","수도권 직장인 출퇴근 시간, 하루 평균 82분. 1년이면 300시간이 넘는다."],
+    ["msg","work","김 팀장","한 대리~ 내일 상무님 보고 자료 오늘 3시까지 1차본 가능? 🙏","06:58","shock"],
+    ["say","아침 7시 전에…?","sigh"]
+  ],
+  choices:[
+    {label:"“넵! 가능합니다!” 바로 답장", fx:{rep:5, mind:-5}, face:"tired", res:["cap","‘넵’, ‘넵!’, ‘넵넵’ 중에 뭘 보낼지 10초 고민했다. 출근 전부터 업무 시작."]},
+    {label:"회사 도착해서 답장한다", fx:{rep:-3, mind:2}, face:"shock", res:["cap","08:52. 팀장에게서 물음표 하나가 왔다. ‘?’"]}
+  ]},
+{ id:"lobby", t:"08:20", place:"본사 1층 로비", title:"삑, 사원증", bg:"lobby", cam:"zoomout", outfit:"coat", face:"smile", b:45, cat:"commute",
+  enter:s=>{ if(s.flags.late) addTime("commute", 6); return null; },
+  perk:"사원증 효과: 부모님의 자랑, 대출 심사의 프리패스",
+  lines:[["cap","삑. 사원증을 찍고 게이트를 통과한다."],["say","그래도… 이 순간은 좀 뿌듯하단 말이지.","smile"],["cap","엄마는 친척 단톡방 프로필을 아직도 우리 회사 로고로 해두셨다."]],
+  choices:[{label:"9층으로 올라간다", fx:{mind:3}, face:"happy", res:["say","그래, 여기까지 온 게 어디야!"]}]},
+{ id:"breakfast", t:"08:30", place:"9층 · 탕비실 옆", title:"아침은 어떻게 할까", bg:"office", cam:"zoomin", face:"think", b:10, cat:"work",
+  lines:[["cap","업무 시작까지 30분."],["say","배는 고프고, 잠은 덜 깼고…","think"]],
+  choices:[
+    {label:"사내식당 무료 조식", sub:"토스트 · 시리얼 · 요거트", fx:{hp:5}, face:"happy", prop:"cup", perk:"사내식당 조식과 복지포인트", res:["say","이건 확실히 대기업의 맛이야~"]},
+    {label:"1층 카페 라떼", sub:"5,500원", won:5500, fx:{mind:4}, face:"soft", prop:"cup", res:["cap","하루 커피 서너 잔이면 한 달 커피값만 십만 원이 넘는다. 그래도 오늘은 필요했다."]},
+    {label:"굶고 바로 자리로", fx:{hp:-4, prog:10}, face:"determined", res:["cap","아무도 없는 사무실에서 보고서를 열었다. 이 30분이 오늘 가장 생산적인 시간일 거다."]}
+  ]},
+{ id:"inbox", t:"09:00", place:"마케팅팀 · 내 자리", title:"빨간 숫자들", bg:"office", cam:"zoomin", face:"shock", b:30, cat:"work",
+  lines:[["cap","메일 47통, 메신저 12개, 결재 요청 3건."],["note",[["15:00","상무 보고 1차본"],["10:00","주간회의"],["오늘","대행사 리포트"],["언젠가","법카 영수증 재첨부"]]],["say","해야 할 일은 산더미인데… 하아…","sigh",{prop:"cheek"}]],
+  choices:[
+    {label:"보고서부터 연다", fx:{prog:15, mind:-3}, face:"determined", res:["cap","알림을 끄고 장표 뼈대를 잡았다. 메신저 빨간 점이 계속 눈에 밟힌다."]},
+    {label:"메일과 메신저부터 비운다", fx:{mind:4, prog:5, team:3}, face:"neutral", res:["cap","답장 12개를 보냈다. 일은 많이 한 것 같은데 보고서는 그대로다."]}
+  ]},
+{ id:"meeting", t:"10:00", place:"14층 소회의실", title:"주간회의", bg:"meeting", cam:"zoomin", face:"neutral", tint:"dim", b:60, cat:"work",
+  lines:[["cap","14층 소회의실. 주간회의."],["npc","김 팀장","지난달 캠페인 성과, 왜 이래? 한 대리 담당이었지?","shock"],["cap","사실은 옆 팀 승인이 늦어 집행이 2주 밀렸다."],["cap","옆 팀 박 과장은 노트북 화면만 보고 있다.","sigh"]],
+  choices:[
+    {label:"“옆 팀 승인이 2주 늦어져서요.”", fx:{team:-10, mind:3}, face:"determined", res:["cap","맞는 말을 했다. 오후 내내 박 과장은 내 메시지를 읽지 않았다."]},
+    {label:"“제가 보완해서 다시 보고드리겠습니다.”", fx:{mind:-10, rep:4, team:3, prog:-5}, face:"tired", res:["cap","일이 하나 더 늘었다. 팀장은 끄덕였고, 박 과장은 커피 쿠폰을 보내왔다."]},
+    {label:"말없이 수첩에 적는다", fx:{mind:-6, rep:-5}, face:"sad", res:["cap","회의록 내 이름 옆에 ‘개선 필요’가 붙었다."]}
+  ]},
+{ id:"feedback", t:"11:20", place:"마케팅팀 · 내 자리", title:"v3에서 v7까지", bg:"office", cam:"panl", face:"neutral", b:80, cat:"work",
+  lines:[
+    ["msg","work","김 팀장","내용은 좋은데 느낌이 좀 약하네","11:18"],
+    ["msg","work","김 팀장","폰트 좀 바꿔보고 색은 회사 톤으로","11:18","sigh"],
+    ["msg","work","김 팀장","그리고 결론을 앞으로 빼자. 상무님은 첫 장만 보셔","11:19"],
+    ["file","상무보고_캠페인개선안_최종_진짜최종_v7.pptx"],
+    ["say","폰트는… 왜…","tired"]],
+  choices:[
+    {label:"팀장 취향대로 디자인부터", fx:{rep:4, mind:-5, prog:5}, face:"tired", res:["cap","폰트를 세 번 바꿨다. 결국 처음 폰트로 돌아갔다. 팀장: “오, 훨씬 낫네.”"]},
+    {label:"근거 데이터 장표를 보강한다", fx:{prog:15, mind:-2}, face:"determined", set:s=>{s.flags.data=true}, res:["cap","숫자 근거를 두 장 더 붙였다. 팀장 답장은 ‘ㅇㅋ’ 두 글자."]},
+    {label:"둘 다 한다", sub:"점심시간 20분 반납", fx:{prog:15, rep:3, hp:-8}, b:20, cat:"work", face:"sigh", set:s=>{s.flags.data=true}, res:["cap","점심을 20분 깎아 둘 다 해냈다. 위가 쓰리다."]}
+  ]},
+{ id:"lunch", t:"12:00", place:"회사 앞 국밥집", title:"점심시간", bg:"lunch", cam:"zoomin", face:"smile", tint:"warm", b:40, cat:"work",
+  lines:[["cap","점심 알림이 울리자마자 머릿속엔 벌써 뜨끈한 국밥 한 그릇."],["say","점심시간은 행복해~","happy"],["cap","그런데 서울 비빔밥 한 그릇이 1만 2천 원에 육박한다. 오늘은 누구랑, 어디서 먹지?"]],
+  choices:[
+    {label:"팀 점심", sub:"팀장님 픽: 순댓국", fx:{team:6, mind:-4}, b:60, cat:"work", face:"sigh", res:["cap","팀장님 주말 골프 얘기 40분. 계산은 법카. 공짜 점심이었지만 근무시간이기도 했다."]},
+    {label:"동기 수진이와 비빔밥", sub:"12,000원", won:12000, fx:{mind:-1}, face:"shock", set:s=>{s.flags.quit++}, res:["npc","동기 수진","나 다음 달에 이직해. 연봉 20% 올려서."]},
+    {label:"구내식당 먹고 혼자 산책", fx:{hp:3, mind:6}, face:"soft", res:["cap","15분을 걸었다. 하늘을 올려다본 게 일주일 만이다."]}
+  ]},
+{ id:"blind", t:"12:55", place:"9층 화장실 · 양치하며", title:"블라인드를 연다", bg:"office", cam:"zoomin", face:"neutral", prop:"phone",
+  cost:"성과급은 업종과 실적에 따라 극과 극. 같은 그룹 안에서도 다르다.",
+  lines:[["cap","양치하면서 익명 직장인 앱을 연다."],
+    ["post","blind","블라인드 · 회사생활","옆 계열사 성과급 기본급 1,000% 확정ㅋㅋ","좋아요 2.1천 · 댓글 846"],
+    ["post","blind","블라인드 · 우리 회사 라운지","올해 우리 0%설 도는데 아는 사람?","좋아요 312 · 댓글 190","shock"],
+    ["say","1,000%…? 우리는 0%설인데…","sad"]],
+  choices:[
+    {label:"연봉 계산기 앱을 켠다", fx:{mind:-5}, face:"sad", set:s=>{s.flags.quit++}, res:["cap","옆 계열사 동기의 성과급을 계산해 봤다. 내 연봉의 절반. 같은 그룹, 같은 입사 연도인데."]},
+    {label:"앱을 닫는다", fx:{mind:-2, prog:5}, face:"neutral", res:["say","모르는 게 약이다. 오후까지만이라도."]}
+  ]},
+{ id:"bomb", t:"13:30", place:"마케팅팀 · 내 자리", title:"일정 변경", bg:"office", cam:"shake", face:"neutral", b:30, cat:"work",
+  cost:"내 일정은 내가 정하지 못한다.",
+  lines:[
+    ["msg","work","김 팀장","한 대리, 상무님 일정 바뀌어서 보고가 내일 아침 8시로 당겨졌어","13:28","shock"],
+    ["msg","work","김 팀장","오늘 중으로 최종본 부탁해","13:28"],
+    ["msg","work","김 팀장","아 그리고 상무님이 한 장으로 보자고 하시네 😅","13:29"],
+    ["cap","30장짜리 보고서를 한 장으로.","shock"],
+    ["say","3시 1차본이… 오늘 중 최종본…?","tired"]],
+  choices:[{label:"…넵.", fx:{mind:-6}, face:"tired", res:["cap","‘넵’이라고 쳤다. 오늘도 8시간 안에 끝나긴 글렀다. 이제 곧 시급이 깎이기 시작한다."]}]},
+{ id:"agency", t:"15:00", place:"전화 · 대행사", title:"갑과 을 사이", bg:"office", cam:"zoomin", face:"neutral", prop:"phone", b:90, cat:"work",
+  lines:[["npc","대행사 이 대리 (전화)","대리님… 수정 리포트는 내일 오전까지 가능할 것 같습니다…"],["cap","목소리가 갈라져 있다."],["say","대행사 앞에선 갑, 팀장 앞에선 을…","sigh"]],
+  choices:[
+    {label:"“오늘 밤 10시까지 꼭 부탁드려요.”", fx:{rep:5, mind:-5, prog:10}, face:"sad", set:s=>{s.flags.agency="push"}, res:["cap","전화를 끊고 한참 모니터만 봤다. 이 대리도 오늘 집에 못 가겠지."]},
+    {label:"“괜찮아요, 제가 직접 할게요.”", fx:{hp:-10, prog:20}, face:"determined", set:s=>{s.flags.agency="self"}, res:["cap","피벗 테이블을 다시 짰다. 이 대리가 ‘정말 감사합니다ㅠㅠ’를 세 번 보냈다."]},
+    {label:"“핵심 장표 두 장만 오늘 주세요.”", fx:{prog:12, mind:-2, rep:2}, face:"smile", set:s=>{s.flags.agency="deal"}, res:["cap","서로 숨 쉴 틈을 만들었다. 5년차쯤 되면 이런 협상이 는다."]}
+  ]},
+{ id:"junior", t:"16:30", place:"사내 메신저", title:"후배의 실수", bg:"office", cam:"zoomin", face:"tired", b:90, cat:"work",
+  lines:[["say","오후만 되면 왜 이렇게 피곤할까…","tired"],
+    ["msg","work","민준 (2년차)","대리님 혹시 지금 잠깐 괜찮으세요…?","16:27"],
+    ["msg","work","민준 (2년차)","제가 드린 엑셀 매출 수치에 0이 하나 더 들어가 있었어요 ㅠㅠ 보고서에 이미 들어갔죠…","16:29","shock"],
+    ["msg","work","민준 (2년차)","입력 중…","","shock",{typing:true}]],
+  choices:[
+    {label:"조용히 고쳐주고 따로 알려준다", fx:{team:10, hp:-5}, b:20, cat:"work", face:"soft", set:s=>{s.flags.junior="cover"}, res:["say","괜찮아, 나도 3년차 때 상무 보고서에 오타 냈어."]},
+    {label:"팀장에게 보고한다", fx:{rep:3, team:-8}, face:"neutral", set:s=>{s.flags.junior="report"}, res:["cap","원칙대로 했다. 팀장은 “잘했어”라고 했고, 민준이는 오후 내내 말이 없었다."]},
+    {label:"팀 단톡방에서 공개적으로 짚는다", fx:{rep:-3, team:-15}, face:"sigh", set:s=>{s.flags.junior="public"}, res:["cap","단톡방에 ‘확인했습니다, 죄송합니다’가 올라왔다. 그 뒤로 단톡방이 조용하다."]}
+  ]},
+{ id:"bank", t:"17:25", place:"폰 알림", title:"월급은 스쳐 간다", bg:"office", bgv:"evening", tint:"dusk", cam:"zoomin", face:"neutral", prop:"phone", b:55, cat:"work",
+  cost:"연봉 7천의 월급 통장은 잠깐 들르는 경유지다.",
+  lines:[["alert","bank","카드 결제 예정 (25일)","1,870,000원"],["alert","bank","전세대출 이자 출금 예정","612,000원","sigh"],["alert","bank","주택청약 · 적금 자동이체","800,000원"],
+    ["cap","실수령 약 470만 원. 25일에 들어와 27일이면 절반이 사라진다."],["cap","허탈해서 웃음이 다 나온다."],["say","하하… 월급은… 스쳐 갈 뿐…","tired"]],
+  choices:[{label:"알림을 밀어서 지운다", fx:{mind:-3}, face:"sigh", res:["cap","지워도 결제일은 온다."]}]},
+{ id:"love", t:"17:40", place:"카카오톡", title:"1주년", bg:"office", bgv:"evening", tint:"dusk", cam:"zoomin", face:"neutral", prop:"phone", b:15, cat:"work",
+  lines:[["msg","kakao","지원 💛","오늘 7시 우리 1주년인 거 알지? 🥂","17:39","shock"],["msg","kakao","지원 💛","성수 레스토랑 예약해놨어!","17:39","happy"]],
+  choices:[{label:"“당연하지! 7시까지 갈게”", fx:{love:5}, face:"soft", res:["cap","보내고 나서 보고서 진척도를 확인했다. 아직 멀었다."]}]},
+{ id:"hoesik", t:"18:00", place:"마케팅팀 · PC-OFF 30분 전", title:"갑작스러운 회식", bg:"office", bgv:"evening", tint:"dusk", cam:"zoomin", face:"neutral", b:20, cat:"work",
+  lines:s=>[
+    ["alert","work","PC-OFF 알림","18:30에 업무용 PC가 종료됩니다"],
+    ["npc","김 팀장","오늘 다들 고생했으니까 간단하게 삼겹살 어때? 보고서는 끝나고 마무리하고~","shock"],
+    s.flags.junior==="cover" ? ["cap","오후에 감싸준 민준이마저 슬금슬금 가방을 챙긴다. 남은 건 팀장, 과장, 그리고 나."] : ["cap","막내 민준이는 이미 “아, 저 오늘 선약이…”를 시전했다. 남은 건 팀장, 과장, 그리고 나."],
+    ["say","오늘… 1주년인데…","sad"]],
+  choices:s=>{
+    const c = [
+      {label:"끝까지 남는다", sub:"1차 삼겹살 · 2차 맥주", fx:{team:15, rep:5, hp:-15, love:-25}, b:300, cat:"extra", face:"tired", set:s=>{s.flags.dinner="A"}, res:["cap","팀장의 신입 시절 이야기를 세 번째로 들었다. 부재중 전화 4통."]},
+      {label:"1차만 하고 빠진다", fx:{team:5, hp:-5, love:-10}, b:120, cat:"extra", face:"sigh", set:s=>{s.flags.dinner="B"}, res:["cap","8시 15분, 레스토랑에 1시간 15분 늦게 도착했다."]},
+      {label:"“죄송해요, 오늘 선약이 있어서요.”", fx:{rep:-5, love:12}, face:"determined", set:s=>{s.flags.dinner="C"}, res:["npc","김 팀장","아 그래 그래, 가봐~"]}
+    ];
+    if(s.g.hp < 35) c.push({label:"“몸이 좀 안 좋아서요…”", sub:"체력이 낮아서 열린 선택지", fx:{hp:5, rep:-2, love:5}, face:"sigh", set:s=>{s.flags.dinner="C"}, res:["cap","거짓말은 아니었다. 오늘 같은 날이면 누구라도 몸이 안 좋다."]});
+    return c;
+  }},
+{ id:"eveA", if:s=>s.flags.dinner==="A", t:"23:20", place:"택시 · 심야 할증", title:"택시비 18,000원", bg:"taxi", cam:"panr", face:"tired", outfit:"coat", prop:"phone", tint:"night", b:40, cat:"extra",
+  enter:s=>{ spend(18000); return {mind:-5}; },
+  lines:[["cap","심야 할증. 택시비 18,000원."],["msg","kakao","팀 단톡방","[사진] 오늘 우리 팀 최고👍 내일 보고도 화이팅!","23:12"],["msg","kakao","지원 💛","…집 잘 들어가.","23:15","sad"],["say","보고서는… 아직이다.","tired"]],
+  choices:[{label:"“미안해, 주말에 꼭 다시 하자”", fx:{love:3}, face:"sad", res:["cap","읽음 표시는 떴다. 답장은 오지 않았다."]}]},
+{ id:"eveB", if:s=>s.flags.dinner==="B", t:"21:40", place:"성수 · 레스토랑", title:"늦은 1주년", bg:"restaurant", cam:"zoomin", face:"sigh", outfit:"coat", tint:"warm",
+  enter:s=>{ spend(160000); return {mind:3}; },
+  lines:[["cap","코스 2인 16만 원. 늦은 벌로 오늘은 내가 냈다."],["npc","지원 💛","괜찮아."],["say","…별로 안 괜찮은 ‘괜찮아’다.","sad"]],
+  choices:[{label:"노트북 가방을 들고 집으로", fx:{love:5}, face:"tired", res:["cap","지하철에서도 보고서 파일을 열어 봤다."]}]},
+{ id:"eveC", if:s=>s.flags.dinner==="C", t:"21:30", place:"성수 · 레스토랑", title:"제시간의 1주년", bg:"restaurant", cam:"zoomin", face:"happy", outfit:"coat", tint:"warm", b:45, cat:"commute",
+  enter:s=>{ spend(160000); return {mind:10, hp:5}; },
+  lines:[["cap","코스 2인 16만 원. 2시간 동안 업무 카톡을 보지 않았다. 1년 만에 처음이다."],["say","이 시간… 너무 좋다.","happy"],["msg","kakao","팀 단톡방","[사진] 다음엔 같이해요 한 대리~ 🍖","20:41","sigh"]],
+  choices:[{label:"못 본 척 폰을 엎어둔다", fx:{love:10}, face:"soft", res:["say","오늘 하루 중 가장 사람 같은 시간이었다."]}]},
+{ id:"home", place:"집 · 거실", title:"PC는 꺼졌지만", bg:"living", cam:"zoomin", face:"tired", outfit:"home", hair:"bun", glasses:true, prop:"laptop", tint:"dim",
+  t:s=> s.flags.dinner==="A" ? "00:05" : s.flags.dinner==="B" ? "22:35" : "22:00",
+  b:s=> s.flags.dinner==="B" ? 45 : 0, cat:"commute",
+  cost:"PC-OFF 이후의 일은 근무 기록에 남지 않는다.",
+  enter:s=>{ s.homeMin = Math.round(clamp(190 - s.prog*1.4, 30, 190) / 5) * 5; return null; },
+  lines:s=>{
+    const l = [["cap","회사 PC는 18시 30분에 자동으로 꺼졌다. 주 52시간 준수. 서류상으로는."],
+      ["cap","서랍에서 챙겨 온 개인 노트북을 연다. 직장인들은 이걸 ‘도둑 야근’이라고 부른다."],
+      ["say","오늘도 야근… ㅠㅠ","sad"],
+      ["cap","남은 작업은 약 " + s.homeMin + "분 분량."]];
+    if(s.flags.agency==="push") l.push(["alert","work","메일 · 대행사 이 대리","[수정본] 캠페인 리포트 v2 송부드립니다 (22:02)"]);
+    return l;
+  },
+  choices:s=>[
+    {label:"끝까지 다듬는다", sub:"약 "+s.homeMin+"분", fx:{hp:-8, rep:6}, b:s.homeMin, cat:"home", face:"determined", set:s=>{s.flags.finish="full"},
+      res: s.flags.data ? ["say","예상 질문 답변까지 준비 완료. 내일이 조금 덜 무섭다."] : ["cap","디자인은 완벽해졌다. 숫자를 물어보면 어떡하지, 라는 생각은 일단 접었다."]},
+    {label:"80%에서 멈추고 잔다", sub:"약 "+Math.round(s.homeMin*0.5/5)*5+"분", fx:{hp:4, rep:-4, mind:-3}, b:Math.round(s.homeMin*0.5/5)*5, cat:"home", face:"sleepy", set:s=>{s.flags.finish="part"},
+      res:["say","내일 6시에 일어나서 마저 하자…"]}
+  ]},
+{ id:"bed", place:"침대 위", title:"내일 아침 8시", bg:"bedNight", cam:"zoomin", face:"sleepy", outfit:"home", hair:"long", prop:"phone", tint:"night",
+  t:s=> toClock(toMin(val(SCENES.find(x=>x.id==="home").t)) + (s.flags.finish==="full" ? s.homeMin : Math.round(s.homeMin*0.5/5)*5) + 10),
+  lines:[["cap","불을 끄고 폰을 켠다."],["say","내일 아침 8시, 상무 보고… 알람 6시…","sleepy"]],
+  choices:[
+    {label:"블라인드를 연다", fx:{mind:-5}, face:"sad", set:s=>{s.flags.bed="blind"}, res:["cap","‘대리 5년차 현실 연봉 공개’ 글을 30분 읽었다. 댓글이 다 내 얘기 같다."]},
+    {label:"채용 앱을 연다", fx:{mind:2}, face:"think", set:s=>{s.flags.quit++; s.flags.bed="job"}, res:["cap","헤드헌터 메시지 1건. ‘좋은 포지션이 있어 연락드립니다.’ 열어보진 않았다. 아직은."]},
+    {label:"바로 잔다", fx:{hp:5}, face:"sleepy", set:s=>{s.flags.bed="sleep"}, res:["cap","눈을 감자마자 보고서 첫 장이 떠오른다."]}
+  ]}
+];
+/* AI 일러스트 (Figma 생성) 연결 */
+const IMG = {alarm:"alarm", subway:"subway", lobby:"lobby", breakfast:"pantry", inbox:"inbox", meeting:"meeting", feedback:"feedback", lunch:"lunch",
+  blind:"blind", bomb:"inbox", agency:"agency", junior:"junior", bank:"evening", love:"evening", hoesik:"hoesik",
+  eveA:"taxi", eveB:"restaurant", eveC:"restaurant", home:"home", bed:"bed"};
+const CAMS = {alarm:"zoomin", lobby:"zoomout", breakfast:"panr", inbox:"zoomin", meeting:"panl", feedback:"zoomin", lunch:"zoomout", blind:"panr",
+  bomb:"shake", agency:"panl", junior:"zoomin", bank:"panr", love:"zoomin", hoesik:"zoomout", eveA:"panr", eveB:"zoomin", eveC:"zoomin", home:"panl", bed:"zoomin"};
+function mapImages(scenes, imgs, cams){ scenes.forEach(s => { if(imgs[s.id]) s.img = "img/" + imgs[s.id] + ".jpg"; if(cams[s.id]) s.cam = cams[s.id]; }); }
+mapImages(SCENES_DAERI, IMG, CAMS);
+/* 선택 결과 컷: 고르면 그림이 이 장면으로 바뀜 (장면 id: [선택 인덱스별 그림 이름]) */
+const RIMG_DAERI = {alarm:[null,"r_late"], breakfast:["r_buffet","r_latte",null], inbox:["feedback",null], lunch:["r_teamlunch","r_friend",null], hoesik:[null,"restaurant",null,null]};
+
+/* ---------------------------------------------------------------------
+   강남 피부과 개원의 · 서 원장 (42세, 개원 4년차, 직원 12명)
+   수치는 시나리오용 가정: 월 매출 약 1.6억, 고정비 약 1.25억, 세후 순소득 월 약 2,300만, 개원 대출 잔액 8.2억
+   --------------------------------------------------------------------- */
+const SCENES_DERMA = [
+{ id:"d_wake", t:"06:20", place:"반포 아파트 · 침실", title:"매출 앱부터 연다", cam:"zoomin",
+  perk:"한강뷰 아파트, 모두가 부르는 ‘원장님’",
+  lines:[["cap","06:20. 한강이 보이는 반포 아파트."],["cap","눈을 뜨자마자 손이 가는 건 병원 매출 앱이다."],
+    ["alert","bank","어제 매출","4,870,000원"],["say","한 달 고정비가 1억 2천… 오늘은 600은 찍어야 하는데."]],
+  choices:[
+    {label:"한강 러닝 30분", fx:{hp:6, mind:4}, res:["cap","새벽 한강을 달렸다. 하루 중 유일하게 아무도 ‘원장님’이라 부르지 않는 시간."]},
+    {label:"침대에서 마케팅 리포트를 본다", fx:{mind:-5, rep:2}, res:["cap","광고비는 그대로인데 신규 환자가 또 줄었다. 아침부터 계산기를 두드린다."]}
+  ]},
+{ id:"d_drive", t:"07:50", place:"올림픽대로 · 출근길", title:"독일 SUV 안에서", cam:"panr",
+  lines:[["cap","독일 SUV. 리스료 월 280만 원은 병원 경비로 처리된다."],
+    ["msg","kakao","최 실장 (상담실장)","원장님 ㅠㅠ 지은 쌤이 이번 달까지만 하겠대요","07:42"],
+    ["msg","kakao","최 실장 (상담실장)","길 건너 새로 생긴 피부과가 월 30 더 준다고…","07:43"],
+    ["say","개원 4년 만에… 벌써 열네 번째 퇴사다."]],
+  choices:[
+    {label:"바로 전화해서 붙잡는다", sub:"월급 30만 원 인상 약속", fx:{team:8, mind:-3, bank:-2}, res:["cap","통화 10분. 지은 쌤은 남기로 했다. 다른 직원들도 곧 알게 될 거다."]},
+    {label:"구인공고를 올리라고 한다", fx:{team:-8, mind:2}, res:["cap","‘간호조무사 구함, 경력 우대’. 같은 공고를 올해만 네 번째 올린다."]}
+  ]},
+{ id:"d_clinic", t:"08:40", place:"강남역 · 6층 피부과", title:"원장님 오셨어요", cam:"zoomout", b:30, cat:"commute",
+  enter:s=>{ addTime("work", 20); return null; },
+  perk:"대리석 로비, 원장실, 열두 명의 직원",
+  lines:[["cap","대리석 로비, 은은한 조명, 디퓨저 향."],["npc","직원들","원장님 오셨어요!"],
+    ["say","이 순간만큼은… 꽤 근사하다."],["cap","오늘 예약 68명. 그중 시술 41건."]],
+  choices:[
+    {label:"아침 조회를 한다", fx:{team:5, rep:2}, res:["cap","오늘 매출 목표와 리뷰 이벤트를 공유했다. 직원들 눈빛이 별로 반짝이지 않는다."]},
+    {label:"원장실에서 혼자 커피를 마신다", fx:{mind:4}, res:["cap","책상 위에 장비 리스 청구서가 놓여 있다. 이번 달 1,900만 원."]}
+  ]},
+{ id:"d_consult", t:"09:30", place:"상담실", title:"적금 깨서 왔어요", cam:"zoomin", b:50, cat:"work",
+  lines:[["npc","환자 (27세 직장인)","적금 깨서 왔어요. 리프팅 제일 좋은 걸로 해주세요."],
+    ["cap","최 실장이 내민 상담지: ‘프리미엄 리프팅 패키지 330만 원’."],
+    ["say","이분 피부엔 50만 원짜리로도 충분한데…"]],
+  choices:[
+    {label:"필요한 시술만 권한다", sub:"오늘 매출 −280만 원", fx:{rep:6, mind:4, bank:-6}, res:["cap","환자는 몇 번이나 고맙다며 돌아갔다. 최 실장의 인센티브도 같이 날아갔다."]},
+    {label:"실장 플랜대로 패키지를 진행한다", fx:{bank:8, mind:-6, rep:-2}, res:["cap","330만 원 결제. 환자는 웃었는데, 나는 차트를 한참 들여다봤다."]}
+  ]},
+{ id:"d_procedure", t:"11:00", place:"시술실 1~6번 베드", title:"보톡스 5분, 레이저 15분", cam:"panl", b:90, cat:"work",
+  lines:[["cap","오전에만 시술 32건. 보톡스 한 부위 5분, 레이저 15분."],["cap","베드 여섯 개를 오가는 동선만 하루 8km."],
+    ["say","점심 전까지 18명 더…"]],
+  choices:[
+    {label:"속도를 유지한다", fx:{hp:-10, bank:6}, res:["cap","손목이 저릿하다. 대기실 모니터의 대기 인원이 0이 됐다."]},
+    {label:"예약 간격을 늘린다", fx:{bank:-5, rep:4, hp:3}, res:["cap","한 명 한 명 얼굴을 보고 설명했다. 오늘 매출 목표는 멀어졌다."]}
+  ]},
+{ id:"d_lunch", t:"12:40", place:"원장실 · 점심", title:"샐러드 10분, 영업 30분", cam:"zoomin", b:100, cat:"work",
+  lines:[["cap","점심은 원장실에서 샐러드 10분."],
+    ["npc","장비 영업사원","원장님, 신형 리프팅 장비요. 근처 병원들 다 들였어요. 리스 월 620만 원이면 됩니다."],
+    ["say","안 들이면 뒤처지고, 들이면 또 빚이다."]],
+  choices:[
+    {label:"계약한다", sub:"60개월 리스", fx:{rep:5, mind:-6}, set:s=>{s.flags.lease=true}, res:["cap","리스 계약서에 사인했다. 60개월. 마흔일곱 살까지 갚는다."]},
+    {label:"보류한다", fx:{mind:2, rep:-3}, res:["npc","장비 영업사원","아 네~ 길 건너 원장님은 어제 계약하셨어요."]}
+  ]},
+{ id:"d_review", t:"13:40", place:"원장실", title:"별점 하나", cam:"zoomin", b:60, cat:"work",
+  cost:"별점 하나가 한 달 신규 환자 수를 바꾼다.",
+  lines:[["post","blind","네이버 플레이스 · 방문자 리뷰","★☆☆☆☆ 원장 얼굴은 1분 봤고 상담실장이 다 팔더라. 비추.","방금 전"],
+    ["post","blind","강남언니 · 시술 후기","★★★★★ 원장님이 꼼꼼해요! 재방문 의사 있음","3일 전"],
+    ["say","1분… 맞는 말이라 더 아프다."]],
+  choices:[
+    {label:"직접 정중하게 답글을 단다", fx:{rep:5, mind:-4}, res:["cap","‘충분히 설명드리지 못해 죄송합니다.’ 답글 세 줄을 열 번 고쳐 썼다."]},
+    {label:"리뷰 관리 대행사에 맡긴다", sub:"월 200만 원", won:2000000, fx:{mind:3, rep:-2}, res:["npc","대행사 팀장","요즘 네이버가 조작 리뷰를 잡아내서요, 진짜 후기만 관리해 드려요."]}
+  ]},
+{ id:"d_dumping", t:"15:00", place:"진료실", title:"반값이던데요?", cam:"panr", b:80, cat:"work",
+  cost:"덤핑 경쟁: 같은 이름의 시술이 길 하나 사이로 반값이 된다.",
+  lines:[["cap","길 건너 새 피부과의 전단지: ‘스킨부스터 1cc 4.9만 원’."],
+    ["npc","단골 환자","원장님, 저기는 반값이던데요?"],
+    ["cap","우리 병원 가격은 1cc 15만 원."],["say","같은 이름의 주사인데… 뭘 넣는지는 모르지."]],
+  choices:[
+    {label:"가격을 맞춘다", fx:{bank:-6, mind:-5, rep:-2}, res:["cap","가격표를 바꿨다. 같은 일을 하고 3분의 1을 받는다."]},
+    {label:"가격은 지키고 차이를 설명한다", fx:{bank:-3, rep:4}, res:["cap","단골 환자는 고개를 끄덕였다. 오늘 신규 문의는 0건."]}
+  ]},
+{ id:"d_complaint", t:"16:40", place:"로비 · 데스크 앞", title:"환불해 주세요", cam:"shake", b:100, cat:"work",
+  lines:[["npc","환자 (화난 목소리)","레이저 받고 얼굴이 빨갛게 올라왔잖아요! 환불해 주세요!"],
+    ["cap","정상 반응 범위다. 하지만 환자는 이미 SNS에 사진을 올렸다."],["say","분명히 설명했는데… 못 들었다고 한다."]],
+  choices:[
+    {label:"직접 사과하고 다시 진료한다", fx:{rep:6, hp:-4, mind:-4}, res:["cap","30분을 썼다. 환자는 화를 풀었고, 사진은 내려갔다."]},
+    {label:"실장에게 환불 처리를 맡긴다", fx:{rep:-5, bank:-3, mind:2}, res:["cap","환불 45만 원. 사진은 그대로 남아 있다."]}
+  ]},
+{ id:"d_settle", t:"19:30", place:"불 꺼진 병원 · 원장실", title:"매출 1.6억의 진실", cam:"zoomin", b:170, cat:"work",
+  cost:"월 매출 1.6억 중 고정비만 1억 2천.",
+  lines:[["cap","19:30. 마지막 환자가 나갔다. 직원들은 퇴근, 원장은 정산."],
+    ["alert","bank","오늘 매출","6,120,000원"],["alert","bank","이번 달 임대료 (25일)","28,000,000원"],
+    ["alert","bank","인건비 · 4대보험","48,000,000원"],["alert","bank","장비 리스 · 개원 대출 이자","24,000,000원"],
+    ["cap","월 매출 1.6억이 찍혀도 손에 남는 건 5분의 1 남짓. 세금을 떼면 또 줄어든다."],
+    ["say","‘원장님은 좋겠다’… 다들 매출만 본다."]],
+  choices:[
+    {label:"직원 단톡방에 커피 쿠폰을 쏜다", sub:"12명 × 8,000원", won:96000, fx:{team:6}, res:["cap","‘오늘 고생 많았어요 ☕’ 읽음 12, 답장 3."]},
+    {label:"말없이 정산만 한다", fx:{mind:-3, team:-3}, res:["cap","불 꺼진 병원에서 혼자 엑셀을 본다. 사장은 원래 외롭다."]}
+  ]},
+{ id:"d_evening", t:"20:30", place:"원장실 · 퇴근 직전", title:"생일과 세미나 사이", cam:"zoomin", b:60, cat:"work",
+  lines:[["msg","kakao","아내","오늘 하율이 생일인 거 알지? 8시 반까진 와 🎂","18:12"],
+    ["alert","work","개원의 모임","오늘 20:30 강남 마케팅 세미나 + 저녁 (참석 확정)"],
+    ["say","세미나에 빠지면 또 뒤처지는데…"]],
+  choices:[
+    {label:"세미나에 간다", fx:{rep:5, love:-15, hp:-5}, b:150, cat:"extra", set:s=>{s.flags.night="seminar"}, res:["cap","‘숏폼 광고로 신규 환자 3배’. 받아 적는 사이 케이크 사진이 도착했다."]},
+    {label:"집으로 간다", fx:{love:12, mind:6}, b:30, cat:"commute", set:s=>{s.flags.night="home"}, res:["cap","엑셀을 저장하지도 않고 차 키를 집었다."]}
+  ]},
+{ id:"d_nightA", if:s=>s.flags.night==="seminar", t:"23:10", place:"대리운전 · 귀갓길", title:"냉장고 속 케이크", cam:"panr", b:30, cat:"commute",
+  enter:s=>{ spend(30000); return {mind:-4}; },
+  lines:[["cap","대리운전비 3만 원."],["msg","kakao","아내","하율이 자. 케이크는 냉장고에.","22:41"],["say","다음 생일엔 꼭…"]],
+  choices:[{label:"잠든 아이 방을 들여다본다", fx:{love:3, mind:-2}, res:["cap","식탁 위 케이크 한 조각에 메모가 붙어 있다. ‘아빠 꺼’."]}]},
+{ id:"d_nightB", if:s=>s.flags.night==="home", t:"21:00", place:"반포 아파트 · 거실", title:"촛불 일곱 개", cam:"zoomin",
+  lines:[["cap","케이크 위 촛불 일곱 개."],["say","이 시간이 제일 비싸다. 어떤 시술보다."],
+    ["msg","work","최 실장","원장님, 내일 오전 예약 2건 취소됐어요…","21:12"]],
+  choices:[{label:"폰을 뒤집어 놓는다", fx:{love:6, mind:4}, res:["cap","내일 걱정은 내일. 오늘 밤은 아빠만 한다."]}]},
+{ id:"d_study", t:s=> s.flags.night==="seminar" ? "23:40" : "22:30", place:"집 · 서재", title:"쉬면 수입이 0", cam:"zoomin",
+  cost:"유급휴가가 없다. 원장이 쉬면 매출도 쉰다.",
+  lines:[["cap","서재. 세무사의 메일이 와 있다."],["alert","bank","종합소득세 · 지방세 예정액","약 140,000,000원"],
+    ["cap","개원 대출 잔액 8억 2천. 원금만 매달 700만 원씩 갚는다."],["say","쉬면 병원이 쉬고, 병원이 쉬면 수입이 0이다."]],
+  choices:[
+    {label:"새 장비 광고 문구를 쓴다", sub:"약 60분", fx:{hp:-6, rep:4}, b:60, cat:"home", set:s=>{s.flags.finish="full"}, res:["cap","‘강남역 1분, 원장 직접 시술’. 결국 그 별점 1개짜리 리뷰가 광고 문구가 됐다."]},
+    {label:"노트북을 덮는다", sub:"약 20분", fx:{hp:3, mind:2}, b:20, cat:"home", set:s=>{s.flags.finish="part"}, res:["cap","세금 계산은 세무사에게, 걱정은 내일의 나에게."]}
+  ]},
+{ id:"bed", place:"침대 위", title:"마지막 휴가", cam:"zoomin",
+  t:s=> toClock(toMin(s.flags.night==="seminar" ? "23:40" : "22:30") + (s.flags.finish==="full" ? 70 : 30)),
+  lines:[["cap","불을 끈다. 여행 앱 알림: ‘가을 몰디브 특가’."],["say","마지막으로 일주일 쉰 게… 개원 전이었나."]],
+  choices:[
+    {label:"휴가 날짜를 찾아본다", fx:{mind:-3}, res:["cap","문을 닫으면 그 주 매출 0, 대진 의사를 쓰면 하루 100만 원. 앱을 껐다."]},
+    {label:"그냥 잔다", fx:{hp:5}, res:["cap","내일 예약 66명. 눈을 감는다."]}
+  ]}
+];
+/* 원장 장면 그림은 Figma 크레딧이 초기화되면 생성해서 여기에 연결 */
+const IMG_DERMA = {}, CAMS_DERMA = {};
+mapImages(SCENES_DERMA, IMG_DERMA, CAMS_DERMA);
+const RIMG_DERMA = {};
+
+let SCENES = SCENES_DAERI, RIMG = RIMG_DAERI;
+const activeScenes = () => SCENES.filter(s => !s.if || s.if(st));
+
+/* ---------- state helpers ---------- */
+function applyFx(fx){
+  const out = [];
+  if(!fx) return out;
+  for(const k of ["hp","mind","team","love","rep","bank"]){
+    if(fx[k]){ const b = st.g[k]; st.g[k] = clamp(st.g[k] + fx[k], 0, 100); out.push([k, st.g[k]-b]); }
+  }
+  if(fx.prog) st.prog = clamp(st.prog + fx.prog, 0, 150);
+  return out;
+}
+function spend(w){
+  if(!w) return null;
+  st.spent += w;
+  const hit = Math.max(1, Math.round(w/((PF && PF.wonPerPoint) || 10000))), b = st.g.bank;
+  st.g.bank = clamp(st.g.bank - hit, 0, 100);
+  return ["bank", st.g.bank - b];
+}
+function addTime(cat, m){ if(m) st.min[cat] = (st.min[cat]||0) + m; }
+const boundMin = () => st.min.commute + st.min.work + st.min.extra + st.min.home;
+/* 세후 일급을 8시간으로 나눈 값에서 시작해, 회사에 묶인 시간이 8시간을 넘는 순간부터 내려감 */
+const liveWage = () => DAILY_PAY / Math.max(8, boundMin()/60);
+const relation = () => Math.round((st.g.team + st.g.love)/2);
+function endingDerma(){
+  const g = st.g;
+  if(g.hp <= 30 && g.bank >= 65) return {name:"매출의 노예", icon:"💸", line:"병원은 잘 돌아갔습니다. 당신의 손목과 가족 사진첩만 빼고요.", say:"내일도 66명…"};
+  if(st.flags.night === "home" && g.love >= 70) return {name:"아빠 원장", icon:"🎂", line:"세미나 하나를 놓쳤습니다. 일곱 살 생일은 한 번뿐입니다.", say:"그래, 이게 내가 개원한 이유였지."};
+  if(g.rep >= 80) return {name:"양심 원장", icon:"🩺", line:"별점은 올랐고 매출은 덜 올랐습니다. 오래 가는 병원은 보통 이쪽입니다.", say:"천천히 가도… 오래 가면 되지."};
+  if(g.team <= 35) return {name:"회전문 병원", icon:"🚪", line:"직원이 또 바뀔 것 같습니다. 원장의 진짜 고객은 직원일지도 모릅니다.", say:"다음 달엔… 누가 남아 있을까."};
+  return {name:"버티는 원장", icon:"⚖️", line:"월 매출 1.6억, 고정비 1.2억. 오늘도 남는 것보다 갚을 것을 먼저 셌습니다.", say:"부러워하는 사람들… 이 숫자도 알까."};
+}
+let ending = () => endingDaeri();
+function endingDaeri(){
+  const g = st.g;
+  if(g.hp <= 30 && g.rep >= 70) return {name:"회사의 기둥", icon:"🏛️", line:"회사는 오늘 당신 덕분에 잘 굴러갔습니다. 그런데 회사는 당신을 기억할까요?", say:"내일도… 또 열심히…", face:"tired"};
+  if(st.flags.dinner === "C" && g.love >= 70) return {name:"칼퇴의 용자", icon:"🌙", line:"승진은 조금 늦어도 저녁은 지켰습니다. 이게 생각보다 어렵습니다.", say:"내일도 열심히… 그리고 조금 더 행복하게 :)", face:"soft"};
+  if(st.flags.quit >= 2) return {name:"이직 준비생", icon:"🚪", line:"동기의 ‘연봉 20%’가 계속 머릿속을 맴돕니다. 내일 헤드헌터 메시지를 열어볼지도 모릅니다.", say:"나… 여기 계속 있어도 될까?", face:"think"};
+  if(g.team >= 80) return {name:"회식 생존자", icon:"🍻", line:"팀은 당신을 좋아합니다. 대신 당신 몸과 연인이 대가를 치렀습니다.", say:"팀은 좋은데… 나는 괜찮은 걸까.", face:"sigh"};
+  return {name:"평범하게 버틴 대리", icon:"⚖️", line:"특별한 사건 없이 하루를 버텼습니다. 사실 이게 제일 어렵습니다.", say:"오늘도 버텼다. 그거면 됐다.", face:"soft"};
+}
+
+/* =====================================================================
+   PLAY ENGINE (visual-novel style)
+   ===================================================================== */
+let view = {screen:"home", idx:0};
+let P = null;          // per-scene play state
+let typer = null;
+
+let GLABEL = {hp:"체력", mind:"멘탈", team:"관계(팀)", love:"관계(연인)", rep:"평판", bank:"통장"};
+function hudHTML(sc){
+  const t = val(sc.t), w = liveWage();
+  const pct = clamp((toMin(t) - toMin("06:50")) / (toMin("01:30") - toMin("06:50")) * 100, 0, 100);
+  const gs = [["hp","체력",st.g.hp],["mind","멘탈",st.g.mind],["rel","관계",relation()],["bank","통장",st.g.bank],["rep","평판",st.g.rep]];
+  return `<div class="hud" id="hud">
+    <div class="hud-top">
+      <div class="clock"><span class="tm">${t}</span><span class="pl">${esc(sc.place)}</span></div>
+      <div class="wage" id="wage" title="출퇴근, 회식, 집에서 한 일까지 포함한 세후 시급"><span class="k">체감 시급 · 세후</span><span class="v">${w ? won(w) : "출근 전"}</span></div>
+    </div>
+    <div class="dayline" aria-hidden="true"><i style="width:${pct}%"></i></div>
+    <div class="gauges">${gs.map(([k,l,v]) => `<div class="g ${v<30?"low":""}" data-g="${k}"><div class="lb"><span>${l}</span><b>${v}</b></div><div class="bar"><i style="width:${v}%"></i></div></div>`).join("")}</div>
+  </div>`;
+}
+function refreshHud(changed){
+  const sc = activeScenes()[view.idx];
+  const old = document.getElementById("hud"); if(!old) return;
+  const tmp = document.createElement("div"); tmp.innerHTML = hudHTML(sc);
+  const nu = tmp.firstElementChild; old.replaceWith(nu);
+  const map = {hp:"hp", mind:"mind", team:"rel", love:"rel", rep:"rep", bank:"bank"};
+  (changed||[]).forEach(([k,d]) => { if(d){ const el = nu.querySelector(`[data-g="${map[k]}"]`); if(el) el.classList.add("hit"); } });
+  if(changed && changed.length) document.getElementById("wage").classList.add("tick");
+}
+function charOpts(){
+  const sc = activeScenes()[view.idx];
+  return {face:P.face, outfit:sc.outfit, hair:sc.hair, glasses:sc.glasses, prop:P.prop};
+}
+function setFace(face, extra){
+  if(face) P.face = face;
+  if(extra && "prop" in extra) P.prop = extra.prop;
+  const w = document.getElementById("chrwrap");
+  if(w) w.innerHTML = charSVG({...charOpts(), pop:true});
+}
+
+function phHTML(place){
+  return `<div class="ph art"><span aria-hidden="true">🎨</span><b>${esc(place || "")}</b><span>이 장면의 웹툰 그림은 생성 중이에요. 곧 채워집니다.</span></div>`;
+}
+function startDay(){
+  st = freshState(); view = {screen:"play", idx:0};
+  beginScene(); window.scrollTo(0,0);
+}
+function beginScene(){
+  const sc = activeScenes()[view.idx];
+  addTime(sc.cat || "work", val(sc.b) || 0);
+  const ed = sc.enter ? applyFx(sc.enter(st)) : [];
+  if(sc.perk && !st.perks.includes(sc.perk)) st.perks.push(sc.perk);
+  if(sc.cost && !st.costs.includes(sc.cost)) st.costs.push(sc.cost);
+  const lines = (val(sc.lines) || []).slice();
+  if(sc.perk) lines.push(["perk", sc.perk]);
+  if(sc.cost) lines.push(["cost", sc.cost]);
+  P = {lines, li:-1, face:val(sc.face) || "neutral", prop:sc.prop || null, phone:null, phase:"lines", enterDeltas:ed};
+  const nx = activeScenes().slice(view.idx + 1, view.idx + 3);
+  nx.forEach(n => { if(n.img){ const im = new Image(); im.src = n.img; } });
+  const chs = val(sc.choices) || [];
+  chs.forEach(c => { if(c.img){ const im = new Image(); im.src = c.img; } });
+  renderPlay();
+}
+function renderPlay(){
+  const list = activeScenes(), sc = list[view.idx];
+  const tilt = view.idx % 2 ? "tilt-b" : "tilt-a";
+  $app.innerHTML = hudHTML(sc) + `
+    <div class="panel ${tilt} panel-in" id="panel" role="button" tabindex="0" aria-label="장면을 눌러 계속">
+      ${sc.img ? `<img class="art cam ${reduced ? "" : "cam-" + (sc.cam || "zoomin")}" src="${sc.img}" alt="">` : (JOB_ID === "daeri" ? panelSVG(sc, charOpts()) : phHTML(sc.place))}
+      <div class="ov" id="ov"></div>
+      <div class="ov" id="ovPhone"></div>
+      <div class="ov" id="ovFx"></div>
+      <span class="tapnext" id="tapnext">탭해서 계속 ▶</span>
+    </div>
+    <div class="stage-meta"><h2>${esc(sc.title)}</h2><span class="eyebrow">장면 ${view.idx+1} / ${list.length}</span></div>
+    <div class="controls" id="controls"></div>`;
+  const panel = document.getElementById("panel");
+  panel.addEventListener("click", onTap);
+  panel.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); onTap(); } });
+  renderControls();
+  if(P.enterDeltas && P.enterDeltas.some(([,d]) => d)) floatDeltas(P.enterDeltas);
+  setTimeout(() => nextLine(), reduced ? 0 : 380);
+}
+function renderControls(){
+  const c = document.getElementById("controls"); if(!c) return;
+  const list = activeScenes(), sc = list[view.idx];
+  if(P.phase === "lines"){
+    c.innerHTML = `<div class="cta-row"><span class="react-note">장면을 누르면 다음 대사로 넘어가요</span><button class="skip" type="button" id="skip">대사 건너뛰기</button></div>`;
+    document.getElementById("skip").onclick = () => { stopTyping(); while(P.li < P.lines.length - 1){ P.li++; applyLineFace(P.lines[P.li]); } showLine(P.lines[P.li], true); toChoices(); };
+  } else if(P.phase === "choose"){
+    const chs = val(sc.choices);
+    c.innerHTML = `<div class="thoughts" role="group" aria-label="선택지">${chs.map((ch,i) => `<button class="thought" type="button" data-ch="${i}">${esc(ch.label)}${ch.sub ? `<span class="sub">${esc(ch.sub)}</span>` : ""}</button>`).join("")}</div>`;
+    c.querySelectorAll("[data-ch]").forEach(b => b.addEventListener("click", () => choose(+b.dataset.ch)));
+  } else {
+    c.innerHTML = `<div class="cta-row"><span class="react-note">${P.wonNote ? "오늘 쓴 돈 +" + won(P.wonNote) : ""}</span><button class="next" type="button" id="next">${view.idx === list.length-1 ? "하루 정산 보기" : "다음 장면 ▶"}</button></div>`;
+    const n = document.getElementById("next"); n.onclick = goNext; n.focus({preventScroll:true});
+  }
+}
+function onTap(){
+  if(P.phase === "lines"){
+    if(typer){ finishTyping(); return; }
+    nextLine();
+  } else if(P.phase === "react"){
+    if(typer){ finishTyping(); return; }
+    goNext();
+  }
+}
+function applyLineFace(line){
+  const meta = line.find(x => x && typeof x === "object" && !Array.isArray(x));
+  const faceIdx = {cap:2, say:2, npc:3, msg:5, post:5, alert:4}[line[0]];
+  const f = faceIdx != null ? line[faceIdx] : null;
+  if(typeof f === "string" || meta) setFace(typeof f === "string" ? f : null, meta && "prop" in meta ? meta : null);
+}
+function nextLine(){
+  if(P.li >= P.lines.length - 1){ toChoices(); return; }
+  P.li++;
+  const line = P.lines[P.li];
+  applyLineFace(line);
+  showLine(line, false);
+}
+function phoneShell(kind){
+  const title = {work:"사내 메신저", kakao:"카카오톡", blind:"블라인드", bank:"알림"}[kind] || "";
+  return `<div class="phone ${kind}"><div class="scr"><div class="bar"><span>${title}</span><span class="mono">${val(activeScenes()[view.idx].t)}</span></div><div class="list" id="plist"></div></div></div>`;
+}
+function ensurePhone(kind){
+  const host = document.getElementById("ovPhone");
+  if(P.phone !== kind){ host.innerHTML = phoneShell(kind); P.phone = kind; }
+  return document.getElementById("plist");
+}
+function closePhone(){ const h = document.getElementById("ovPhone"); if(h) h.innerHTML = ""; P.phone = null; }
+function showLine(line, instant){
+  const ov = document.getElementById("ov"); if(!ov) return;
+  const type = line[0];
+  const tap = document.getElementById("tapnext"); if(tap) tap.hidden = false;
+  if(["msg","post","alert"].includes(type) && line[1] !== "bank" || (type === "alert" && line[1] === "bank")){
+    if(type === "alert" && line[1] !== "bank"){
+      closePhone();
+      ov.innerHTML = `<div class="banner"><span class="ic">${line[1]==="work"?"✉":"🔔"}</span><span><b>${esc(line[2])}</b>${esc(line[3])}</span></div>`;
+      return;
+    }
+    ov.innerHTML = "";
+    const kind = line[1];
+    const list = ensurePhone(kind);
+    let el;
+    if(type === "msg"){
+      const meta = line[6] || {};
+      el = document.createElement("div"); el.className = "pm" + (meta.typing ? " typing" : "");
+      el.innerHTML = `<span class="f">${esc(line[2])}</span><span class="b"></span>${line[4] ? `<span class="t">${esc(line[4])}</span>` : ""}`;
+      list.appendChild(el);
+      typeInto(el.querySelector(".b"), line[3], instant);
+    } else if(type === "post"){
+      el = document.createElement("div"); el.className = "pp";
+      el.innerHTML = `<span class="s">${esc(line[2])}</span><b>${esc(line[3])}</b><span class="m">${esc(line[4])}</span>`;
+      list.appendChild(el);
+    } else {
+      el = document.createElement("div"); el.className = "pa";
+      el.innerHTML = `<span>🔔 ${esc(line[2])}</span><span class="amt">${esc(line[3])}</span>`;
+      list.appendChild(el);
+    }
+    while(list.children.length > 4) list.removeChild(list.firstChild);
+    return;
+  }
+  if(["cap","say","npc"].includes(type)) closePhone();
+  if(type === "cap"){
+    ov.innerHTML = `<div class="cap"></div>`; typeInto(ov.firstChild, line[1], instant);
+  } else if(type === "say"){
+    ov.innerHTML = `<div class="say"></div>`; typeInto(ov.firstChild, line[1], instant);
+  } else if(type === "npc"){
+    ov.innerHTML = `<div class="npc"><span class="who">${esc(line[1])}</span><span class="tx"></span></div>`; typeInto(ov.querySelector(".tx"), line[2], instant);
+  } else if(type === "note"){
+    closePhone();
+    ov.innerHTML = `<div class="sticky">${line[1].map(([a,b]) => `<div><span>☐</span><span>${esc(a)} ${esc(b)}</span></div>`).join("")}</div>`;
+  } else if(type === "file"){
+    ov.insertAdjacentHTML("beforeend", `<div class="filechip"><span>PPT</span><span>${esc(line[1])}</span></div>`);
+  } else if(type === "perk" || type === "cost"){
+    ov.insertAdjacentHTML("beforeend", `<div class="stamp ${type}">${type==="perk"?"＋ 부러운 점":"− 대가"} · ${esc(line[1])}</div>`);
+  }
+}
+function typeInto(el, text, instant){
+  stopTyping();
+  if(instant || reduced){ el.textContent = text; return; }
+  let i = 0; el.textContent = "";
+  typer = {el, text, id:setInterval(() => {
+    i += 1; el.textContent = text.slice(0, i);
+    if(i >= text.length) stopTyping();
+  }, 34)};
+}
+function finishTyping(){ if(typer){ typer.el.textContent = typer.text; stopTyping(); } }
+function stopTyping(){ if(typer){ clearInterval(typer.id); typer = null; } }
+function toChoices(){
+  finishTyping();
+  P.phase = "choose";
+  const tap = document.getElementById("tapnext"); if(tap) tap.hidden = true;
+  renderControls();
+  const c = document.getElementById("controls"); if(c) c.scrollIntoView({behavior: reduced ? "auto" : "smooth", block:"nearest"});
+}
+function choose(i){
+  const sc = activeScenes()[view.idx];
+  const ch = val(sc.choices)[i];
+  const deltas = applyFx(ch.fx);
+  const m = spend(ch.won); if(m) deltas.push(m);
+  if(ch.b) addTime(ch.cat || "work", val(ch.b));
+  if(ch.perk && !st.perks.includes(ch.perk)) st.perks.push(ch.perk);
+  if(ch.set) ch.set(st);
+  st.log.push(sc.title + " → " + ch.label);
+  st.choices = st.choices || {}; st.choices[sc.id] = i;
+  P.phase = "react"; P.wonNote = ch.won || 0;
+  closePhone();
+  const rimg = ch.img || (RIMG[sc.id] && RIMG[sc.id][i] ? "img/" + RIMG[sc.id][i] + ".jpg" : null);
+  if(rimg){
+    const panel = document.getElementById("panel");
+    const old = panel && panel.querySelector("img.art");
+    const nu = document.createElement("img");
+    nu.className = "art"; nu.alt = ""; nu.src = rimg;
+    if(!reduced) nu.style.animation = "reactIn .55s ease, camZoomIn 10s ease-out forwards";
+    if(old) old.after(nu); else if(panel) panel.prepend(nu);
+    if(old) setTimeout(() => old.remove(), 600);
+    const ov = document.getElementById("ov"); if(ov) ov.innerHTML = "";
+  } else {
+    /* 결과 그림이 아직 없는 선택: 장면을 어둡게 가리고 결과 문장을 가운데에 크게 보여주는 내레이션 컷 */
+    const panel = document.getElementById("panel"); if(panel) panel.classList.add("narr");
+    const ov = document.getElementById("ov"); if(ov) ov.innerHTML = "";
+  }
+  setFace(ch.face || "neutral", ch.prop !== undefined ? {prop:ch.prop} : null);
+  const r = val(ch.res);
+  showLine(r, false);
+  const tap = document.getElementById("tapnext"); if(tap) tap.hidden = false;
+  floatDeltas(deltas);
+  refreshHud(deltas);
+  renderControls();
+  window.scrollTo({top:0, behavior: reduced ? "auto" : "smooth"});
+}
+function floatDeltas(ds){
+  const host = document.getElementById("ovFx"); if(!host) return;
+  const chips = ds.filter(([,d]) => d).map(([k,d]) => `<span class="fl ${d>0?"up":"dn"}">${GLABEL[k]} ${d>0?"+":"−"}${Math.abs(d)}</span>`).join("");
+  host.innerHTML = chips ? `<div class="floaters">${chips}</div>` : "";
+}
+function goNext(){
+  stopTyping();
+  const panel = document.getElementById("panel");
+  const go = () => {
+    view.idx++;
+    if(view.idx >= activeScenes().length){ view.screen = "end"; render(); window.scrollTo(0,0); return; }
+    beginScene(); window.scrollTo(0,0);
+  };
+  if(panel && !reduced){ panel.classList.remove("panel-in"); panel.classList.add("panel-out"); setTimeout(go, 300); }
+  else go();
+}
+
+/* =====================================================================
+   HOME / JOB / LOCKED
+   ===================================================================== */
+function renderHome(){
+  const myVote = store.get("vote", null);
+  const heroSc = {bg:"subway", cam:"panr", tint:null};
+  $app.innerHTML = `
+    <div class="brand">
+      <span class="demo-tag">DEMO v0.4 · 하루 체험</span>
+      <h1>남의 연봉 말고<br><em>남의 하루</em>를 살아보기</h1>
+      <p>부러운 직업의 하루를 웹툰처럼 살아보고, 연봉 뒤에 숨은 실제 시급을 확인해 보세요.</p>
+    </div>
+    <div class="hero"><div class="panel tilt-a"><img class="art cam ${reduced ? "" : "cam-zoomin"}" src="img/subway.jpg" alt="">
+      <div class="ov"><div class="cap">오늘도 출근하는 화요일…</div><div class="say" style="top:auto;bottom:10%">연봉 7천인데… 왜 이렇게 피곤하지?</div></div></div></div>
+    <div class="section-title"><h2>오늘 살아볼 직업</h2><span class="note">1차 공개 4개</span></div>
+    <div class="joblist">${JOBS.map(j => `
+      <button class="job ${j.playable ? "playable" : "locked"}" data-job="${j.id}" type="button">
+        <span class="ic" aria-hidden="true">${j.icon}</span>
+        <span><span class="nm">${esc(j.name)}</span><span class="tag-kind">${j.kind}</span><br><span class="meta">${esc(j.meta)}</span></span>
+        <span class="go">${j.playable ? "살아보기" : "🔒 준비 중"}</span>
+      </button>`).join("")}</div>
+    <div class="section-title"><h2>다음에 열 직업 투표</h2><span class="note">한 표만</span></div>
+    <div class="votes">${VOTES.map(v => `<button class="vote" type="button" data-vote="${v.id}" aria-pressed="${myVote===v.id}"><span class="e" aria-hidden="true">${v.e}</span><span>${esc(v.n)}</span><span class="v">${myVote===v.id ? "투표함 ✓" : "투표하기"}</span></button>`).join("")}</div>
+    <p class="note">데모라서 투표와 알림 신청은 이 기기에만 저장됩니다.</p>`;
+  $app.querySelectorAll("[data-job]").forEach(b => b.addEventListener("click", () => {
+    const j = JOBS.find(x => x.id === b.dataset.job);
+    if(j.playable){ setJob(j.id); view.screen = "job"; render(); window.scrollTo(0,0); }
+    else openLocked({title:j.name, icon:j.icon, desc:"이 직업의 하루 시나리오는 현직자 이야기를 모아 준비하고 있어요.", key:"job:"+j.id});
+  }));
+  $app.querySelectorAll("[data-vote]").forEach(b => b.addEventListener("click", () => { store.set("vote", b.dataset.vote); toast("투표했어요. 다음 직업 순서에 반영됩니다."); renderHome(); }));
+}
+function renderJob(){
+  $app.innerHTML = `
+    <button class="back" type="button" id="back">← 직업 목록</button>
+    <div class="idcard">
+      <div class="lanyard"><span>${esc(PF.org)}</span><span class="hole" aria-hidden="true"></span><span>${esc(PF.badge)}</span></div>
+      <div class="body">
+        <div class="photo">${PF.photo ? `<img src="${PF.photo}" alt="${esc(PF.who)} 사진">` : `<span class="ph-emoji" aria-hidden="true">${PF.icon}</span>`}</div>
+        <div><div class="who">${esc(PF.who)}</div><div class="role">${esc(PF.role)}</div></div>
+      </div>
+      <div class="facts">${PF.facts4.map(([k,v]) => `<div><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join("")}</div>
+      <p class="assume">수치는 시나리오용 가정입니다. 현직자 검수를 거쳐 보정할 예정입니다.</p>
+    </div>
+    <div class="modes">
+      <button class="mode" type="button" id="m-day"><span class="t">하루 체험</span><span class="d">10분 · ${esc(PF.dayDesc)}</span><span class="cta">시작</span></button>
+      <button class="mode locked" type="button" id="m-week"><span class="t">🔒 7일 체험</span><span class="d">7일 동안 하루 10분씩 · 월요일부터 일요일까지</span><span class="cta">준비 중</span></button>
+      <button class="mode locked" type="button" id="m-year"><span class="t">🔒 1년 체험</span><span class="d">20일 동안 하루 10분씩 · ${esc(PF.yearHook)}</span><span class="cta">준비 중</span></button>
+    </div>`;
+  document.getElementById("back").onclick = () => { view.screen = "home"; render(); };
+  document.getElementById("m-day").onclick = startDay;
+  document.getElementById("m-week").onclick = () => openLocked(LOCKS().week);
+  document.getElementById("m-year").onclick = () => openLocked(LOCKS().year);
+}
+const LOCKS = () => ({
+  week:{title:"7일 체험", icon:"📅", key:"mode:week:"+JOB_ID, desc:`7일 동안 하루 10분씩 ${PF.who}의 한 주를 이어서 살아봅니다. ${PF.weekHook}`},
+  year:{title:"1년 체험", icon:"🗓️", key:"mode:year:"+JOB_ID, desc:`20일 동안 하루 10분씩 ${PF.who}의 1년을 살아봅니다. ${PF.yearHook}까지 이어집니다.`}
+});
+function openLocked(l){
+  const done = store.get("notify:"+l.key, false);
+  store.set("click:"+l.key, store.get("click:"+l.key, 0) + 1);
+  $modal.innerHTML = `<div class="scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lk-t">
+    <span class="lock" aria-hidden="true">${l.icon}</span><h3 id="lk-t">${esc(l.title)}은(는) 준비 중이에요</h3><p>${esc(l.desc)}</p>
+    <div class="row"><button class="btn" type="button" id="lk-close">닫기</button><button class="btn primary" type="button" id="lk-notify" ${done ? "disabled" : ""}>${done ? "알림 신청 완료 ✓" : "출시 알림 받기"}</button></div></div></div>`;
+  const close = () => { $modal.innerHTML = ""; };
+  document.getElementById("lk-close").onclick = close;
+  document.getElementById("scrim").addEventListener("click", e => { if(e.target.id === "scrim") close(); });
+  document.getElementById("lk-notify").onclick = () => { store.set("notify:"+l.key, true); close(); toast("출시되면 가장 먼저 알려드릴게요."); };
+  document.getElementById("lk-notify").focus();
+}
+
+/* =====================================================================
+   END / 정산
+   ===================================================================== */
+const FACTS_DERMA = [
+  {t:"2023년 기준 의사 평균 보수는 약 2억 8,518만 원이고, 의원급은 약 3.2억 원입니다. 매출이 아니라 비용을 뺀 뒤의 보수입니다.", s:"보건복지부 2차 보건의료인력 실태조사 (데일리메디 보도)", u:"https://dailymedi.com/news/news_view.php?ca_id=&wr_id=940942"},
+  {t:"2025년 1~7월 새로 개원한 일반의 의원 176곳 중 146곳(83%)이 피부과 진료를 내걸었습니다.", s:"The Korea Times", u:"https://www.koreatimes.co.kr/southkorea/society/20250908/koreas-shortage-of-core-medical-services-to-worsen-as-new-clinics-focus-on-dermatology-plastic-surgery"},
+  {t:"플랫폼에 올라온 스킨부스터 가격이 1cc 5만 원 이하까지 떨어지는 등 덤핑 경쟁이 과열됐습니다.", s:"메디칼타임즈 (2026년 7월)", u:"https://medicaltimes.com/Main/News/NewsView.html?ID=1169596"},
+  {t:"2025년 피부과 의원은 새로 문을 연 곳 대비 41.9%만큼 문을 닫았습니다.", s:"위키트리", u:"https://www.wikitree.co.kr/articles/1119870"},
+  {t:"의료기관 휴·폐업 관련 소비자 상담 1,157건 중 피부과가 42.1%로 가장 많았습니다. 선결제한 시술비를 못 돌려받는 사례가 대부분입니다.", s:"메디칼타임즈", u:"https://www.medicaltimes.com/Main/News/NewsView.html?ID=1171047"},
+  {t:"‘부가세 별도’ 표기로 광고가보다 결제 금액이 높아 환자 불만이 커지고 있습니다.", s:"머니투데이 (2026년 8월)", u:"https://www.mt.co.kr/article/2026082415055583288"}
+];
+const FACTS_DAERI = [
+  {t:"수도권 직장인은 출퇴근에 하루 평균 82분을 쓰고, 직장에 머무는 시간은 9시간이 넘습니다.", s:"통계청 2024 통근 근로자 이동 특성 (데일리안 보도)", u:"https://www.dailian.co.kr/news/view/1443575/"},
+  {t:"PC-OFF제 이후에도 개인 노트북으로 이어지는 ‘도둑 야근’이 관행처럼 남아 있다는 지적이 나옵니다.", s:"잡플래닛 컨텐츠", u:"https://www.jobplanet.co.kr/contents/news-4285"},
+  {t:"2026년 서울 냉면과 비빔밥 평균 가격은 1만 2천 원에 육박하고, 구내식당 수요가 늘었습니다.", s:"더팩트 (한국소비자원 참가격 인용)", u:"https://news.tf.co.kr/read/economy/2301844.htm"},
+  {t:"직장인 10명 중 8명(81.3%)이 최근 이직을 생각해 본 적이 있다고 답했습니다.", s:"잡코리아 2023 설문 (아시아경제 보도)", u:"https://view.asiae.co.kr/article/2023110918012547933"},
+  {t:"직장인 28.2%는 감원이 있다면 “내가 대상이 될 수도 있다”고 답했습니다.", s:"피앰아이 현실 직장인 리포트 (세계일보 보도)", u:"https://www.segye.com/newsView/20251120515107"},
+  {t:"성과급은 업종과 실적에 따라 ‘잭팟’과 ‘0%’로 갈리고 있습니다.", s:"뉴스토마토", u:"https://newstomato.com/ReadNews.aspx?no=1287663"}
+];
+function renderEnd(){
+  stopTyping();
+  const e = ending();
+  const bm = boundMin(), hrs = bm/60, wage = DAILY_PAY/hrs, maxW = Math.max(CONTRACT_WAGE, wage);
+  const cats = [["commute","출퇴근","c-commute"],["work","회사 안","c-work"],["extra","회식·야근","c-extra"],["home","집에서 일","c-home"]];
+  const fin = [["체력","hp"],["멘탈","mind"],["관계(팀)","team"],["관계(연인)","love"],["통장","bank"],["평판","rep"]];
+  const perks = st.perks.length ? st.perks : ["안정적인 수입"];
+  const bedT = val(SCENES.find(x => x.id === "bed").t);
+  const share = `[타인의 삶] ${PF.shareName}로 하루 살아봄
+일에 묶인 시간 ${hrs.toFixed(1)}시간
+${PF.wageLabel} ${won(wage)}
+엔딩: ${e.name} ${e.icon}
+오늘 쓴 돈 ${won(st.spent)}`;
+  $app.innerHTML = `
+    <div class="panel tilt-a panel-in" aria-label="엔딩 장면">
+      ${PF.endImg ? `<img class="art cam ${reduced ? "" : "cam-zoomout"}" src="${PF.endImg}" alt="">` : phHTML("엔딩")}
+      <div class="ov"><div class="cap">${esc(bedT)}. ${esc(PF.who)}의 화요일이 끝났다.</div><div class="say" id="endsay" style="top:auto;bottom:12%"></div></div>
+    </div>
+    <div class="endhead"><span class="demo-tag">하루 정산</span><h1>${e.icon} ${esc(e.name)}</h1><p class="note">${esc(e.line)}</p></div>
+    <div class="wagebig">
+      <span class="lbl">${esc(PF.wageLabel)}</span>
+      <span class="num"><span>${won(wage)}</span></span>
+    </div>
+    <div class="box rx" id="rxbox"></div>
+    <div class="box"><h3>부러운 점과 대가</h3><div class="pc">
+      <div class="p"><h4>부러운 점</h4><ul>${perks.map(p => `<li>${esc(p)}</li>`).join("")}${PF.perkExtra.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>
+      <div class="c"><h4>대가</h4><ul>${st.costs.map(c => `<li>${esc(c)}</li>`).join("")}</ul></div></div></div>
+    <div class="box"><h3>현직자 한마디</h3><p class="quote">“${esc(PF.quote)}”<small>가상 예시 문구입니다. 실제 현직자 인터뷰로 교체할 예정입니다.</small></p></div>
+    <div class="box"><h3>이 하루의 근거</h3><ul class="factlist">${FACTS.map(f => `<li><span>${esc(f.t)}</span><a href="${f.u}" target="_blank" rel="noopener">${esc(f.s)} ↗</a></li>`).join("")}</ul></div>
+    <div class="box"><h3>공유 카드</h3><div class="sharecard" id="sharetext">${esc(share)}</div>
+      <div class="actions"><button class="btn primary wide" type="button" id="copy">결과 복사하기</button></div></div>
+    <div class="actions">
+      <button class="btn locked wide" type="button" id="e-week">🔒 ${esc(PF.who)}의 7일 이어서 살아보기 · 7일 × 10분</button>
+      <button class="btn locked wide" type="button" id="e-year">🔒 ${esc(PF.who)}의 1년 살아보기 · 20일 × 10분</button>
+      <button class="btn" type="button" id="again">다시 해보기</button>
+      <button class="btn" type="button" id="others">다른 직업 보기</button>
+    </div>`;
+  typeInto(document.getElementById("endsay"), e.say, false);
+  paintRx();
+  document.getElementById("copy").onclick = () => {
+    try{ navigator.clipboard.writeText(share).then(() => toast("복사했어요. 친구에게 붙여넣어 보세요."), selectShare); }catch(err){ selectShare(); }
+  };
+  document.getElementById("e-week").onclick = () => openLocked(LOCKS().week);
+  document.getElementById("e-year").onclick = () => openLocked(LOCKS().year);
+  document.getElementById("again").onclick = startDay;
+  document.getElementById("others").onclick = () => { view.screen = "home"; render(); window.scrollTo(0,0); };
+}
+function selectShare(){
+  const el = document.getElementById("sharetext"), r = document.createRange(); r.selectNodeContents(el);
+  const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); toast("텍스트를 선택했어요. 길게 눌러 복사하세요.");
+}
+
+/* ---------- 감정 반응 + 선택 통계 (모두가 함께 보는 공유 저장소) ---------- */
+const EMOS = [["wow","😮","생각보다 안 부러워"],["sad","🥲","짠하다"],["envy","😤","그래도 부러워"],["me","🤝","내 얘기 같아"],["tip","💡","진로에 도움 됐어"]];
+const KEY_SCENES = {daeri:["hoesik","lunch","junior"], derma:["d_consult","d_evening","d_dumping"]};
+let RXDB = null, RXUID = null, RX = [], rxState = "loading", rxWriting = false;
+(async () => {
+  try{
+    if(!window.claude || typeof window.claude.use !== "function"){ rxState = "off"; paintRx(); return; }
+    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    if(!db || !user){ rxState = "off"; paintRx(); return; }
+    RXUID = await user.id(); RXDB = db;
+    const timer = setTimeout(() => { if(rxState === "loading"){ rxState = "slow"; paintRx(); } }, 10000);
+    db.collection("reactions").onSnapshot(snap => {
+      if(!snap.metadata.fromCache) clearTimeout(timer);
+      RX = snap.docs.map(d => ({id:d.id, body:d.data() || {}}));
+      rxState = "ready"; paintRx();
+    }, () => { clearTimeout(timer); rxState = "off"; paintRx(); });
+  }catch(e){ rxState = "off"; paintRx(); }
+})();
+function myRx(){
+  const shared = RXUID && RX.find(r => r.id === RXUID);
+  return (shared && shared.body[JOB_ID]) || store.get("rx:" + JOB_ID, null);
+}
+function choiceLabel(sid, idx){
+  const sc = SCENES.find(s => s.id === sid); if(!sc) return "";
+  const chs = val(sc.choices) || []; return chs[idx] ? chs[idx].label : "";
+}
+function paintRx(){
+  const box = document.getElementById("rxbox"); if(!box) return;
+  const mine = myRx();
+  const all = RX.map(r => r.body[JOB_ID]).filter(Boolean);
+  const n = all.length;
+  let html = `<h3>이 하루, 어떠셨어요?</h3>
+    <div class="emos" role="group" aria-label="감정 반응">${EMOS.map(([k,e,l]) => `<button type="button" class="emo" data-emo="${k}" aria-pressed="${mine && mine.emo === k}"><span aria-hidden="true">${e}</span>${esc(l)}</button>`).join("")}</div>`;
+  if(mine){
+    if(rxState === "ready" && n){
+      const cnt = k => all.filter(r => r.emo === k).length;
+      html += `<div class="rxbars">${EMOS.map(([k,e,l]) => { const c = cnt(k), pct = Math.round(c / n * 100);
+        return `<div class="rxrow ${mine.emo === k ? "me" : ""}"><span>${e} ${esc(l)}</span><span class="rxbar"><i style="width:${pct}%"></i></span><span class="rxv">${pct}%</span></div>`; }).join("")}</div>
+        <p class="note">이 직업을 끝낸 ${n}명의 반응이에요 (나 포함).</p>`;
+      const wages = all.map(r => r.wage).filter(w => typeof w === "number" && w > 0);
+      if(wages.length > 1) html += `<p class="rxline">다른 사람들의 평균 체감 시급 <b>${won(wages.reduce((a,b) => a+b, 0) / wages.length)}</b></p>`;
+      const keys = KEY_SCENES[JOB_ID] || [];
+      const rows = keys.filter(sid => st.choices && st.choices[sid] != null).map(sid => {
+        const myIdx = st.choices[sid];
+        const pool = all.filter(r => r.choices && r.choices[sid] != null);
+        const same = pool.filter(r => r.choices[sid] === myIdx).length;
+        const pct = pool.length ? Math.round(same / pool.length * 100) : 0;
+        return `<li><span class="q">${esc(choiceLabel(sid, myIdx))}</span><span class="rxbar"><i style="width:${pct}%"></i></span><span class="rxv">${pct}%</span></li>`;
+      }).join("");
+      if(rows) html += `<h4 class="rxh">나와 같은 선택을 한 사람</h4><ul class="rxchoices">${rows}</ul>`;
+    } else if(rxState === "loading"){
+      html += `<p class="note">다른 사람들의 반응을 불러오는 중이에요…</p>`;
+    } else if(rxState === "slow"){
+      html += `<p class="note">다른 사람들의 반응을 아직 불러오지 못했어요. 잠시 뒤 다시 열어 보세요.</p>`;
+    } else if(rxState === "off"){
+      html += `<p class="note">반응을 저장했어요. 다른 사람들의 반응은 로그인한 상태에서 볼 수 있어요.</p>`;
+    } else {
+      html += `<p class="note">첫 번째 반응이에요. 다른 사람들이 하루를 마치면 여기에 비율이 쌓여요.</p>`;
+    }
+  } else {
+    html += `<p class="note">하나를 고르면 다른 사람들은 어떻게 느꼈는지 보여드려요.</p>`;
+  }
+  box.innerHTML = html;
+  box.querySelectorAll("[data-emo]").forEach(b => b.addEventListener("click", () => react(b.dataset.emo)));
+}
+async function react(emo){
+  if(rxWriting) return;
+  const rec = {emo, ending:ending().name, choices:{...(st.choices || {})}, wage:Math.round(DAILY_PAY / Math.max(boundMin() / 60, 1)), at:Date.now()};
+  store.set("rx:" + JOB_ID, rec);
+  const shared = RXUID && RX.find(r => r.id === RXUID);
+  if(shared) shared.body = {...shared.body, [JOB_ID]:rec}; else if(RXUID) RX = RX.concat([{id:RXUID, body:{[JOB_ID]:rec}}]);
+  paintRx();
+  if(!RXDB || !RXUID) return;
+  rxWriting = true;
+  try{
+    const ref = RXDB.doc("reactions/" + RXUID);
+    const cur = await ref.get();
+    const body = cur.exists ? {...cur.data()} : {};
+    body[JOB_ID] = rec;
+    await ref.set(body);
+  }catch(e){
+    toast(e && e.code === "invalid_argument" ? "이 링크에서는 반응을 저장할 수 없어요. 내 기기에만 기록했어요." : "반응을 저장하지 못했어요. 잠시 뒤 다시 눌러 주세요.");
+  }finally{ rxWriting = false; }
+}
+
+/* ---------- 직업별 프로필 ---------- */
+const PROFILES = {
+  daeri:{icon:"🪪", who:"한 대리", org:"HANBIT GROUP", badge:"EMPLOYEE", photo:"img/idphoto.jpg", role:"한빛그룹(가상) 계열사 · 마케팅팀 5년차 · 33세",
+    facts4:[["연봉 (세전)","약 7,000만 원"],["월 실수령","약 470만 원"],["출퇴근","왕복 약 90분"],["주거","전세대출 오피스텔"]],
+    dayDesc:"상무 보고 전날인 화요일 하루", weekHook:"오늘 고른 선택(이직 고민, 연인과의 관계, 상무 보고 결과)이 다음 날로 이어집니다.", yearHook:"연봉 협상, 성과급 시즌, 승진 심사, 헤드헌터 제안",
+    scenes:SCENES_DAERI, rimg:RIMG_DAERI, start:{hp:65, mind:60, team:60, love:60, bank:50, rep:60},
+    daily:Math.round(4700000 / 21), wonPerPoint:10000, ending:endingDaeri, facts:FACTS_DAERI, gl:{team:"관계(팀)", love:"관계(연인)"},
+    wageLabel:"출퇴근, 회식, 집에서 한 일까지 포함한 체감 시급", shareName:"대기업 5년차 대리", endImg:"img/ending.jpg",
+    perkExtra:["성과급 시즌의 기대감"], quote:"힘든 건 일 자체가 아니라 내 일정이 남의 손에 있다는 거예요. 그래도 월급날 한 번도 걱정 안 해본 건 큰 복이죠."},
+  derma:{icon:"💉", who:"서 원장", org:"SEO DERMATOLOGY", badge:"원장 · 피부과 전문의", photo:null, role:"강남역 피부과 개원 4년차 · 피부과 전문의 · 42세",
+    facts4:[["월 매출","약 1억 6,000만 원"],["월 고정비","약 1억 2,500만 원"],["세후 순소득","월 약 2,300만 원"],["개원 대출 잔액","약 8억 2,000만 원"]],
+    dayDesc:"예약 68명, 딸 생일인 화요일 하루", weekHook:"오늘 고른 선택(장비 리스, 리뷰 대응, 직원 이탈, 가족과의 약속)이 다음 날로 이어집니다.", yearHook:"종합소득세 납부, 직원 재계약, 경쟁 병원 개원, 장비 교체",
+    scenes:SCENES_DERMA, rimg:RIMG_DERMA, start:{hp:60, mind:55, team:55, love:55, bank:60, rep:65},
+    daily:Math.round(23000000 / 24), wonPerPoint:500000, ending:endingDerma, facts:FACTS_DERMA, gl:{team:"관계(직원)", love:"관계(가족)"},
+    wageLabel:"출퇴근, 세미나, 집에서 한 일까지 포함한 체감 시급", shareName:"강남 피부과 원장", endImg:null,
+    perkExtra:["대기업 대리의 약 3~4배 수입", "‘원장님’이라는 사회적 지위"], quote:"매출은 다들 부러워하는데, 그 매출에서 임대료랑 직원 월급, 장비 리스를 빼면 얘기가 달라져요. 그래도 내 이름 걸고 환자 보는 건 좋아요."}
+};
+function setJob(id){
+  JOB_ID = id; PF = PROFILES[id];
+  SCENES = PF.scenes; RIMG = PF.rimg; START = PF.start;
+  DAILY_PAY = PF.daily; CONTRACT_WAGE = Math.round(DAILY_PAY / 8);
+  ending = PF.ending; FACTS = PF.facts;
+  GLABEL.team = PF.gl.team; GLABEL.love = PF.gl.love;
+}
+let FACTS = FACTS_DAERI;
+setJob("daeri");
+
+/* ---------- router ---------- */
+function render(){
+  stopTyping();
+  if(view.screen === "home") renderHome();
+  else if(view.screen === "job") renderJob();
+  else if(view.screen === "play") beginScene();
+  else renderEnd();
+}
+function boot(data){
+  if(data && data.st && data.view && data.view.screen === "end"){ setJob(data.job || "daeri"); st = data.st; view = data.view; }
+  render();
+}
+if(window.claude && window.claude.hot && window.claude.hot.snapshot){ try{ window.claude.hot.snapshot(() => ({st, view, job:JOB_ID})); }catch(e){} }
+if(window.claude && window.claude.hot && window.claude.hot.ready) window.claude.hot.ready(boot);
+else boot((window.claude && window.claude.hot && window.claude.hot.data) || {});
+})();
+</script>
+
+</body>
+</html>
