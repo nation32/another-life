@@ -10,7 +10,7 @@
 <title>타인의 삶</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Do+Hyeon&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap">
 <style>
 /* Layout: one phone-width column. The day plays as webtoon panels (4:5) with captions, speech bubbles and a phone that slides up. Lanyard blue = the company, highlighter yellow = the real hourly wage. */
 :root{
@@ -312,6 +312,158 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--badge);outline-offs
 .sheet .row{display:flex;gap:10px}
 .sheet .row .btn{flex:1}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== TDS layer: 토스 디자인 시스템(TDS) 색상(@toss/tds-colors)과 글자 크기(t1~t7) 값에 맞춘 화면 틀 ===== */
+:root{
+  --bg:#ffffff; --surface:#ffffff; --surface2:#f2f4f6; --ink:#191f28; --muted:#6b7684; --line:#e5e8eb;
+  --grey700:#4e5968; --grey500:#8b95a1; --grey200:#e5e8eb; --blue50:#e8f3ff; --blue700:#1b64da;
+  --badge:#3182f6; --badge-ink:#ffffff; --good:#03b26c; --bad:#f04452; --hl:#ffefbf; --hl-ink:#191f28;
+  --f-display:"Toss Product Sans",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --f-body:var(--f-display); --f-mono:var(--f-display);
+  --t1:30px; --t2:26px; --t3:22px; --t4:20px; --t5:17px; --t6:15px; --t7:13px;
+}
+body{font-size:var(--t6)}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+.mono{font-variant-numeric:tabular-nums}
+.wrap{gap:0}
+.wrap > * + *{margin-top:8px}
+/* Top */
+.top{display:flex;flex-direction:column;gap:8px;padding:12px 0 8px}
+.top h1{font-size:var(--t2);line-height:1.35;font-weight:700}
+.top h1 em{font-style:normal;color:var(--badge)}
+.top .sub{font-size:var(--t5);color:var(--grey700);line-height:1.5}
+.top .eyebrow2{font-size:var(--t7);font-weight:600;color:var(--badge)}
+/* ListHeader */
+.lh{display:flex;flex-direction:column;gap:2px;padding:24px 0 4px}
+.lh h2{font-size:var(--t5);font-weight:700}
+.lh .desc{font-size:var(--t7);color:var(--muted)}
+/* ListRow */
+.lr{display:flex;align-items:center;gap:14px;padding:14px 8px;margin:0 -8px;width:calc(100% + 16px);background:none;border:none;text-align:left;border-radius:14px;color:var(--ink);font:inherit;cursor:pointer;transition:background .12s ease}
+.lr:active,.lr:hover{background:var(--surface2)}
+.lr .asset{width:48px;height:48px;border-radius:50%;background:var(--surface2);display:grid;place-items:center;font-size:24px;flex:none;overflow:hidden}
+.lr .asset img{width:100%;height:100%;object-fit:cover;display:block}
+.lr .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.lr .t{font-size:var(--t5);font-weight:600;line-height:1.4;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.lr .d{font-size:var(--t6);color:var(--muted);line-height:1.45}
+.lr .arrow{color:var(--grey500);font-size:22px;line-height:1;flex:none}
+.lr.dim .t{color:var(--grey700)}
+.lr.dim .asset{opacity:.6}
+/* Badge */
+.badge{display:inline-flex;align-items:center;font-size:12px;font-weight:600;line-height:1;padding:5px 7px;border-radius:6px;white-space:nowrap;flex:none}
+.badge.blue{background:var(--blue50);color:var(--blue700)}
+.badge.grey{background:var(--surface2);color:var(--grey700)}
+.badge.yellow{background:#fff9e7;color:#f57800}
+/* TableRow */
+.table{display:flex;flex-direction:column;padding:4px 0}
+.tablerow{display:flex;justify-content:space-between;gap:16px;padding:11px 0;font-size:var(--t6)}
+.tablerow .k{color:var(--muted)}
+.tablerow .v{font-weight:600;color:var(--ink);text-align:right}
+.border{height:12px;background:var(--surface2);margin:16px calc(-1 * max(16px, env(safe-area-inset-left,0px)))}
+.bottominfo{font-size:var(--t7);color:var(--muted);line-height:1.6;padding:8px 0 4px}
+/* Button / CTA */
+.cta{flex:1;min-height:56px;border-radius:16px;border:none;font-size:var(--t5);font-weight:600;background:var(--badge);color:#fff;cursor:pointer;font-family:var(--f-display);padding:0 16px}
+.cta.weak{background:var(--blue50);color:var(--blue700)}
+.cta.grey{background:var(--surface2);color:var(--grey700)}
+.cta:active{filter:brightness(.94)}
+.cta[disabled]{opacity:.5}
+.fixedcta{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;gap:8px;max-width:480px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:linear-gradient(rgba(255,255,255,0),#fff 32%)}
+.has-cta{padding-bottom:120px!important}
+.textbtn{background:none;border:none;color:var(--muted);font-size:var(--t6);font-weight:500;padding:10px 4px;cursor:pointer;font-family:var(--f-display)}
+.btn-weak-sm{border:none;border-radius:10px;background:var(--surface2);color:var(--grey700);font-size:var(--t6);font-weight:600;padding:10px 14px;cursor:pointer;font-family:var(--f-display)}
+.btn-weak-sm[aria-pressed="true"]{background:var(--blue50);color:var(--blue700)}
+/* BottomSheet */
+.scrim{background:rgba(0,0,0,.2);padding:0}
+.sheet{border-radius:24px 24px 0 0;max-width:480px;padding:12px 20px calc(16px + env(safe-area-inset-bottom,0px));gap:10px}
+.sheet .handle{width:40px;height:4px;border-radius:2px;background:var(--grey200);align-self:center;margin-bottom:8px}
+.sheet h3{font-size:var(--t4);font-weight:700}
+.sheet p{font-size:var(--t6);color:var(--grey700);line-height:1.6}
+.sheet .row{margin-top:8px}
+/* Toast */
+.toast{background:var(--ink);color:#fff;border-radius:14px;font-size:var(--t6);font-weight:500;padding:12px 18px}
+/* Votes */
+.votes{display:flex;flex-wrap:wrap;gap:8px;padding:8px 0}
+/* Play HUD */
+.hud{background:var(--bg);padding-block:10px 10px;gap:10px}
+.clock .tm{font-family:var(--f-display);font-size:var(--t3);font-weight:700;font-variant-numeric:tabular-nums}
+.clock .pl{font-size:var(--t7)}
+.wage{background:var(--hl);border-radius:10px;padding:5px 10px}
+.wage .k{font-size:12px}
+.wage .v{font-family:var(--f-display);font-size:var(--t5);font-weight:700;font-variant-numeric:tabular-nums}
+.rings{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.ring{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.ring .rv{position:relative;width:44px;height:44px}
+.ring svg{width:44px;height:44px;transform:rotate(-90deg);display:block}
+.ring .trk{stroke:var(--grey200)}
+.ring .fil{stroke:var(--badge);transition:stroke-dashoffset .6s ease}
+.ring.low .fil{stroke:var(--bad)}
+.ring .n{position:absolute;inset:0;display:grid;place-items:center;font-size:var(--t7);font-weight:700;font-variant-numeric:tabular-nums}
+.ring.low .n{color:var(--bad)}
+.ring .lab{font-size:12px;color:var(--grey700)}
+.ring.hit .rv{animation:pop .45s ease}
+.dayline{height:4px;background:var(--grey200)}
+.dayline i{background:var(--badge)}
+.stage-meta{padding-top:12px}
+.stage-meta h2{font-size:var(--t4)}
+.stage-meta .eyebrow{font-size:var(--t7);color:var(--muted);letter-spacing:0}
+.react-note{font-size:var(--t7)}
+.controls{padding-top:8px}
+/* End */
+.wagebig{background:var(--surface2);border:none;border-radius:16px;gap:8px}
+.wagebig .lbl{font-family:var(--f-display);font-size:var(--t4);font-weight:700;line-height:1.4}
+.wagebig .num{font-family:var(--f-display);font-size:var(--t3);font-weight:700}
+.wagebig .num span{background:var(--hl);color:var(--ink)}
+.plist{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:var(--t6);line-height:1.5}
+.quote{font-size:var(--t6);color:var(--grey700);border-left:3px solid var(--grey200)}
+.quote small{font-size:var(--t7)}
+details.board{border-top:1px solid var(--line);padding:4px 0}
+details.board:last-of-type{border-bottom:1px solid var(--line)}
+details.board summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:14px 0;font-size:var(--t6);font-weight:600}
+details.board summary::-webkit-details-marker{display:none}
+details.board summary::after{content:"⌄";color:var(--grey500);font-size:18px}
+details.board[open] summary::after{transform:rotate(180deg)}
+details.board .bd{font-size:var(--t6);color:var(--grey700);line-height:1.6;padding:0 0 14px}
+details.board .src{display:block;font-size:var(--t7);color:var(--muted);margin-top:4px}
+.factlist a{color:var(--badge);font-size:var(--t7)}
+.sharecard{font-family:var(--f-display);font-size:var(--t7);word-break:keep-all;overflow-wrap:normal;background:var(--surface2);border:none;border-radius:12px;line-height:1.6}
+.emos{gap:8px}
+.rxrow,.rxchoices li{font-size:var(--t7)}
+.rxline{font-size:var(--t6)}
+.rx h3,.endsec h3{font-size:var(--t5)}
+.endsec{display:flex;flex-direction:column;gap:10px;padding:8px 0}
+.box{border:none;background:none;padding:8px 0;border-radius:0}
+.box h3{font-size:var(--t5)}
+.note{font-size:var(--t7);color:var(--muted)}
+
+/* ===== 대사 상자: 그림 아래에 두어 주인공 얼굴과 표정을 가리지 않는다 ===== */
+.panel{max-height:52vh}
+.dock{display:flex;flex-direction:column;gap:8px;min-height:96px;padding:12px 0 4px;cursor:pointer}
+.dock .cap,.dock .say,.dock .npc,.dock .banner,.dock .sticky,.dock .filechip,.dock .stamp{position:relative;left:auto;right:auto;top:auto;bottom:auto;max-width:100%;width:auto;transform:none}
+.dock .cap{align-self:stretch;font-size:18px;box-shadow:none;border-width:2px;background:#fff}
+.dock .say{align-self:stretch;font-size:19px;border-radius:18px;padding:12px 16px;margin-top:8px}
+.dock .say::after{bottom:auto;top:-9px;left:30px;width:14px;height:14px;transform:rotate(135deg);border-bottom-left-radius:2px}
+.dock .npc{align-self:stretch;font-size:18px;margin-top:10px;box-shadow:none}
+.dock .banner{box-shadow:0 2px 10px rgba(0,0,0,.08);border:1px solid var(--line)}
+.dock .sticky{width:auto;align-self:flex-start;transform:rotate(-1deg)}
+.dock .filechip{left:0;right:0}
+.dock .stamp{align-self:flex-start}
+.dock .phone{position:relative;left:auto;bottom:auto;transform:none;width:100%;height:auto;border-radius:20px;padding:8px;animation:capIn .3s ease;box-shadow:none}
+.dock .phone .scr{border-radius:14px}
+.dock .phone .list{justify-content:flex-start}
+.dock #ov:empty,.dock #ovPhone:empty{display:none}
+.panel .floaters{top:auto;bottom:10%}
+.narrtext{position:absolute;left:8%;right:8%;top:50%;transform:translateY(-50%);color:#fff;font-family:var(--f-hand);font-size:24px;font-weight:700;line-height:1.4;text-align:center;animation:narrIn .6s ease;pointer-events:none}
+.sheet .row .cta{white-space:nowrap}
+
+.wagebig{padding:18px 16px;gap:0}
+.payrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0}
+.payrow .pk{font-size:var(--t6);color:var(--grey700);display:flex;flex-direction:column;gap:2px}
+.payrow .pk small{font-size:12px;color:var(--muted)}
+.payrow .pv{font-size:var(--t5);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.payrow.total{border-top:1px solid var(--grey200);margin-top:6px;padding-top:14px}
+.payrow.total .pk{font-size:var(--t5);font-weight:700;color:var(--ink)}
+.payrow.total .pv{font-size:var(--t2)}
+.hlnum{background:var(--hl);padding:0 6px;border-radius:6px}
+.paynote{font-size:var(--t7);color:var(--muted);margin-top:6px}
 </style>
 
 <div class="wrap" id="app"></div>
@@ -705,7 +857,7 @@ const SCENES_DAERI = [
     {label:"구내식당 먹고 혼자 산책", fx:{hp:3, mind:6}, face:"soft", res:["cap","15분을 걸었다. 하늘을 올려다본 게 일주일 만이다."]}
   ]},
 { id:"blind", t:"12:55", place:"9층 화장실 · 양치하며", title:"블라인드를 연다", bg:"office", cam:"zoomin", face:"neutral", prop:"phone",
-  cost:"성과급은 업종과 실적에 따라 극과 극. 같은 그룹 안에서도 다르다.",
+  cost:"성과급은 업종과 실적에 따라 극과 극이에요. 같은 그룹 안에서도 달라요.",
   lines:[["cap","양치하면서 익명 직장인 앱을 연다."],
     ["post","blind","블라인드 · 회사생활","옆 계열사 성과급 기본급 1,000% 확정ㅋㅋ","좋아요 2.1천 · 댓글 846"],
     ["post","blind","블라인드 · 우리 회사 라운지","올해 우리 0%설 도는데 아는 사람?","좋아요 312 · 댓글 190","shock"],
@@ -715,14 +867,14 @@ const SCENES_DAERI = [
     {label:"앱을 닫는다", fx:{mind:-2, prog:5}, face:"neutral", res:["say","모르는 게 약이다. 오후까지만이라도."]}
   ]},
 { id:"bomb", t:"13:30", place:"마케팅팀 · 내 자리", title:"일정 변경", bg:"office", cam:"shake", face:"neutral", b:30, cat:"work",
-  cost:"내 일정은 내가 정하지 못한다.",
+  cost:"내 일정을 내가 정하지 못해요.",
   lines:[
     ["msg","work","김 팀장","한 대리, 상무님 일정 바뀌어서 보고가 내일 아침 8시로 당겨졌어","13:28","shock"],
     ["msg","work","김 팀장","오늘 중으로 최종본 부탁해","13:28"],
     ["msg","work","김 팀장","아 그리고 상무님이 한 장으로 보자고 하시네 😅","13:29"],
     ["cap","30장짜리 보고서를 한 장으로.","shock"],
     ["say","3시 1차본이… 오늘 중 최종본…?","tired"]],
-  choices:[{label:"…넵.", fx:{mind:-6}, face:"tired", res:["cap","‘넵’이라고 쳤다. 오늘도 8시간 안에 끝나긴 글렀다. 이제 곧 시급이 깎이기 시작한다."]}]},
+  choices:[{label:"…넵.", fx:{mind:-6}, face:"tired", res:["cap","‘넵’이라고 쳤다. 오늘도 8시간 안에 끝나긴 글렀다."]}]},
 { id:"agency", t:"15:00", place:"전화 · 대행사", title:"갑과 을 사이", bg:"office", cam:"zoomin", face:"neutral", prop:"phone", b:90, cat:"work",
   lines:[["npc","대행사 이 대리 (전화)","대리님… 수정 리포트는 내일 오전까지 가능할 것 같습니다…"],["cap","목소리가 갈라져 있다."],["say","대행사 앞에선 갑, 팀장 앞에선 을…","sigh"]],
   choices:[
@@ -741,7 +893,7 @@ const SCENES_DAERI = [
     {label:"팀 단톡방에서 공개적으로 짚는다", fx:{rep:-3, team:-15}, face:"sigh", set:s=>{s.flags.junior="public"}, res:["cap","단톡방에 ‘확인했습니다, 죄송합니다’가 올라왔다. 그 뒤로 단톡방이 조용하다."]}
   ]},
 { id:"bank", t:"17:25", place:"폰 알림", title:"월급은 스쳐 간다", bg:"office", bgv:"evening", tint:"dusk", cam:"zoomin", face:"neutral", prop:"phone", b:55, cat:"work",
-  cost:"연봉 7천의 월급 통장은 잠깐 들르는 경유지다.",
+  cost:"연봉 7천의 월급 통장은 잠깐 들르는 경유지예요.",
   lines:[["alert","bank","카드 결제 예정 (25일)","1,870,000원"],["alert","bank","전세대출 이자 출금 예정","612,000원","sigh"],["alert","bank","주택청약 · 적금 자동이체","800,000원"],
     ["cap","실수령 약 470만 원. 25일에 들어와 27일이면 절반이 사라진다."],["cap","허탈해서 웃음이 다 나온다."],["say","하하… 월급은… 스쳐 갈 뿐…","tired"]],
   choices:[{label:"알림을 밀어서 지운다", fx:{mind:-3}, face:"sigh", res:["cap","지워도 결제일은 온다."]}]},
@@ -778,7 +930,7 @@ const SCENES_DAERI = [
 { id:"home", place:"집 · 거실", title:"PC는 꺼졌지만", bg:"living", cam:"zoomin", face:"tired", outfit:"home", hair:"bun", glasses:true, prop:"laptop", tint:"dim",
   t:s=> s.flags.dinner==="A" ? "00:05" : s.flags.dinner==="B" ? "22:35" : "22:00",
   b:s=> s.flags.dinner==="B" ? 45 : 0, cat:"commute",
-  cost:"PC-OFF 이후의 일은 근무 기록에 남지 않는다.",
+  cost:"PC-OFF 이후에 한 일은 근무 기록에 남지 않아요.",
   enter:s=>{ s.homeMin = Math.round(clamp(190 - s.prog*1.4, 30, 190) / 5) * 5; return null; },
   lines:s=>{
     const l = [["cap","회사 PC는 18시 30분에 자동으로 꺼졌다. 주 52시간 준수. 서류상으로는."],
@@ -869,7 +1021,7 @@ const SCENES_DERMA = [
     {label:"보류한다", fx:{mind:2, rep:-3}, res:["npc","장비 영업사원","아 네~ 길 건너 원장님은 어제 계약하셨어요."]}
   ]},
 { id:"d_review", t:"13:40", place:"원장실", title:"별점 하나", cam:"zoomin", b:60, cat:"work",
-  cost:"별점 하나가 한 달 신규 환자 수를 바꾼다.",
+  cost:"별점 하나가 한 달 신규 환자 수를 바꿔요.",
   lines:[["post","blind","네이버 플레이스 · 방문자 리뷰","★☆☆☆☆ 원장 얼굴은 1분 봤고 상담실장이 다 팔더라. 비추.","방금 전"],
     ["post","blind","강남언니 · 시술 후기","★★★★★ 원장님이 꼼꼼해요! 재방문 의사 있음","3일 전"],
     ["say","1분… 맞는 말이라 더 아프다."]],
@@ -878,7 +1030,7 @@ const SCENES_DERMA = [
     {label:"리뷰 관리 대행사에 맡긴다", sub:"월 200만 원", won:2000000, fx:{mind:3, rep:-2}, res:["npc","대행사 팀장","요즘 네이버가 조작 리뷰를 잡아내서요, 진짜 후기만 관리해 드려요."]}
   ]},
 { id:"d_dumping", t:"15:00", place:"진료실", title:"반값이던데요?", cam:"panr", b:80, cat:"work",
-  cost:"덤핑 경쟁: 같은 이름의 시술이 길 하나 사이로 반값이 된다.",
+  cost:"같은 이름의 시술이 길 하나 건너 반값이 돼요.",
   lines:[["cap","길 건너 새 피부과의 전단지: ‘스킨부스터 1cc 4.9만 원’."],
     ["npc","단골 환자","원장님, 저기는 반값이던데요?"],
     ["cap","우리 병원 가격은 1cc 15만 원."],["say","같은 이름의 주사인데… 뭘 넣는지는 모르지."]],
@@ -894,7 +1046,7 @@ const SCENES_DERMA = [
     {label:"실장에게 환불 처리를 맡긴다", fx:{rep:-5, bank:-3, mind:2}, res:["cap","환불 45만 원. 사진은 그대로 남아 있다."]}
   ]},
 { id:"d_settle", t:"19:30", place:"불 꺼진 병원 · 원장실", title:"매출 1.6억의 진실", cam:"zoomin", b:170, cat:"work",
-  cost:"월 매출 1.6억 중 고정비만 1억 2천.",
+  cost:"월 매출 1.6억 중 고정비만 1억 2천이에요.",
   lines:[["cap","19:30. 마지막 환자가 나갔다. 직원들은 퇴근, 원장은 정산."],
     ["alert","bank","오늘 매출","6,120,000원"],["alert","bank","이번 달 임대료 (25일)","28,000,000원"],
     ["alert","bank","인건비 · 4대보험","48,000,000원"],["alert","bank","장비 리스 · 개원 대출 이자","24,000,000원"],
@@ -921,7 +1073,7 @@ const SCENES_DERMA = [
     ["msg","work","최 실장","원장님, 내일 오전 예약 2건 취소됐어요…","21:12"]],
   choices:[{label:"폰을 뒤집어 놓는다", fx:{love:6, mind:4}, res:["cap","내일 걱정은 내일. 오늘 밤은 아빠만 한다."]}]},
 { id:"d_study", t:s=> s.flags.night==="seminar" ? "23:40" : "22:30", place:"집 · 서재", title:"쉬면 수입이 0", cam:"zoomin",
-  cost:"유급휴가가 없다. 원장이 쉬면 매출도 쉰다.",
+  cost:"유급휴가가 없어요. 원장이 쉬면 매출도 쉬어요.",
   lines:[["cap","서재. 세무사의 메일이 와 있다."],["alert","bank","종합소득세 · 지방세 예정액","약 140,000,000원"],
     ["cap","개원 대출 잔액 8억 2천. 원금만 매달 700만 원씩 갚는다."],["say","쉬면 병원이 쉬고, 병원이 쉬면 수입이 0이다."]],
   choices:[
@@ -972,20 +1124,20 @@ const liveWage = () => DAILY_PAY / Math.max(8, boundMin()/60);
 const relation = () => Math.round((st.g.team + st.g.love)/2);
 function endingDerma(){
   const g = st.g;
-  if(g.hp <= 30 && g.bank >= 65) return {name:"매출의 노예", icon:"💸", line:"병원은 잘 돌아갔습니다. 당신의 손목과 가족 사진첩만 빼고요.", say:"내일도 66명…"};
-  if(st.flags.night === "home" && g.love >= 70) return {name:"아빠 원장", icon:"🎂", line:"세미나 하나를 놓쳤습니다. 일곱 살 생일은 한 번뿐입니다.", say:"그래, 이게 내가 개원한 이유였지."};
-  if(g.rep >= 80) return {name:"양심 원장", icon:"🩺", line:"별점은 올랐고 매출은 덜 올랐습니다. 오래 가는 병원은 보통 이쪽입니다.", say:"천천히 가도… 오래 가면 되지."};
-  if(g.team <= 35) return {name:"회전문 병원", icon:"🚪", line:"직원이 또 바뀔 것 같습니다. 원장의 진짜 고객은 직원일지도 모릅니다.", say:"다음 달엔… 누가 남아 있을까."};
-  return {name:"버티는 원장", icon:"⚖️", line:"월 매출 1.6억, 고정비 1.2억. 오늘도 남는 것보다 갚을 것을 먼저 셌습니다.", say:"부러워하는 사람들… 이 숫자도 알까."};
+  if(g.hp <= 30 && g.bank >= 85) return {name:"매출의 노예", icon:"💸", line:"병원은 잘 돌아갔어요. 당신의 손목과 가족 사진첩만 빼고요.", say:"내일도 66명…"};
+  if(st.flags.night === "home" && g.love >= 70) return {name:"아빠 원장", icon:"🎂", line:"세미나 하나를 놓쳤어요. 일곱 살 생일은 한 번뿐이에요.", say:"그래, 이게 내가 개원한 이유였지."};
+  if(g.rep >= 80) return {name:"양심 원장", icon:"🩺", line:"별점은 올랐고 매출은 덜 올랐어요. 오래 가는 병원은 보통 이쪽이에요.", say:"천천히 가도… 오래 가면 되지."};
+  if(g.team <= 35) return {name:"회전문 병원", icon:"🚪", line:"직원이 또 바뀔 것 같아요. 원장의 진짜 고객은 직원일지도 몰라요.", say:"다음 달엔… 누가 남아 있을까."};
+  return {name:"버티는 원장", icon:"⚖️", line:"월 매출 1.6억, 고정비 1.2억. 오늘도 남는 것보다 갚을 것을 먼저 셌어요.", say:"부러워하는 사람들… 이 숫자도 알까."};
 }
 let ending = () => endingDaeri();
 function endingDaeri(){
   const g = st.g;
-  if(g.hp <= 30 && g.rep >= 70) return {name:"회사의 기둥", icon:"🏛️", line:"회사는 오늘 당신 덕분에 잘 굴러갔습니다. 그런데 회사는 당신을 기억할까요?", say:"내일도… 또 열심히…", face:"tired"};
-  if(st.flags.dinner === "C" && g.love >= 70) return {name:"칼퇴의 용자", icon:"🌙", line:"승진은 조금 늦어도 저녁은 지켰습니다. 이게 생각보다 어렵습니다.", say:"내일도 열심히… 그리고 조금 더 행복하게 :)", face:"soft"};
-  if(st.flags.quit >= 2) return {name:"이직 준비생", icon:"🚪", line:"동기의 ‘연봉 20%’가 계속 머릿속을 맴돕니다. 내일 헤드헌터 메시지를 열어볼지도 모릅니다.", say:"나… 여기 계속 있어도 될까?", face:"think"};
-  if(g.team >= 80) return {name:"회식 생존자", icon:"🍻", line:"팀은 당신을 좋아합니다. 대신 당신 몸과 연인이 대가를 치렀습니다.", say:"팀은 좋은데… 나는 괜찮은 걸까.", face:"sigh"};
-  return {name:"평범하게 버틴 대리", icon:"⚖️", line:"특별한 사건 없이 하루를 버텼습니다. 사실 이게 제일 어렵습니다.", say:"오늘도 버텼다. 그거면 됐다.", face:"soft"};
+  if(g.hp <= 30 && g.rep >= 70) return {name:"회사의 기둥", icon:"🏛️", line:"회사는 오늘 당신 덕분에 잘 굴러갔어요. 그런데 회사는 당신을 기억할까요?", say:"내일도… 또 열심히…", face:"tired"};
+  if(st.flags.dinner === "C" && g.love >= 70) return {name:"칼퇴의 용자", icon:"🌙", line:"승진은 조금 늦어도 저녁은 지켰어요. 이게 생각보다 어려워요.", say:"내일도 열심히… 그리고 조금 더 행복하게 :)", face:"soft"};
+  if(st.flags.quit >= 2) return {name:"이직 준비생", icon:"🚪", line:"동기의 ‘연봉 20%’가 계속 머릿속을 맴돌아요. 내일 헤드헌터 메시지를 열어볼지도 몰라요.", say:"나… 여기 계속 있어도 될까?", face:"think"};
+  if(g.team >= 80) return {name:"회식 생존자", icon:"🍻", line:"팀은 당신을 좋아해요. 대신 당신 몸과 연인이 대가를 치렀어요.", say:"팀은 좋은데… 나는 괜찮은 걸까.", face:"sigh"};
+  return {name:"평범하게 버틴 대리", icon:"⚖️", line:"특별한 사건 없이 하루를 버텼어요. 사실 이게 제일 어려워요.", say:"오늘도 버텼다. 그거면 됐다.", face:"soft"};
 }
 
 /* =====================================================================
@@ -996,17 +1148,22 @@ let P = null;          // per-scene play state
 let typer = null;
 
 let GLABEL = {hp:"체력", mind:"멘탈", team:"관계(팀)", love:"관계(연인)", rep:"평판", bank:"통장"};
+function fmtHM(m){ m = Math.round(m); const h = Math.floor(m / 60), r = m % 60; return h ? (r ? `${h}시간 ${r}분` : `${h}시간`) : `${r}분`; }
+function ringHTML(k, l, v){
+  const R = 18, C = 2 * Math.PI * R, off = C * (1 - clamp(v, 0, 100) / 100);
+  return `<div class="ring ${v < 30 ? "low" : ""}" data-g="${k}"><div class="rv"><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="trk" cx="22" cy="22" r="${R}" fill="none" stroke-width="5"/><circle class="fil" cx="22" cy="22" r="${R}" fill="none" stroke-width="5" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg><span class="n">${v}</span></div><span class="lab">${l}</span></div>`;
+}
 function hudHTML(sc){
   const t = val(sc.t), w = liveWage();
-  const pct = clamp((toMin(t) - toMin("06:50")) / (toMin("01:30") - toMin("06:50")) * 100, 0, 100);
+  const pct = clamp((toMin(t) - toMin("06:20")) / (toMin("01:30") - toMin("06:20")) * 100, 0, 100);
   const gs = [["hp","체력",st.g.hp],["mind","멘탈",st.g.mind],["rel","관계",relation()],["bank","통장",st.g.bank],["rep","평판",st.g.rep]];
   return `<div class="hud" id="hud">
     <div class="hud-top">
       <div class="clock"><span class="tm">${t}</span><span class="pl">${esc(sc.place)}</span></div>
-      <div class="wage" id="wage" title="출퇴근, 회식, 집에서 한 일까지 포함한 세후 시급"><span class="k">체감 시급 · 세후</span><span class="v">${w ? won(w) : "출근 전"}</span></div>
+      <div class="wage" id="wage" title="출퇴근, 회식, 집에서 한 일까지 포함해요"><span class="k">오늘 일한 시간</span><span class="v">${boundMin() ? fmtHM(boundMin()) : "출근 전"}</span></div>
     </div>
     <div class="dayline" aria-hidden="true"><i style="width:${pct}%"></i></div>
-    <div class="gauges">${gs.map(([k,l,v]) => `<div class="g ${v<30?"low":""}" data-g="${k}"><div class="lb"><span>${l}</span><b>${v}</b></div><div class="bar"><i style="width:${v}%"></i></div></div>`).join("")}</div>
+    <div class="rings">${gs.map(([k,l,v]) => ringHTML(k, l, v)).join("")}</div>
   </div>`;
 }
 function refreshHud(changed){
@@ -1030,9 +1187,10 @@ function setFace(face, extra){
 }
 
 function phHTML(place){
-  return `<div class="ph art"><span aria-hidden="true">🎨</span><b>${esc(place || "")}</b><span>이 장면의 웹툰 그림은 생성 중이에요. 곧 채워집니다.</span></div>`;
+  return `<div class="ph art"><span aria-hidden="true">🎨</span><b>${esc(place || "")}</b><span>이 장면의 웹툰 그림을 만들고 있어요. 곧 채워져요.</span></div>`;
 }
 function startDay(){
+  $app.classList.remove("has-cta");
   st = freshState(); view = {screen:"play", idx:0};
   syncHistory();
   beginScene(); window.scrollTo(0,0);
@@ -1057,17 +1215,17 @@ function renderPlay(){
   const list = activeScenes(), sc = list[view.idx];
   const tilt = view.idx % 2 ? "tilt-b" : "tilt-a";
   $app.innerHTML = hudHTML(sc) + `
+    <div class="stage-meta"><h2>${esc(sc.title)}</h2><span class="eyebrow">장면 ${view.idx+1} / ${list.length}</span></div>
     <div class="panel ${tilt} panel-in" id="panel" role="button" tabindex="0" aria-label="장면을 눌러 계속">
       ${sc.img ? `<img class="art cam ${reduced ? "" : "cam-" + (sc.cam || "zoomin")}" src="${sc.img}" alt="">` : (JOB_ID === "daeri" ? panelSVG(sc, charOpts()) : phHTML(sc.place))}
-      <div class="ov" id="ov"></div>
-      <div class="ov" id="ovPhone"></div>
       <div class="ov" id="ovFx"></div>
       <span class="tapnext" id="tapnext">탭해서 계속 ▶</span>
     </div>
-    <div class="stage-meta"><h2>${esc(sc.title)}</h2><span class="eyebrow">장면 ${view.idx+1} / ${list.length}</span></div>
+    <div class="dock" id="dock" role="button" tabindex="-1"><div id="ovPhone"></div><div id="ov"></div></div>
     <div class="controls" id="controls"></div>`;
   const panel = document.getElementById("panel");
   panel.addEventListener("click", onTap);
+  document.getElementById("dock").addEventListener("click", onTap);
   panel.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); onTap(); } });
   renderControls();
   if(P.enterDeltas && P.enterDeltas.some(([,d]) => d)) floatDeltas(P.enterDeltas);
@@ -1077,14 +1235,14 @@ function renderControls(){
   const c = document.getElementById("controls"); if(!c) return;
   const list = activeScenes(), sc = list[view.idx];
   if(P.phase === "lines"){
-    c.innerHTML = `<div class="cta-row"><span class="react-note">장면을 누르면 다음 대사로 넘어가요</span><button class="skip" type="button" id="skip">대사 건너뛰기</button></div>`;
+    c.innerHTML = `<div class="cta-row"><span class="react-note">장면을 누르면 다음 대사로 넘어가요</span><button class="textbtn" type="button" id="skip">대사 건너뛰기</button></div>`;
     document.getElementById("skip").onclick = () => { stopTyping(); while(P.li < P.lines.length - 1){ P.li++; applyLineFace(P.lines[P.li]); } showLine(P.lines[P.li], true); toChoices(); };
   } else if(P.phase === "choose"){
     const chs = val(sc.choices);
     c.innerHTML = `<div class="thoughts" role="group" aria-label="선택지">${chs.map((ch,i) => `<button class="thought" type="button" data-ch="${i}">${esc(ch.label)}${ch.sub ? `<span class="sub">${esc(ch.sub)}</span>` : ""}</button>`).join("")}</div>`;
     c.querySelectorAll("[data-ch]").forEach(b => b.addEventListener("click", () => choose(+b.dataset.ch)));
   } else {
-    c.innerHTML = `<div class="cta-row"><span class="react-note">${P.wonNote ? "오늘 쓴 돈 +" + won(P.wonNote) : ""}</span><button class="next" type="button" id="next">${view.idx === list.length-1 ? "하루 정산 보기" : "다음 장면 ▶"}</button></div>`;
+    c.innerHTML = `${P.wonNote ? `<p class="react-note">오늘 쓴 돈 +${won(P.wonNote)}</p>` : ""}<button class="cta" type="button" id="next" style="width:100%">${view.idx === list.length-1 ? "하루 정산 보기" : "다음 장면 보기"}</button>`;
     const n = document.getElementById("next"); n.onclick = goNext; n.focus({preventScroll:true});
   }
 }
@@ -1149,7 +1307,7 @@ function showLine(line, instant){
       el.innerHTML = `<span>🔔 ${esc(line[2])}</span><span class="amt">${esc(line[3])}</span>`;
       list.appendChild(el);
     }
-    while(list.children.length > 4) list.removeChild(list.firstChild);
+    while(list.children.length > 3) list.removeChild(list.firstChild);
     return;
   }
   if(["cap","say","npc"].includes(type)) closePhone();
@@ -1212,6 +1370,8 @@ function choose(i){
     /* 결과 그림이 아직 없는 선택: 장면을 어둡게 가리고 결과 문장을 가운데에 크게 보여주는 내레이션 컷 */
     const panel = document.getElementById("panel"); if(panel) panel.classList.add("narr");
     const ov = document.getElementById("ov"); if(ov) ov.innerHTML = "";
+    const rtext = val(ch.res); const fx = document.getElementById("ovFx");
+    if(fx) fx.insertAdjacentHTML("beforebegin", `<div class="narrtext">${esc(rtext[0] === "npc" ? rtext[2] : rtext[1])}</div>`);
   }
   setFace(ch.face || "neutral", ch.prop !== undefined ? {prop:ch.prop} : null);
   const r = val(ch.res);
@@ -1244,131 +1404,138 @@ function goNext(){
    ===================================================================== */
 function renderHome(){
   const myVote = store.get("vote", null);
-  const heroSc = {bg:"subway", cam:"panr", tint:null};
+  $app.classList.remove("has-cta");
   $app.innerHTML = `
-    <div class="brand">
-      <span class="demo-tag">하루 체험</span>
-      <h1>남의 연봉 말고<br><em>남의 하루</em>를 살아보기</h1>
-      <p>부러운 직업의 하루를 웹툰처럼 살아보고, 연봉 뒤에 숨은 실제 시급을 확인해 보세요.</p>
+    <div class="top">
+      <h1>남의 연봉 말고<br><em>남의 하루</em>를 살아봐요</h1>
+      <p class="sub">부러운 직업의 하루를 웹툰처럼 살아보고, 연봉 뒤에 숨은 체감 시급을 확인해 보세요.</p>
     </div>
-    <div class="hero"><div class="panel tilt-a"><img class="art cam ${reduced ? "" : "cam-zoomin"}" src="img/subway.jpg" alt="">
+    <div class="hero"><div class="panel tilt-a"><img class="art cam ${reduced ? "" : "cam-zoomin"}" src="img/subway.jpg" alt="출근길 지하철의 한 대리">
       <div class="ov"><div class="cap">오늘도 출근하는 화요일…</div><div class="say" style="top:auto;bottom:10%">연봉 7천인데… 왜 이렇게 피곤하지?</div></div></div></div>
-    <div class="section-title"><h2>오늘 살아볼 직업</h2><span class="note">1차 공개 4개</span></div>
-    <div class="joblist">${JOBS.map(j => `
-      <button class="job ${j.playable ? "playable" : "locked"}" data-job="${j.id}" type="button">
-        <span class="ic" aria-hidden="true">${j.icon}</span>
-        <span><span class="nm">${esc(j.name)}</span><span class="tag-kind">${j.kind}</span><br><span class="meta">${esc(j.meta)}</span></span>
-        <span class="go">${j.playable ? "살아보기" : "🔒 준비 중"}</span>
+    <div class="lh"><h2>오늘 살아볼 직업</h2><span class="desc">직업을 누르면 그 사람의 하루가 시작돼요</span></div>
+    <div>${JOBS.map(j => `
+      <button class="lr ${j.playable ? "" : "dim"}" data-job="${j.id}" type="button">
+        <span class="asset" aria-hidden="true">${PROFILES[j.id] && PROFILES[j.id].photo ? `<img src="${PROFILES[j.id].photo}" alt="">` : j.icon}</span>
+        <span class="tx"><span class="t">${esc(j.name)}${j.kind === "부자" ? `<span class="badge yellow">부자 직업</span>` : ""}</span><span class="d">${esc(j.meta)}</span></span>
+        ${j.playable ? `<span class="arrow" aria-hidden="true">›</span>` : `<span class="badge grey">준비 중</span>`}
       </button>`).join("")}</div>
-    <div class="section-title"><h2>다음에 열 직업 투표</h2><span class="note">한 표만</span></div>
-    <div class="votes">${VOTES.map(v => `<button class="vote" type="button" data-vote="${v.id}" aria-pressed="${myVote===v.id}"><span class="e" aria-hidden="true">${v.e}</span><span>${esc(v.n)}</span><span class="v">${myVote===v.id ? "투표함 ✓" : "투표하기"}</span></button>`).join("")}</div>
-    <p class="note">투표와 알림 신청은 이 기기에 저장돼요.</p>`;
+    <div class="lh"><h2>다음에 열 직업 투표</h2><span class="desc">가장 궁금한 직업 하나를 골라 주세요</span></div>
+    <div class="votes">${VOTES.map(v => `<button class="btn-weak-sm" type="button" data-vote="${v.id}" aria-pressed="${myVote===v.id}">${myVote===v.id ? "✓ " : ""}${esc(v.n)}</button>`).join("")}</div>
+    <p class="bottominfo">투표와 알림 신청은 이 기기에 저장돼요.</p>`;
   $app.querySelectorAll("[data-job]").forEach(b => b.addEventListener("click", () => {
     const j = JOBS.find(x => x.id === b.dataset.job);
     if(j.playable){ setJob(j.id); view.screen = "job"; render(); window.scrollTo(0,0); }
-    else openLocked({title:j.name, icon:j.icon, desc:"이 직업의 하루 시나리오는 현직자 이야기를 모아 준비하고 있어요.", key:"job:"+j.id});
+    else openLocked({title:j.name, icon:j.icon, desc:"이 직업의 하루는 현직자 이야기를 모아 준비하고 있어요.", key:"job:"+j.id});
   }));
-  $app.querySelectorAll("[data-vote]").forEach(b => b.addEventListener("click", () => { store.set("vote", b.dataset.vote); toast("투표했어요. 다음 직업 순서에 반영됩니다."); renderHome(); }));
+  $app.querySelectorAll("[data-vote]").forEach(b => b.addEventListener("click", () => { store.set("vote", b.dataset.vote); toast("투표했어요. 다음 직업 순서에 반영할게요."); renderHome(); }));
 }
 function renderJob(){
+  $app.classList.add("has-cta");
   $app.innerHTML = `
     <button class="back" type="button" id="back">← 직업 목록</button>
-    <div class="idcard">
-      <div class="lanyard"><span>${esc(PF.org)}</span><span class="hole" aria-hidden="true"></span><span>${esc(PF.badge)}</span></div>
-      <div class="body">
-        <div class="photo">${PF.photo ? `<img src="${PF.photo}" alt="${esc(PF.who)} 사진">` : `<span class="ph-emoji" aria-hidden="true">${PF.icon}</span>`}</div>
-        <div><div class="who">${esc(PF.who)}</div><div class="role">${esc(PF.role)}</div></div>
-      </div>
-      <div class="facts">${PF.facts4.map(([k,v]) => `<div><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join("")}</div>
-      <p class="assume">수치는 시나리오용 가정입니다. 현직자 검수를 거쳐 보정할 예정입니다.</p>
+    <div class="lr" style="cursor:default;padding-top:12px">
+      <span class="asset" style="width:64px;height:64px">${PF.photo ? `<img src="${PF.photo}" alt="${esc(PF.who)} 사진">` : PF.icon}</span>
+      <span class="tx"><span class="t" style="font-size:var(--t2);font-weight:700">${esc(PF.who)}</span><span class="d">${esc(PF.role)}</span><span class="d">${esc(PF.org2 || "")}</span></span>
     </div>
-    <div class="modes">
-      <button class="mode" type="button" id="m-day"><span class="t">하루 체험</span><span class="d">10분 · ${esc(PF.dayDesc)}</span><span class="cta">시작</span></button>
-      <button class="mode locked" type="button" id="m-week"><span class="t">🔒 7일 체험</span><span class="d">7일 동안 하루 10분씩 · 월요일부터 일요일까지</span><span class="cta">준비 중</span></button>
-      <button class="mode locked" type="button" id="m-year"><span class="t">🔒 1년 체험</span><span class="d">20일 동안 하루 10분씩 · ${esc(PF.yearHook)}</span><span class="cta">준비 중</span></button>
-    </div>`;
+    <div class="table">${PF.facts4.map(([k,v]) => `<div class="tablerow"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join("")}</div>
+    <p class="bottominfo">시나리오를 위해 정한 숫자예요. 현직자 검수를 거쳐 고칠 거예요.</p>
+    <div class="border" aria-hidden="true"></div>
+    <div class="lh"><h2>체험 방식</h2></div>
+    <div>
+      <button class="lr" type="button" id="m-day"><span class="tx"><span class="t">하루 체험 <span class="badge blue">지금 할 수 있어요</span></span><span class="d">10분 · ${esc(PF.dayDesc)}</span></span><span class="arrow" aria-hidden="true">›</span></button>
+      <button class="lr dim" type="button" id="m-week"><span class="tx"><span class="t">7일 체험 <span class="badge grey">준비 중</span></span><span class="d">7일 동안 하루 10분씩, 월요일부터 일요일까지</span></span></button>
+      <button class="lr dim" type="button" id="m-year"><span class="tx"><span class="t">1년 체험 <span class="badge grey">준비 중</span></span><span class="d">20일 동안 하루 10분씩, ${esc(PF.yearHook)}</span></span></button>
+    </div>
+    <div class="fixedcta"><button class="cta" type="button" id="cta-start">하루 체험 시작하기</button></div>`;
   document.getElementById("back").onclick = () => { view.screen = "home"; render(); };
   document.getElementById("m-day").onclick = startDay;
+  document.getElementById("cta-start").onclick = startDay;
   document.getElementById("m-week").onclick = () => openLocked(LOCKS().week);
   document.getElementById("m-year").onclick = () => openLocked(LOCKS().year);
 }
+function josa(word, withBatchim, without){
+  const c = word.charCodeAt(word.length - 1);
+  if(c < 0xAC00 || c > 0xD7A3) return word + without;
+  return word + (((c - 0xAC00) % 28) ? withBatchim : without);
+}
 const LOCKS = () => ({
-  week:{title:"7일 체험", icon:"📅", key:"mode:week:"+JOB_ID, desc:`7일 동안 하루 10분씩 ${PF.who}의 한 주를 이어서 살아봅니다. ${PF.weekHook}`},
-  year:{title:"1년 체험", icon:"🗓️", key:"mode:year:"+JOB_ID, desc:`20일 동안 하루 10분씩 ${PF.who}의 1년을 살아봅니다. ${PF.yearHook}까지 이어집니다.`}
+  week:{title:"7일 체험", icon:"📅", key:"mode:week:"+JOB_ID, desc:`7일 동안 하루 10분씩 ${PF.who}의 한 주를 이어서 살아봐요. ${PF.weekHook}`},
+  year:{title:"1년 체험", icon:"🗓️", key:"mode:year:"+JOB_ID, desc:`20일 동안 하루 10분씩 ${PF.who}의 1년을 살아봐요. ${PF.yearHook}까지 이어져요.`}
 });
 function openLocked(l){
   const done = store.get("notify:"+l.key, false);
   store.set("click:"+l.key, store.get("click:"+l.key, 0) + 1);
   $modal.innerHTML = `<div class="scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lk-t">
-    <span class="lock" aria-hidden="true">${l.icon}</span><h3 id="lk-t">${esc(l.title)}은(는) 준비 중이에요</h3><p>${esc(l.desc)}</p>
-    <div class="row"><button class="btn" type="button" id="lk-close">닫기</button><button class="btn primary" type="button" id="lk-notify" ${done ? "disabled" : ""}>${done ? "알림 신청 완료 ✓" : "출시 알림 받기"}</button></div></div></div>`;
+    <span class="handle" aria-hidden="true"></span>
+    <h3 id="lk-t">${esc(josa(l.title, "은", "는"))} 준비 중이에요</h3><p>${esc(l.desc)}</p>
+    <div class="row"><button class="cta grey" type="button" id="lk-close">닫기</button><button class="cta" type="button" id="lk-notify" ${done ? "disabled" : ""}>${done ? "신청했어요" : "알림 받기"}</button></div></div></div>`;
   const close = () => { $modal.innerHTML = ""; };
   document.getElementById("lk-close").onclick = close;
   document.getElementById("scrim").addEventListener("click", e => { if(e.target.id === "scrim") close(); });
   document.getElementById("lk-notify").onclick = () => { store.set("notify:"+l.key, true); close(); toast("출시되면 가장 먼저 알려드릴게요."); };
-  document.getElementById("lk-notify").focus();
+  document.getElementById("lk-close").focus();
 }
 
-/* =====================================================================
-   END / 정산
-   ===================================================================== */
 const FACTS_DERMA = [
-  {t:"2023년 기준 의사 평균 보수는 약 2억 8,518만 원이고, 의원급은 약 3.2억 원입니다. 매출이 아니라 비용을 뺀 뒤의 보수입니다.", s:"보건복지부 2차 보건의료인력 실태조사 (데일리메디 보도)", u:"https://dailymedi.com/news/news_view.php?ca_id=&wr_id=940942"},
-  {t:"2025년 1~7월 새로 개원한 일반의 의원 176곳 중 146곳(83%)이 피부과 진료를 내걸었습니다.", s:"The Korea Times", u:"https://www.koreatimes.co.kr/southkorea/society/20250908/koreas-shortage-of-core-medical-services-to-worsen-as-new-clinics-focus-on-dermatology-plastic-surgery"},
-  {t:"플랫폼에 올라온 스킨부스터 가격이 1cc 5만 원 이하까지 떨어지는 등 덤핑 경쟁이 과열됐습니다.", s:"메디칼타임즈 (2026년 7월)", u:"https://medicaltimes.com/Main/News/NewsView.html?ID=1169596"},
-  {t:"2025년 피부과 의원은 새로 문을 연 곳 대비 41.9%만큼 문을 닫았습니다.", s:"위키트리", u:"https://www.wikitree.co.kr/articles/1119870"},
-  {t:"의료기관 휴·폐업 관련 소비자 상담 1,157건 중 피부과가 42.1%로 가장 많았습니다. 선결제한 시술비를 못 돌려받는 사례가 대부분입니다.", s:"메디칼타임즈", u:"https://www.medicaltimes.com/Main/News/NewsView.html?ID=1171047"},
-  {t:"‘부가세 별도’ 표기로 광고가보다 결제 금액이 높아 환자 불만이 커지고 있습니다.", s:"머니투데이 (2026년 8월)", u:"https://www.mt.co.kr/article/2026082415055583288"}
+  {t:"2023년 기준 의사 평균 보수는 약 2억 8,518만 원이고, 의원급은 약 3.2억 원이에요. 매출이 아니라 비용을 뺀 뒤의 보수예요.", s:"보건복지부 2차 보건의료인력 실태조사 (데일리메디 보도)", u:"https://dailymedi.com/news/news_view.php?ca_id=&wr_id=940942"},
+  {t:"2025년 1~7월 새로 개원한 일반의 의원 176곳 중 146곳(83%)이 피부과 진료를 내걸었어요.", s:"The Korea Times", u:"https://www.koreatimes.co.kr/southkorea/society/20250908/koreas-shortage-of-core-medical-services-to-worsen-as-new-clinics-focus-on-dermatology-plastic-surgery"},
+  {t:"플랫폼에 올라온 스킨부스터 가격이 1cc 5만 원 이하까지 떨어지는 등 덤핑 경쟁이 과열됐어요.", s:"메디칼타임즈 (2026년 7월)", u:"https://medicaltimes.com/Main/News/NewsView.html?ID=1169596"},
+  {t:"2025년 피부과 의원은 새로 문을 연 곳 대비 41.9%만큼 문을 닫았어요.", s:"위키트리", u:"https://www.wikitree.co.kr/articles/1119870"},
+  {t:"의료기관 휴·폐업 관련 소비자 상담 1,157건 중 피부과가 42.1%로 가장 많았어요. 선결제한 시술비를 못 돌려받는 사례가 대부분이에요.", s:"메디칼타임즈", u:"https://www.medicaltimes.com/Main/News/NewsView.html?ID=1171047"},
+  {t:"‘부가세 별도’ 표기로 광고가보다 결제 금액이 높아 환자 불만이 커지고 있어요.", s:"머니투데이 (2026년 8월)", u:"https://www.mt.co.kr/article/2026082415055583288"}
 ];
 const FACTS_DAERI = [
-  {t:"수도권 직장인은 출퇴근에 하루 평균 82분을 쓰고, 직장에 머무는 시간은 9시간이 넘습니다.", s:"통계청 2024 통근 근로자 이동 특성 (데일리안 보도)", u:"https://www.dailian.co.kr/news/view/1443575/"},
-  {t:"PC-OFF제 이후에도 개인 노트북으로 이어지는 ‘도둑 야근’이 관행처럼 남아 있다는 지적이 나옵니다.", s:"잡플래닛 컨텐츠", u:"https://www.jobplanet.co.kr/contents/news-4285"},
-  {t:"2026년 서울 냉면과 비빔밥 평균 가격은 1만 2천 원에 육박하고, 구내식당 수요가 늘었습니다.", s:"더팩트 (한국소비자원 참가격 인용)", u:"https://news.tf.co.kr/read/economy/2301844.htm"},
-  {t:"직장인 10명 중 8명(81.3%)이 최근 이직을 생각해 본 적이 있다고 답했습니다.", s:"잡코리아 2023 설문 (아시아경제 보도)", u:"https://view.asiae.co.kr/article/2023110918012547933"},
-  {t:"직장인 28.2%는 감원이 있다면 “내가 대상이 될 수도 있다”고 답했습니다.", s:"피앰아이 현실 직장인 리포트 (세계일보 보도)", u:"https://www.segye.com/newsView/20251120515107"},
-  {t:"성과급은 업종과 실적에 따라 ‘잭팟’과 ‘0%’로 갈리고 있습니다.", s:"뉴스토마토", u:"https://newstomato.com/ReadNews.aspx?no=1287663"}
+  {t:"수도권 직장인은 출퇴근에 하루 평균 82분을 쓰고, 직장에 머무는 시간은 9시간이 넘어요.", s:"통계청 2024 통근 근로자 이동 특성 (데일리안 보도)", u:"https://www.dailian.co.kr/news/view/1443575/"},
+  {t:"PC-OFF제 이후에도 개인 노트북으로 이어지는 ‘도둑 야근’이 관행처럼 남아 있다는 지적이 나와요.", s:"잡플래닛 컨텐츠", u:"https://www.jobplanet.co.kr/contents/news-4285"},
+  {t:"2026년 서울 냉면과 비빔밥 평균 가격은 1만 2천 원에 육박하고, 구내식당 수요가 늘었어요.", s:"더팩트 (한국소비자원 참가격 인용)", u:"https://news.tf.co.kr/read/economy/2301844.htm"},
+  {t:"직장인 10명 중 8명(81.3%)이 최근 이직을 생각해 본 적이 있다고 답했어요.", s:"잡코리아 2023 설문 (아시아경제 보도)", u:"https://view.asiae.co.kr/article/2023110918012547933"},
+  {t:"직장인 28.2%는 감원이 있다면 “내가 대상이 될 수도 있다”고 답했어요.", s:"피앰아이 현실 직장인 리포트 (세계일보 보도)", u:"https://www.segye.com/newsView/20251120515107"},
+  {t:"성과급은 업종과 실적에 따라 ‘잭팟’과 ‘0%’로 갈리고 있어요.", s:"뉴스토마토", u:"https://newstomato.com/ReadNews.aspx?no=1287663"}
 ];
 function renderEnd(){
   stopTyping();
   const e = ending();
-  const bm = boundMin(), hrs = bm/60, wage = DAILY_PAY/hrs, maxW = Math.max(CONTRACT_WAGE, wage);
-  const cats = [["commute","출퇴근","c-commute"],["work","회사 안","c-work"],["extra","회식·야근","c-extra"],["home","집에서 일","c-home"]];
-  const fin = [["체력","hp"],["멘탈","mind"],["관계(팀)","team"],["관계(연인)","love"],["통장","bank"],["평판","rep"]];
+  const bm = boundMin(), hrs = bm/60, wage = DAILY_PAY/hrs;
   const perks = st.perks.length ? st.perks : ["안정적인 수입"];
   const bedT = val(SCENES.find(x => x.id === "bed").t);
   const share = `[타인의 삶] ${PF.shareName}로 하루 살아봄
-일에 묶인 시간 ${hrs.toFixed(1)}시간
-${PF.wageLabel} ${won(wage)}
-엔딩: ${e.name} ${e.icon}
+오늘 번 돈 ${won(DAILY_PAY)} (세후)
+일에 묶인 시간 ${fmtHM(bm)}
+1시간에 ${won(wage)}
+엔딩: ${e.name}
 오늘 쓴 돈 ${won(st.spent)}`;
+  $app.classList.add("has-cta");
   $app.innerHTML = `
     <div class="panel tilt-a panel-in" aria-label="엔딩 장면">
       ${PF.endImg ? `<img class="art cam ${reduced ? "" : "cam-zoomout"}" src="${PF.endImg}" alt="">` : phHTML("엔딩")}
-      <div class="ov"><div class="cap">${esc(bedT)}. ${esc(PF.who)}의 화요일이 끝났다.</div><div class="say" id="endsay" style="top:auto;bottom:12%"></div></div>
     </div>
-    <div class="endhead"><span class="demo-tag">하루 정산</span><h1>${e.icon} ${esc(e.name)}</h1><p class="note">${esc(e.line)}</p></div>
+    <div class="dock"><div class="cap">${esc(bedT)}. ${esc(PF.who)}의 화요일이 끝났다.</div><div class="say" id="endsay"></div></div>
+    <div class="top"><span class="eyebrow2">하루 정산</span><h1>${e.icon} ${esc(e.name)}</h1><p class="sub">${esc(e.line)}</p></div>
     <div class="wagebig">
-      <span class="lbl">${esc(PF.wageLabel)}</span>
-      <span class="num"><span>${won(wage)}</span></span>
+      <div class="payrow"><span class="pk">오늘 번 돈 <small>세후</small></span><span class="pv">${won(DAILY_PAY)}</span></div>
+      <div class="payrow"><span class="pk">일에 묶인 시간 <small>출퇴근·${esc(PF.extraWord)}·집에서 한 일 포함</small></span><span class="pv">÷ ${fmtHM(bm)}</span></div>
+      <div class="payrow total"><span class="pk">1시간에</span><span class="pv"><span class="hlnum">${won(wage)}</span></span></div>
+      <p class="paynote">8시간만 일했다면 1시간에 ${won(CONTRACT_WAGE)}이었어요.</p>
     </div>
     <div class="box rx" id="rxbox"></div>
-    <div class="box"><h3>부러운 점과 대가</h3><div class="pc">
-      <div class="p"><h4>부러운 점</h4><ul>${perks.map(p => `<li>${esc(p)}</li>`).join("")}${PF.perkExtra.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>
-      <div class="c"><h4>대가</h4><ul>${st.costs.map(c => `<li>${esc(c)}</li>`).join("")}</ul></div></div></div>
-    <div class="box"><h3>현직자 한마디</h3><p class="quote">“${esc(PF.quote)}”<small>가상 예시 문구입니다. 실제 현직자 인터뷰로 교체할 예정입니다.</small></p></div>
-    <div class="box"><h3>이 하루의 근거</h3><ul class="factlist">${FACTS.map(f => `<li><span>${esc(f.t)}</span><span class="src">출처: ${esc(f.s)}</span></li>`).join("")}</ul></div>
-    <div class="box"><h3>공유 카드</h3><div class="sharecard" id="sharetext">${esc(share)}</div>
-      <div class="actions"><button class="btn primary wide" type="button" id="copy">결과 복사하기</button></div></div>
-    <div class="actions">
-      <button class="btn locked wide" type="button" id="e-week">🔒 ${esc(PF.who)}의 7일 이어서 살아보기 · 7일 × 10분</button>
-      <button class="btn locked wide" type="button" id="e-year">🔒 ${esc(PF.who)}의 1년 살아보기 · 20일 × 10분</button>
-      <button class="btn" type="button" id="again">다시 해보기</button>
-      <button class="btn" type="button" id="others">다른 직업 보기</button>
-    </div>`;
+    <div class="border" aria-hidden="true"></div>
+    <div class="endsec"><h3>현직자 한마디</h3><p class="quote">“${esc(PF.quote)}”<small>가상 예시 문구예요. 실제 현직자 인터뷰로 바꿀 거예요.</small></p></div>
+    <div class="border" aria-hidden="true"></div>
+    <div class="lh"><h2>이 하루의 근거</h2><span class="desc">누르면 자세히 볼 수 있어요</span></div>
+    <div class="factlist">${FACTS.map(f => `<details class="board"><summary>${esc(f.t.split("요. ")[0].replace(/\.$/, "") + (f.t.includes("요. ") ? "요" : ""))}</summary><div class="bd">${esc(f.t.includes("요. ") ? f.t.split("요. ").slice(1).join("요. ") : "")}<span class="src">출처: ${esc(f.s)}</span></div></details>`).join("")}</div>
+    <div class="lh"><h2>결과 공유하기</h2></div>
+    <div class="sharecard" id="sharetext">${esc(share)}</div>
+    <button class="cta weak" type="button" id="copy" style="width:100%;margin-top:10px">결과 복사하기</button>
+    <div class="lh"><h2>더 살아보기</h2></div>
+    <div>
+      <button class="lr dim" type="button" id="e-week"><span class="tx"><span class="t">${esc(PF.who)}의 7일 <span class="badge grey">준비 중</span></span><span class="d">7일 동안 하루 10분씩 이어서 살아봐요</span></span></button>
+      <button class="lr dim" type="button" id="e-year"><span class="tx"><span class="t">${esc(PF.who)}의 1년 <span class="badge grey">준비 중</span></span><span class="d">20일 동안 하루 10분씩 살아봐요</span></span></button>
+    </div>
+    <div class="fixedcta"><button class="cta grey" type="button" id="others">다른 직업 보기</button><button class="cta" type="button" id="again">다시 해보기</button></div>`;
   typeInto(document.getElementById("endsay"), e.say, false);
   paintRx();
   document.getElementById("copy").onclick = () => {
-    try{ navigator.clipboard.writeText(share).then(() => toast("복사했어요. 친구에게 붙여넣어 보세요."), selectShare); }catch(err){ selectShare(); }
+    try{ navigator.clipboard.writeText(share).then(() => toast("결과를 복사했어요. 친구에게 붙여넣어 보세요."), selectShare); }catch(err){ selectShare(); }
   };
   document.getElementById("e-week").onclick = () => openLocked(LOCKS().week);
   document.getElementById("e-year").onclick = () => openLocked(LOCKS().year);
@@ -1412,15 +1579,15 @@ function paintRx(){
   const all = RX.map(r => r.body[JOB_ID]).filter(Boolean);
   const n = all.length;
   let html = `<h3>이 하루, 어떠셨어요?</h3>
-    <div class="emos" role="group" aria-label="감정 반응">${EMOS.map(([k,e,l]) => `<button type="button" class="emo" data-emo="${k}" aria-pressed="${mine && mine.emo === k}"><span aria-hidden="true">${e}</span>${esc(l)}</button>`).join("")}</div>`;
+    <div class="emos" role="group" aria-label="감정 반응">${EMOS.map(([k,e,l]) => `<button type="button" class="btn-weak-sm" data-emo="${k}" aria-pressed="${mine && mine.emo === k}">${esc(l)}</button>`).join("")}</div>`;
   if(mine){
     if(rxState === "ready" && n){
       const cnt = k => all.filter(r => r.emo === k).length;
       html += `<div class="rxbars">${EMOS.map(([k,e,l]) => { const c = cnt(k), pct = Math.round(c / n * 100);
-        return `<div class="rxrow ${mine.emo === k ? "me" : ""}"><span>${e} ${esc(l)}</span><span class="rxbar"><i style="width:${pct}%"></i></span><span class="rxv">${pct}%</span></div>`; }).join("")}</div>
+        return `<div class="rxrow ${mine.emo === k ? "me" : ""}"><span>${esc(l)}</span><span class="rxbar"><i style="width:${pct}%"></i></span><span class="rxv">${pct}%</span></div>`; }).join("")}</div>
         <p class="note">이 직업을 끝낸 ${n}명의 반응이에요 (나 포함).</p>`;
       const wages = all.map(r => r.wage).filter(w => typeof w === "number" && w > 0);
-      if(wages.length > 1) html += `<p class="rxline">다른 사람들의 평균 체감 시급 <b>${won(wages.reduce((a,b) => a+b, 0) / wages.length)}</b></p>`;
+      if(wages.length > 1) html += `<p class="rxline">다른 사람들은 평균 1시간에 <b>${won(wages.reduce((a,b) => a+b, 0) / wages.length)}</b></p>`;
       const keys = KEY_SCENES[JOB_ID] || [];
       const rows = keys.filter(sid => st.choices && st.choices[sid] != null).map(sid => {
         const myIdx = st.choices[sid];
@@ -1467,19 +1634,19 @@ async function react(emo){
 
 /* ---------- 직업별 프로필 ---------- */
 const PROFILES = {
-  daeri:{icon:"🪪", who:"한 대리", org:"HANBIT GROUP", badge:"EMPLOYEE", photo:"img/idphoto.jpg", role:"한빛그룹(가상) 계열사 · 마케팅팀 5년차 · 33세",
+  daeri:{icon:"🪪", who:"한 대리", org:"HANBIT GROUP", badge:"EMPLOYEE", photo:"img/idphoto.jpg", role:"마케팅팀 5년차 · 33세", org2:"한빛그룹(가상) 계열사",
     facts4:[["연봉 (세전)","약 7,000만 원"],["월 실수령","약 470만 원"],["출퇴근","왕복 약 90분"],["주거","전세대출 오피스텔"]],
-    dayDesc:"상무 보고 전날인 화요일 하루", weekHook:"오늘 고른 선택(이직 고민, 연인과의 관계, 상무 보고 결과)이 다음 날로 이어집니다.", yearHook:"연봉 협상, 성과급 시즌, 승진 심사, 헤드헌터 제안",
-    scenes:SCENES_DAERI, rimg:RIMG_DAERI, start:{hp:65, mind:60, team:60, love:60, bank:50, rep:60},
+    dayDesc:"상무 보고 전날인 화요일 하루", weekHook:"오늘 고른 선택(이직 고민, 연인과의 관계, 상무 보고 결과)이 다음 날로 이어져요.", yearHook:"연봉 협상, 성과급 시즌, 승진 심사, 헤드헌터 제안",
+    scenes:SCENES_DAERI, rimg:RIMG_DAERI, start:{hp:65, mind:60, team:60, love:60, bank:45, rep:60},
     daily:Math.round(4700000 / 21), wonPerPoint:10000, ending:endingDaeri, facts:FACTS_DAERI, gl:{team:"관계(팀)", love:"관계(연인)"},
-    wageLabel:"출퇴근, 회식, 집에서 한 일까지 포함한 체감 시급", shareName:"대기업 5년차 대리", endImg:"img/ending.jpg",
+    wageLabel:"출퇴근, 회식, 집에서 한 일까지 포함한 체감 시급", extraWord:"회식", shareName:"대기업 5년차 대리", endImg:"img/ending.jpg",
     perkExtra:["성과급 시즌의 기대감"], quote:"힘든 건 일 자체가 아니라 내 일정이 남의 손에 있다는 거예요. 그래도 월급날 한 번도 걱정 안 해본 건 큰 복이죠."},
-  derma:{icon:"💉", who:"서 원장", org:"SEO DERMATOLOGY", badge:"원장 · 피부과 전문의", photo:"img/d_idphoto.jpg", role:"강남역 피부과 개원 4년차 · 피부과 전문의 · 42세",
+  derma:{icon:"💉", who:"서 원장", org:"SEO DERMATOLOGY", badge:"원장 · 피부과 전문의", photo:"img/d_idphoto.jpg", role:"피부과 전문의 · 42세", org2:"강남역 피부과 개원 4년차",
     facts4:[["월 매출","약 1억 6,000만 원"],["월 고정비","약 1억 2,500만 원"],["세후 순소득","월 약 2,300만 원"],["개원 대출 잔액","약 8억 2,000만 원"]],
-    dayDesc:"예약 68명, 딸 생일인 화요일 하루", weekHook:"오늘 고른 선택(장비 리스, 리뷰 대응, 직원 이탈, 가족과의 약속)이 다음 날로 이어집니다.", yearHook:"종합소득세 납부, 직원 재계약, 경쟁 병원 개원, 장비 교체",
-    scenes:SCENES_DERMA, rimg:RIMG_DERMA, start:{hp:60, mind:55, team:55, love:55, bank:60, rep:65},
+    dayDesc:"예약 68명, 딸 생일인 화요일 하루", weekHook:"오늘 고른 선택(장비 리스, 리뷰 대응, 직원 이탈, 가족과의 약속)이 다음 날로 이어져요.", yearHook:"종합소득세 납부, 직원 재계약, 경쟁 병원 개원, 장비 교체",
+    scenes:SCENES_DERMA, rimg:RIMG_DERMA, start:{hp:60, mind:55, team:55, love:55, bank:85, rep:70},
     daily:Math.round(23000000 / 24), wonPerPoint:500000, ending:endingDerma, facts:FACTS_DERMA, gl:{team:"관계(직원)", love:"관계(가족)"},
-    wageLabel:"출퇴근, 세미나, 집에서 한 일까지 포함한 체감 시급", shareName:"강남 피부과 원장", endImg:"img/d_ending.jpg",
+    wageLabel:"출퇴근, 세미나, 집에서 한 일까지 포함한 체감 시급", extraWord:"세미나", shareName:"강남 피부과 원장", endImg:"img/d_ending.jpg",
     perkExtra:["대기업 대리의 약 3~4배 수입", "‘원장님’이라는 사회적 지위"], quote:"매출은 다들 부러워하는데, 그 매출에서 임대료랑 직원 월급, 장비 리스를 빼면 얘기가 달라져요. 그래도 내 이름 걸고 환자 보는 건 좋아요."}
 };
 function setJob(id){
