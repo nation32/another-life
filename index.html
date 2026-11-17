@@ -1523,9 +1523,6 @@ function renderEnd(){
     <div class="border" aria-hidden="true"></div>
     <div class="lh"><h2>이 하루의 근거</h2><span class="desc">누르면 자세히 볼 수 있어요</span></div>
     <div class="factlist">${FACTS.map(f => `<details class="board"><summary>${esc(f.t.split("요. ")[0].replace(/\.$/, "") + (f.t.includes("요. ") ? "요" : ""))}</summary><div class="bd">${esc(f.t.includes("요. ") ? f.t.split("요. ").slice(1).join("요. ") : "")}<span class="src">출처: ${esc(f.s)}</span></div></details>`).join("")}</div>
-    <div class="lh"><h2>결과 공유하기</h2></div>
-    <div class="sharecard" id="sharetext">${esc(share)}</div>
-    <button class="cta weak" type="button" id="copy" style="width:100%;margin-top:10px">결과 복사하기</button>
     <div class="lh"><h2>더 살아보기</h2></div>
     <div>
       <button class="lr dim" type="button" id="e-week"><span class="tx"><span class="t">${esc(PF.who)}의 7일 <span class="badge grey">준비 중</span></span><span class="d">7일 동안 하루 10분씩 이어서 살아봐요</span></span></button>
@@ -1534,9 +1531,6 @@ function renderEnd(){
     <div class="fixedcta"><button class="cta grey" type="button" id="others">다른 직업 보기</button><button class="cta" type="button" id="again">다시 해보기</button></div>`;
   typeInto(document.getElementById("endsay"), e.say, false);
   paintRx();
-  document.getElementById("copy").onclick = () => {
-    try{ navigator.clipboard.writeText(share).then(() => toast("결과를 복사했어요. 친구에게 붙여넣어 보세요."), selectShare); }catch(err){ selectShare(); }
-  };
   document.getElementById("e-week").onclick = () => openLocked(LOCKS().week);
   document.getElementById("e-year").onclick = () => openLocked(LOCKS().year);
   document.getElementById("again").onclick = startDay;
