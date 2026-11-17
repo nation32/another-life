@@ -624,7 +624,7 @@ let DAILY_PAY = Math.round(4700000 / 21), CONTRACT_WAGE = Math.round(DAILY_PAY /
 let JOB_ID = "daeri", PF = null;
 const JOBS = [
   {id:"daeri", icon:"🪪", name:"대기업 5년차 대리", kind:"일반", meta:"연봉 약 7,000만 원 · 마케팅팀", playable:true},
-  {id:"derma", icon:"💉", name:"강남 피부과 개원의", kind:"부자", meta:"월 매출 약 1.6억 · 직원 12명", playable:false},
+  {id:"derma", icon:"💉", name:"강남 피부과 개원의", kind:"부자", meta:"월 매출 약 1.6억 · 직원 12명", playable:true},
   {id:"civil", icon:"🏛️", name:"9급 공무원 3년차", kind:"일반", meta:"정년 보장 · 주민센터 민원창구", playable:false},
   {id:"nurse", icon:"🩺", name:"대학병원 3교대 간호사", kind:"일반", meta:"4년차 · 내과 병동", playable:false}
 ];
@@ -937,9 +937,13 @@ const SCENES_DERMA = [
   ]}
 ];
 /* 원장 장면 그림은 Figma 크레딧이 초기화되면 생성해서 여기에 연결 */
-const IMG_DERMA = {}, CAMS_DERMA = {};
+const IMG_DERMA = {d_wake:"d_wake", d_drive:"d_drive", d_clinic:"d_clinic", d_consult:"d_consult", d_procedure:"d_procedure", d_lunch:"d_lunch",
+  d_review:"d_review", d_dumping:"d_dumping", d_complaint:"d_complaint", d_settle:"d_settle", d_evening:"d_evening", d_nightA:"d_nightA",
+  d_nightB:"d_nightB", d_study:"d_study", bed:"d_bed"};
+const CAMS_DERMA = {d_wake:"zoomin", d_drive:"panr", d_clinic:"zoomout", d_consult:"zoomin", d_procedure:"panl", d_lunch:"zoomin", d_review:"zoomin",
+  d_dumping:"panr", d_complaint:"shake", d_settle:"zoomout", d_evening:"zoomin", d_nightA:"panr", d_nightB:"zoomin", d_study:"panl", bed:"zoomin"};
 mapImages(SCENES_DERMA, IMG_DERMA, CAMS_DERMA);
-const RIMG_DERMA = {};
+const RIMG_DERMA = {d_wake:["rd_wake0","rd_wake1"], d_drive:["rd_drive0","rd_drive1"], d_clinic:["rd_clinic0","rd_clinic1"], d_consult:["rd_consult0","rd_consult1"]};
 
 let SCENES = SCENES_DAERI, RIMG = RIMG_DAERI;
 const activeScenes = () => SCENES.filter(s => !s.if || s.if(st));
@@ -1470,12 +1474,12 @@ const PROFILES = {
     daily:Math.round(4700000 / 21), wonPerPoint:10000, ending:endingDaeri, facts:FACTS_DAERI, gl:{team:"관계(팀)", love:"관계(연인)"},
     wageLabel:"출퇴근, 회식, 집에서 한 일까지 포함한 체감 시급", shareName:"대기업 5년차 대리", endImg:"img/ending.jpg",
     perkExtra:["성과급 시즌의 기대감"], quote:"힘든 건 일 자체가 아니라 내 일정이 남의 손에 있다는 거예요. 그래도 월급날 한 번도 걱정 안 해본 건 큰 복이죠."},
-  derma:{icon:"💉", who:"서 원장", org:"SEO DERMATOLOGY", badge:"원장 · 피부과 전문의", photo:null, role:"강남역 피부과 개원 4년차 · 피부과 전문의 · 42세",
+  derma:{icon:"💉", who:"서 원장", org:"SEO DERMATOLOGY", badge:"원장 · 피부과 전문의", photo:"img/d_idphoto.jpg", role:"강남역 피부과 개원 4년차 · 피부과 전문의 · 42세",
     facts4:[["월 매출","약 1억 6,000만 원"],["월 고정비","약 1억 2,500만 원"],["세후 순소득","월 약 2,300만 원"],["개원 대출 잔액","약 8억 2,000만 원"]],
     dayDesc:"예약 68명, 딸 생일인 화요일 하루", weekHook:"오늘 고른 선택(장비 리스, 리뷰 대응, 직원 이탈, 가족과의 약속)이 다음 날로 이어집니다.", yearHook:"종합소득세 납부, 직원 재계약, 경쟁 병원 개원, 장비 교체",
     scenes:SCENES_DERMA, rimg:RIMG_DERMA, start:{hp:60, mind:55, team:55, love:55, bank:60, rep:65},
     daily:Math.round(23000000 / 24), wonPerPoint:500000, ending:endingDerma, facts:FACTS_DERMA, gl:{team:"관계(직원)", love:"관계(가족)"},
-    wageLabel:"출퇴근, 세미나, 집에서 한 일까지 포함한 체감 시급", shareName:"강남 피부과 원장", endImg:null,
+    wageLabel:"출퇴근, 세미나, 집에서 한 일까지 포함한 체감 시급", shareName:"강남 피부과 원장", endImg:"img/d_ending.jpg",
     perkExtra:["대기업 대리의 약 3~4배 수입", "‘원장님’이라는 사회적 지위"], quote:"매출은 다들 부러워하는데, 그 매출에서 임대료랑 직원 월급, 장비 리스를 빼면 얘기가 달라져요. 그래도 내 이름 걸고 환자 보는 건 좋아요."}
 };
 function setJob(id){
