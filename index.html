@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="color-scheme" content="light">
+<script type="module" src="./src/ait-share.js"></script>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
@@ -464,6 +465,8 @@ details.board .src{display:block;font-size:var(--t7);color:var(--muted);margin-t
 .payrow.total .pv{font-size:var(--t2)}
 .hlnum{background:var(--hl);padding:0 6px;border-radius:6px}
 .paynote{font-size:var(--t7);color:var(--muted);margin-top:6px}
+.invite{display:flex;flex-direction:column;gap:10px;padding:8px 0 4px}
+.invite-t{font-size:var(--t6);color:var(--grey700)}
 </style>
 
 <div class="wrap" id="app"></div>
@@ -1518,6 +1521,10 @@ function renderEnd(){
       <p class="paynote">8시간만 일했다면 1시간에 ${won(CONTRACT_WAGE)}이었어요.</p>
     </div>
     <div class="box rx" id="rxbox"></div>
+    <div class="invite">
+      <p class="invite-t">친구도 ${esc(PF.who)}의 하루를 살아보게 해 보세요</p>
+      <button class="cta weak" type="button" id="share-friend" style="width:100%">친구에게 공유하기</button>
+    </div>
     <div class="border" aria-hidden="true"></div>
     <div class="endsec"><h3>현직자 한마디</h3><p class="quote">“${esc(PF.quote)}”<small>가상 예시 문구예요. 실제 현직자 인터뷰로 바꿀 거예요.</small></p></div>
     <div class="border" aria-hidden="true"></div>
@@ -1531,10 +1538,25 @@ function renderEnd(){
     <div class="fixedcta"><button class="cta grey" type="button" id="others">다른 직업 보기</button><button class="cta" type="button" id="again">다시 해보기</button></div>`;
   typeInto(document.getElementById("endsay"), e.say, false);
   paintRx();
+  document.getElementById("share-friend").onclick = shareToFriend;
   document.getElementById("e-week").onclick = () => openLocked(LOCKS().week);
   document.getElementById("e-year").onclick = () => openLocked(LOCKS().year);
   document.getElementById("again").onclick = startDay;
   document.getElementById("others").onclick = () => { view.screen = "home"; render(); window.scrollTo(0,0); };
+}
+const APP_NAME = "another-life";
+async function shareToFriend(){
+  const text = `연봉 말고 하루를 살아보는 '타인의 삶'\n${PF.shareName}의 하루, 너도 살아볼래?`;
+  if(typeof window.__aitShare === "function"){
+    try{ await window.__aitShare(`intoss://${APP_NAME}?job=${JOB_ID}`, text); return; }
+    catch(e){ toast("공유하지 못했어요. 잠시 뒤 다시 눌러 주세요."); return; }
+  }
+  const msg = text + "\n" + location.href.split("#")[0];
+  try{
+    if(navigator.share){ await navigator.share({text: msg}); return; }
+  }catch(e){}
+  try{ await navigator.clipboard.writeText(msg); toast("공유 문구를 복사했어요. 카카오톡에 붙여넣어 보세요."); }
+  catch(e){ toast("이 화면에서는 공유 문구를 복사할 수 없어요."); }
 }
 function selectShare(){
   const el = document.getElementById("sharetext"), r = document.createRange(); r.selectNodeContents(el);
@@ -1683,6 +1705,11 @@ function render(){
 }
 function boot(data){
   if(data && data.st && data.view && data.view.screen === "end"){ setJob(data.job || "daeri"); st = data.st; view = data.view; }
+  else{
+    let q = null; try{ q = new URLSearchParams(location.search).get("job"); }catch(e){}
+    const jb = q && JOBS.find(j => j.id === q && j.playable);
+    if(jb){ setJob(jb.id); view = {screen:"job", idx:0}; }
+  }
   render();
 }
 if(window.claude && window.claude.hot && window.claude.hot.snapshot){ try{ window.claude.hot.snapshot(() => ({st, view, job:JOB_ID})); }catch(e){} }
